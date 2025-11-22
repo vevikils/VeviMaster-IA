@@ -1,18 +1,3 @@
-FROM python:3.10-slim
-
-# Instalar dependencias del sistema
-RUN apt-get update && apt-get install -y \
-    curl \
-    unzip \
-    libtbb2 \
-    libsndfile1 \
-    libboost-all-dev \
-    && rm -rf /var/lib/apt/lists/*
-
-# Crear directorio de trabajo
-WORKDIR /app
-
-# Copiar requirements
 COPY requirements.txt .
 
 # Instalar dependencias de Python
