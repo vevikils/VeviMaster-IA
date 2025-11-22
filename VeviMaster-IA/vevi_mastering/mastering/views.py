@@ -71,13 +71,31 @@ def upload_audio(request):
         output_path = os.path.join(settings.MEDIA_ROOT, output_filename)
 
         # Ejecutar masterización
+        # Ejecutar masterización
         BASE_DIR = settings.BASE_DIR
         bin_dir = os.path.join(BASE_DIR, 'app_files', 'phaselimiter', 'phaselimiter', 'bin')
-        exe_path_exe = os.path.join(bin_dir, 'phase_limiter.exe')
-        exe_path_noext = os.path.join(bin_dir, 'phase_limiter')
-        exe_path = exe_path_exe if os.path.exists(exe_path_exe) else exe_path_noext
+        
+        # Detectar binario según SO
+        exe_name = 'phase_limiter.exe' if os.name == 'nt' else 'phase_limiter'
+        exe_path = os.path.join(bin_dir, exe_name)
+        
+        # Fallback: buscar sin extensión si no encuentra el .exe o viceversa
         if not os.path.exists(exe_path):
-            return HttpResponse('No se encontró el ejecutable phase_limiter.', status=500)
+            alt_name = 'phase_limiter' if os.name == 'nt' else 'phase_limiter.exe'
+            alt_path = os.path.join(bin_dir, alt_name)
+            if os.path.exists(alt_path):
+                exe_path = alt_path
+            else:
+                return HttpResponse(f'No se encontró el ejecutable {exe_name} (ni {alt_name}) en {bin_dir}.', status=500)
+
+        # Asegurar permisos de ejecución en Linux/Mac
+        if os.name != 'nt':
+            try:
+                import stat
+                st = os.stat(exe_path)
+                os.chmod(exe_path, st.st_mode | stat.S_IEXEC)
+            except Exception as e:
+                print(f"Advertencia: No se pudieron establecer permisos de ejecución: {e}")
 
         env = os.environ.copy()
         env['PATH'] = bin_dir + os.pathsep + env['PATH']

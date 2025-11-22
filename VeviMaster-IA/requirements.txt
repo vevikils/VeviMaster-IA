@@ -1,1 +1,5 @@
 Django>=4.0
+gunicorn
+whitenoise
+dj-database-url
+python-dotenv

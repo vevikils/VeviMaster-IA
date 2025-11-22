@@ -1,0 +1,1 @@
+web: gunicorn vevi_mastering.wsgi

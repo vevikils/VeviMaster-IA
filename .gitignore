@@ -61,6 +61,16 @@ local_settings.py
 db.sqlite3
 db.sqlite3-journal
 
+# Media files (videos, large audio files)
+*.mp4
+*.avi
+*.mov
+*.mkv
+*.flv
+*.wmv
+media/
+tmp/
+
 # Flask stuff:
 instance/
 .webassets-cache
