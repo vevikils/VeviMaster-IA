@@ -61,6 +61,10 @@ local_settings.py
 db.sqlite3
 db.sqlite3-journal
 
+# Docker
+.env
+.env.docker
+
 # Media files (videos, large audio files)
 *.mp4
 *.avi

@@ -1,0 +1,20 @@
+version: '3.8'
+
+services:
+  web:
+    build: .
+    ports:
+      - "8000:8000"
+    environment:
+      - SECRET_KEY=${SECRET_KEY}
+      - DEBUG=False
+      - ALLOWED_HOSTS=${ALLOWED_HOSTS}
+      - DATABASE_URL=${DATABASE_URL:-sqlite:///db.sqlite3}
+    volumes:
+      - media_files:/app/vevi_mastering/media
+      - static_files:/app/vevi_mastering/staticfiles
+    restart: unless-stopped
+
+volumes:
+  media_files:
+  static_files:
