@@ -14,7 +14,6 @@ else
     pip install gdown
     
     # Descargar el archivo comprimido desde Google Drive
-    # REEMPLAZA 'YOUR_GOOGLE_DRIVE_FILE_ID' con el ID real de tu archivo
     gdown "https://drive.google.com/uc?id=1CNe457Xc-m3DB4_W37Poba--IjXvnQ9k" -O app_files.zip
     
     # Descomprimir
@@ -28,3 +27,7 @@ else
     
     echo "app_files descargado y configurado correctamente!"
 fi
+
+# Configurar LD_LIBRARY_PATH para que encuentre las librerías compartidas
+export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$(pwd)/vevi_mastering/app_files/phaselimiter/phaselimiter/bin
+echo "LD_LIBRARY_PATH configurado: $LD_LIBRARY_PATH"
