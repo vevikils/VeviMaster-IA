@@ -1,0 +1,54 @@
+{
+  "loudness": -8.0,
+  "loudness_range": 5.0,
+  "peak": 0.98,
+  "rms": -9.0,
+  "dynamics": 2.0,
+  "sharpness": 2.5,
+  "space": -1.0,
+  "drr": 11.0,
+  "sample_rate": 44100,
+  "channels": 2,
+  "bands": [
+    {
+      "low_freq": 20.0,
+      "high_freq": 150.0,
+      "loudness": -15.0,
+      "loudness_range": 5.0,
+      "mid_mean": -13.0,
+      "mid_to_side_loudness": -9.0,
+      "mid_to_side_loudness_range": 8.0,
+      "side_mean": -18.0
+    },
+    {
+      "low_freq": 150.0,
+      "high_freq": 600.0,
+      "loudness": -13.0,
+      "loudness_range": 6.0,
+      "mid_mean": -11.0,
+      "mid_to_side_loudness": -7.0,
+      "mid_to_side_loudness_range": 7.0,
+      "side_mean": -16.0
+    },
+    {
+      "low_freq": 600.0,
+      "high_freq": 3000.0,
+      "loudness": -14.0,
+      "loudness_range": 7.0,
+      "mid_mean": -12.0,
+      "mid_to_side_loudness": -6.0,
+      "mid_to_side_loudness_range": 7.0,
+      "side_mean": -15.0
+    },
+    {
+      "low_freq": 3000.0,
+      "high_freq": 20000.0,
+      "loudness": -17.0,
+      "loudness_range": 8.0,
+      "mid_mean": -14.0,
+      "mid_to_side_loudness": -7.0,
+      "mid_to_side_loudness_range": 8.0,
+      "side_mean": -17.0
+    }
+  ]
+}
