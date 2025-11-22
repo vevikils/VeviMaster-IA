@@ -15,7 +15,7 @@ else
     
     # Descargar el archivo comprimido desde Google Drive
     # REEMPLAZA 'YOUR_GOOGLE_DRIVE_FILE_ID' con el ID real de tu archivo
-    gdown "https://drive.google.com/uc?id=YOUR_GOOGLE_DRIVE_FILE_ID" -O app_files.zip
+    gdown "https://drive.google.com/uc?id=1o4nHKkmc5X_lmfoxpNV9jncgzB-rWgZr" -O app_files.zip
     
     # Descomprimir
     unzip -q app_files.zip -d vevi_mastering/
