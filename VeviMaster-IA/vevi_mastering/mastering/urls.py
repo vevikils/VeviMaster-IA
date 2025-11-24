@@ -5,4 +5,5 @@ app_name = 'mastering'
 
 urlpatterns = [
     path('', views.upload_audio, name='upload'),
+    path('download/<str:filename>/', views.download_master, name='download'),
 ]

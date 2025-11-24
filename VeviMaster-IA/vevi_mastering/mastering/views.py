@@ -3,9 +3,10 @@ import uuid
 import subprocess
 import json
 from django.conf import settings
-from django.http import FileResponse, HttpResponse
+from django.http import FileResponse, HttpResponse, Http404
 from django.shortcuts import render
 from django.views.decorators.csrf import csrf_exempt
+from .utils import analyze_audio_metrics
 
 @csrf_exempt
 def upload_audio(request):
@@ -65,56 +66,102 @@ def upload_audio(request):
             for chunk in audio_file.chunks():
                 destination.write(chunk)
 
+        # ANALIZAR INPUT (ANTES)
+        metrics_before = analyze_audio_metrics(input_path)
+
         # Nombre de salida
         base_name = os.path.splitext(audio_file.name)[0]
         output_filename = f'{base_name}_vevi_master_ia.wav'
         output_path = os.path.join(settings.MEDIA_ROOT, output_filename)
 
         # Ejecutar masterización
-        # Ejecutar masterización
         BASE_DIR = settings.BASE_DIR
         bin_dir = os.path.join(BASE_DIR, 'app_files', 'phaselimiter', 'phaselimiter', 'bin')
         
         # Detectar binario según SO
-        exe_name = 'phase_limiter.exe' if os.name == 'nt' else 'phase_limiter'
+        exe_name = 'phase_limiter' # El binario que tienes es Linux
         exe_path = os.path.join(bin_dir, exe_name)
-        
-        # Fallback: buscar sin extensión si no encuentra el .exe o viceversa
-        if not os.path.exists(exe_path):
-            alt_name = 'phase_limiter' if os.name == 'nt' else 'phase_limiter.exe'
-            alt_path = os.path.join(bin_dir, alt_name)
-            if os.path.exists(alt_path):
-                exe_path = alt_path
-            else:
-                return HttpResponse(f'No se encontró el ejecutable {exe_name} (ni {alt_name}) en {bin_dir}.', status=500)
 
-        # Asegurar permisos de ejecución en Linux/Mac
-        if os.name != 'nt':
+        # Verificamos si podemos ejecutar PhaseLimiter
+        if os.name != 'nt' and os.path.exists(exe_path):
+            # Estamos en Linux/Mac y existe el binario
+            use_phaselimiter = True
+            # Asegurar permisos
             try:
                 import stat
                 st = os.stat(exe_path)
                 os.chmod(exe_path, st.st_mode | stat.S_IEXEC)
+            except Exception:
+                pass
+        
+        if use_phaselimiter:
+            # --- EJECUCIÓN CON PHASELIMITER (PRODUCCIÓN/DOCKER) ---
+            print("Usando motor: PhaseLimiter")
+            env = os.environ.copy()
+            env['PATH'] = bin_dir + os.pathsep + env['PATH']
+            
+            cmd = [
+                exe_path,
+                f'-input={input_path}',
+                f'-output={output_path}',
+                f'-mastering_reference_file={config_path}'
+            ]
+            
+            try:
+                result = subprocess.run(cmd, capture_output=True, text=True, timeout=300, cwd=BASE_DIR, env=env)
+                if result.returncode != 0:
+                    return HttpResponse(f'Error en PhaseLimiter:<br><pre>{result.stderr}</pre>', status=500)
             except Exception as e:
-                print(f"Advertencia: No se pudieron establecer permisos de ejecución: {e}")
+                return HttpResponse(f'Error ejecutando PhaseLimiter: {e}', status=500)
+                
+        else:
+            # --- EJECUCIÓN CON FFMPEG (DESARROLLO WINDOWS) ---
+            # Fallback porque PhaseLimiter no corre en Windows
+            print("Usando motor: FFmpeg (Fallback para Windows)")
+            
+            target_lufs = global_params['loudness']
+            target_peak = global_params['peak']
+            
+            filter_chain = "acompressor=threshold=-20dB:ratio=2:attack=5:release=50,"
+            filter_chain += "equalizer=f=60:width_type=o:width=2:g=2,"
+            filter_chain += "equalizer=f=12000:width_type=o:width=2:g=2,"
+            filter_chain += f"loudnorm=I={target_lufs}:TP={target_peak}:LRA=11,"
+            filter_chain += f"alimiter=limit=-0.5dB:level_in=1:level_out=1:attack=5:release=50"
 
-        env = os.environ.copy()
-        env['PATH'] = bin_dir + os.pathsep + env['PATH']
+            cmd = [
+                'ffmpeg', '-y', '-i', input_path,
+                '-filter_complex', filter_chain,
+                '-ar', '44100', output_path
+            ]
+            
+            try:
+                result = subprocess.run(cmd, capture_output=True, text=True, encoding='utf-8', errors='replace', timeout=300)
+                if result.returncode != 0:
+                    return HttpResponse(f'Error en FFmpeg:<br><pre>{result.stderr}</pre>', status=500)
+            except Exception as e:
+                return HttpResponse(f'Error ejecutando FFmpeg: {e}', status=500)
 
-        cmd = [
-            exe_path,
-            f'-input={input_path}',
-            f'-output={output_path}',
-            f'-mastering_reference_file={config_path}'
-        ]
-        try:
-            result = subprocess.run(cmd, capture_output=True, text=True, timeout=300, cwd=BASE_DIR, env=env)
-            if result.returncode != 0:
-                return HttpResponse(f'Error en la masterización:<br><pre>{result.stderr}</pre>', status=500)
-        except Exception as e:
-            return HttpResponse(f'Error ejecutando el proceso: {e}', status=500)
+        # ANALIZAR OUTPUT (DESPUÉS)
+        metrics_after = analyze_audio_metrics(output_path)
 
-        # Descargar automáticamente el archivo masterizado
-        response = FileResponse(open(output_path, 'rb'), as_attachment=True, filename=output_filename)
-        return response
+        # Renderizar página de resultados
+        context = {
+            'metrics_before': metrics_before,
+            'metrics_after': metrics_after,
+            'output_filename': output_filename,
+            'original_filename': audio_file.name,
+            'engine_used': 'PhaseLimiter' if use_phaselimiter else 'FFmpeg (Modo Compatibilidad Windows)'
+        }
+        return render(request, 'mastering/results.html', context)
 
     return render(request, 'mastering/upload.html')
+
+def download_master(request, filename):
+    """
+    Vista para descargar el archivo masterizado.
+    """
+    file_path = os.path.join(settings.MEDIA_ROOT, filename)
+    if os.path.exists(file_path):
+        return FileResponse(open(file_path, 'rb'), as_attachment=True, filename=filename)
+    else:
+        raise Http404("El archivo no existe.")
