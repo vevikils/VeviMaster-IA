@@ -4,3 +4,13 @@ whitenoise
 dj-database-url
 python-dotenv
 gdown
+
+# Dependencias para análisis de música con IA
+# IMPORTANTE: Instalar en este orden para evitar conflictos
+numpy>=1.19.0,<1.25
+scipy>=1.2.0
+soundfile>=0.10.0
+librosa>=0.7.0
+tensorflow>=2.5,<2.16
+musicnn==0.1.0
+colorama>=0.4

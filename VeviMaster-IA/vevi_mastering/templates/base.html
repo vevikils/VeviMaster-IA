@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}VeviMaster-IA{% endblock %}</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #232526 0%, #414345 100%);
+            min-height: 100vh;
+            font-family: 'Montserrat', Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        /* Navbar */
+        .navbar {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(15px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 0;
+        }
+        
+        .navbar-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 2rem;
+        }
+        
+        .navbar-brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 1.2rem 0;
+            color: #fff;
+            text-decoration: none;
+            font-size: 1.5rem;
+            font-weight: 700;
+            transition: transform 0.2s;
+        }
+        
+        .navbar-brand:hover {
+            transform: scale(1.05);
+        }
+        
+        .navbar-brand i {
+            font-size: 1.8rem;
+            background: linear-gradient(135deg, #4f8cff, #a855f7);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .navbar-menu {
+            display: flex;
+            gap: 0;
+            list-style: none;
+        }
+        
+        .navbar-menu li {
+            position: relative;
+        }
+        
+        .navbar-menu a {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 1.5rem 1.5rem;
+            color: rgba(255, 255, 255, 0.8);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1rem;
+            transition: all 0.3s;
+            position: relative;
+        }
+        
+        .navbar-menu a:hover {
+            color: #fff;
+            background: rgba(255, 255, 255, 0.05);
+        }
+        
+        .navbar-menu a.active {
+            color: #fff;
+            background: rgba(79, 140, 255, 0.15);
+        }
+        
+        .navbar-menu a.active::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, #4f8cff, #a855f7);
+        }
+        
+        .navbar-menu a i {
+            font-size: 1.1rem;
+        }
+        
+        /* Mobile menu toggle */
+        .menu-toggle {
+            display: none;
+            background: none;
+            border: none;
+            color: #fff;
+            font-size: 1.5rem;
+            cursor: pointer;
+            padding: 0.5rem;
+        }
+        
+        /* Main content */
+        .main-content {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem 1rem;
+        }
+        
+        /* Footer */
+        footer {
+            background: linear-gradient(90deg, #232526 0%, #4f8cff 100%);
+            color: #b0b6be;
+            text-align: center;
+            padding: 1.5rem;
+            font-size: 1rem;
+            letter-spacing: 0.5px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .menu-toggle {
+                display: block;
+            }
+            
+            .navbar-menu {
+                position: absolute;
+                top: 100%;
+                left: 0;
+                right: 0;
+                flex-direction: column;
+                background: rgba(35, 37, 38, 0.98);
+                backdrop-filter: blur(15px);
+                border-top: 1px solid rgba(255, 255, 255, 0.1);
+                max-height: 0;
+                overflow: hidden;
+                transition: max-height 0.3s ease;
+            }
+            
+            .navbar-menu.active {
+                max-height: 500px;
+            }
+            
+            .navbar-menu a {
+                padding: 1.2rem 2rem;
+                border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            }
+            
+            .navbar-menu a.active::after {
+                left: 0;
+                right: auto;
+                width: 4px;
+                height: 100%;
+                top: 0;
+                bottom: 0;
+            }
+            
+            .navbar-container {
+                padding: 0 1rem;
+                position: relative;
+            }
+        }
+        
+        /* Messages/Alerts */
+        .alert {
+            max-width: 1200px;
+            margin: 1rem auto;
+            padding: 1rem 1.5rem;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-weight: 600;
+            animation: slideIn 0.3s ease;
+        }
+        
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .alert-success {
+            background: rgba(16, 185, 129, 0.15);
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            color: #10b981;
+        }
+        
+        .alert-error {
+            background: rgba(239, 68, 68, 0.15);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            color: #ef4444;
+        }
+        
+        .alert-warning {
+            background: rgba(245, 158, 11, 0.15);
+            border: 1px solid rgba(245, 158, 11, 0.3);
+            color: #f59e0b;
+        }
+        
+        .alert-info {
+            background: rgba(59, 130, 246, 0.15);
+            border: 1px solid rgba(59, 130, 246, 0.3);
+            color: #3b82f6;
+        }
+    </style>
+    {% block extra_css %}{% endblock %}
+</head>
+<body>
+    <nav class="navbar">
+        <div class="navbar-container">
+            <a href="/" class="navbar-brand">
+                <i class="fas fa-wave-square"></i>
+                <span>VeviMaster-IA</span>
+            </a>
+            
+            <button class="menu-toggle" onclick="toggleMenu()">
+                <i class="fas fa-bars"></i>
+            </button>
+            
+            <ul class="navbar-menu" id="navbarMenu">
+                <li>
+                    <a href="{% url 'mastering:upload' %}" class="{% if request.resolver_match.url_name == 'upload' %}active{% endif %}">
+                        <i class="fas fa-sliders-h"></i>
+                        <span>Mastering</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="{% url 'analyzer:index' %}" class="{% if 'analyzer' in request.resolver_match.namespace %}active{% endif %}">
+                        <i class="fas fa-music"></i>
+                        <span>Análisis Musical</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="/admin/" target="_blank">
+                        <i class="fas fa-cog"></i>
+                        <span>Admin</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+    
+    {% if messages %}
+        <div style="padding: 0 1rem;">
+            {% for message in messages %}
+                <div class="alert alert-{{ message.tags }}">
+                    <i class="fas fa-{% if message.tags == 'success' %}check-circle{% elif message.tags == 'error' %}exclamation-circle{% elif message.tags == 'warning' %}exclamation-triangle{% else %}info-circle{% endif %}"></i>
+                    {{ message }}
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+    
+    <div class="main-content">
+        {% block content %}{% endblock %}
+    </div>
+    
+    <footer>
+        © Vevi a los mandos 2025 | VeviMaster-IA con Análisis Musical
+    </footer>
+    
+    <script>
+        function toggleMenu() {
+            const menu = document.getElementById('navbarMenu');
+            menu.classList.toggle('active');
+        }
+        
+        // Close menu when clicking outside
+        document.addEventListener('click', function(event) {
+            const navbar = document.querySelector('.navbar');
+            const menu = document.getElementById('navbarMenu');
+            const toggle = document.querySelector('.menu-toggle');
+            
+            if (!navbar.contains(event.target) && menu.classList.contains('active')) {
+                menu.classList.remove('active');
+            }
+        });
+        
+        // Close menu when window is resized to desktop
+        window.addEventListener('resize', function() {
+            if (window.innerWidth > 768) {
+                document.getElementById('navbarMenu').classList.remove('active');
+            }
+        });
+    </script>
+    {% block extra_js %}{% endblock %}
+</body>
+</html>

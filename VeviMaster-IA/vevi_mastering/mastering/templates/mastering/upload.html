@@ -1,402 +1,416 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Vevi Mastering IA</title>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
-    <style>
-        body {
-            background: linear-gradient(135deg, #232526 0%, #414345 100%);
-            min-height: 100vh;
-            margin: 0;
-            font-family: 'Montserrat', Arial, sans-serif;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            flex-direction: column;
-        }
+{% extends "base.html" %}
+
+{% block title %}Mastering - VeviMaster-IA{% endblock %}
+
+{% block extra_css %}
+<style>
+    .container {
+        background: linear-gradient(120deg, #f5f7fa 0%, #c3cfe2 100%);
+        border-radius: 18px;
+        box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.2);
+        padding: 40px 32px 32px 32px;
+        max-width: 1100px;
+        width: 100%;
+        text-align: center;
+    }
+
+    h1 {
+        color: #232526;
+        font-size: 2rem;
+        margin-bottom: 24px;
+        font-weight: 700;
+    }
+
+    form {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    .slider-group {
+        background: linear-gradient(120deg, #eaf1fb 0%, #f5f7fa 100%);
+        border-radius: 10px;
+        padding: 18px 12px 10px 12px;
+        margin-bottom: 10px;
+        box-shadow: 0 2px 8px rgba(79, 140, 255, 0.07);
+    }
+
+    .slider-label {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-size: 1rem;
+        color: #232526;
+        margin-bottom: 2px;
+    }
+
+    .slider-value {
+        font-weight: 700;
+        color: #4f8cff;
+        margin-left: 8px;
+    }
+
+    input[type="range"] {
+        width: 100%;
+        accent-color: #4f8cff;
+    }
+
+    input[type="file"] {
+        padding: 10px;
+        border: 2px solid #232526;
+        border-radius: 8px;
+        background: #f5f5f5;
+        font-size: 1rem;
+        transition: border 0.2s;
+    }
+
+    input[type="file"]:focus {
+        border-color: #4f8cff;
+        outline: none;
+    }
+
+    button[type="submit"] {
+        background: linear-gradient(90deg, #4f8cff 0%, #232526 100%);
+        color: #fff;
+        border: none;
+        border-radius: 8px;
+        padding: 12px 0;
+        font-size: 1.1rem;
+        font-weight: 700;
+        cursor: pointer;
+        box-shadow: 0 2px 8px rgba(79, 140, 255, 0.15);
+        transition: background 0.2s, transform 0.1s;
+    }
+
+    button[type="submit"]:hover {
+        background: linear-gradient(90deg, #232526 0%, #4f8cff 100%);
+        transform: translateY(-2px) scale(1.03);
+    }
+
+    @media (max-width: 1200px) {
         .container {
-            background: linear-gradient(120deg, #f5f7fa 0%, #c3cfe2 100%);
-            border-radius: 18px;
-            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.2);
-            padding: 40px 32px 32px 32px;
-            max-width: 1100px;
-            width: 100%;
-            text-align: center;
-            margin-bottom: 32px;
+            max-width: 98vw;
         }
-        h1 {
-            color: #fff;
-            font-size: 2rem;
-            margin-bottom: 24px;
-            font-weight: 700;
-        }
-        form {
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-        }
-        .slider-group {
-            background: linear-gradient(120deg, #eaf1fb 0%, #f5f7fa 100%);
-            border-radius: 10px;
-            padding: 18px 12px 10px 12px;
-            margin-bottom: 10px;
-            box-shadow: 0 2px 8px rgba(79, 140, 255, 0.07);
-        }
-        .slider-label {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            font-size: 1rem;
-            color: #232526;
-            margin-bottom: 2px;
-        }
-        .slider-value {
-            font-weight: 700;
-            color: #4f8cff;
-            margin-left: 8px;
-        }
-        input[type="range"] {
-            width: 100%;
-            accent-color: #4f8cff;
-        }
-        input[type="file"] {
-            padding: 10px;
-            border: 2px solid #232526;
-            border-radius: 8px;
-            background: #f5f5f5;
-            font-size: 1rem;
-            transition: border 0.2s;
-        }
-        input[type="file"]:focus {
-            border-color: #4f8cff;
-            outline: none;
-        }
-        button[type="submit"] {
-            background: linear-gradient(90deg, #4f8cff 0%, #232526 100%);
-            color: #fff;
-            border: none;
-            border-radius: 8px;
-            padding: 12px 0;
-            font-size: 1.1rem;
-            font-weight: 700;
-            cursor: pointer;
-            box-shadow: 0 2px 8px rgba(79, 140, 255, 0.15);
-            transition: background 0.2s, transform 0.1s;
-        }
-        button[type="submit"]:hover {
-            background: linear-gradient(90deg, #232526 0%, #4f8cff 100%);
-            transform: translateY(-2px) scale(1.03);
-        }
-        footer {
-            width: 100%;
-            text-align: center;
-            padding: 18px 0 10px 0;
-            color: #b0b6be;
-            font-size: 1rem;
-            font-family: 'Montserrat', Arial, sans-serif;
-            letter-spacing: 0.5px;
-            background: linear-gradient(90deg, #232526 0%, #4f8cff 100%);
-            margin-top: 0;
-            border-radius: 0 0 18px 18px;
-        }
-        @media (max-width: 1200px) {
-            .container {
-                max-width: 98vw;
-            }
-        }
-        @media (max-width: 900px) {
-            .bands-row {
-                flex-direction: column;
-                gap: 8px;
-            }
-            .band-col {
-                max-width: 100%;
-                min-width: 0;
-            }
-        }
-        @media (max-width: 500px) {
-            .container {
-                padding: 24px 8px;
-            }
-            h1 {
-                font-size: 1.3rem;
-            }
-        }
+    }
+
+    @media (max-width: 900px) {
         .bands-row {
-            display: flex;
-            flex-direction: row;
-            gap: 18px;
-            justify-content: center;
-            margin-bottom: 18px;
-            flex-wrap: wrap;
+            flex-direction: column;
+            gap: 8px;
         }
+
         .band-col {
-            flex: 1 1 220px;
-            min-width: 200px;
-            max-width: 260px;
-            background: linear-gradient(120deg, #eaf1fb 0%, #dbeafe 100%);
+            max-width: 100%;
+            min-width: 0;
         }
-    </style>
-    <script>
-        function updateSliderValue(sliderId, valueId) {
-            document.getElementById(valueId).textContent = document.getElementById(sliderId).value;
+    }
+
+    @media (max-width: 500px) {
+        .container {
+            padding: 24px 8px;
         }
-    </script>
-</head>
-<body>
-    <div class="container">
-        <h1>Vevi Mastering IA</h1>
-        <form method="post" enctype="multipart/form-data">
-            {% csrf_token %}
-            <input type="file" name="audio" accept=".wav" required>
-            <div class="slider-group">
-                <div class="slider-label">Loudness (LUFS)
-                    <span class="slider-value" id="loudness_val">-8</span>
-                </div>
-                <input type="range" name="loudness" id="loudness" min="-20" max="0" step="0.1" value="-8" oninput="updateSliderValue('loudness','loudness_val')">
+
+        h1 {
+            font-size: 1.3rem;
+        }
+    }
+
+    .bands-row {
+        display: flex;
+        flex-direction: row;
+        gap: 18px;
+        justify-content: center;
+        margin-bottom: 18px;
+        flex-wrap: wrap;
+    }
+
+    .band-col {
+        flex: 1 1 220px;
+        min-width: 200px;
+        max-width: 260px;
+        background: linear-gradient(120deg, #eaf1fb 0%, #dbeafe 100%);
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h1>Vevi Mastering IA</h1>
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <input type="file" name="audio" accept=".wav" required>
+        <div class="slider-group">
+            <div class="slider-label">Loudness (LUFS)
+                <span class="slider-value" id="loudness_val">-8</span>
             </div>
-            <div class="slider-group">
-                <div class="slider-label">Loudness Range (LU)
-                    <span class="slider-value" id="loudness_range_val">6</span>
-                </div>
-                <input type="range" name="loudness_range" id="loudness_range" min="0" max="20" step="0.1" value="6" oninput="updateSliderValue('loudness_range','loudness_range_val')">
+            <input type="range" name="loudness" id="loudness" min="-20" max="0" step="0.1" value="-8"
+                oninput="updateSliderValue('loudness','loudness_val')">
+        </div>
+        <div class="slider-group">
+            <div class="slider-label">Loudness Range (LU)
+                <span class="slider-value" id="loudness_range_val">6</span>
             </div>
-            <div class="slider-group">
-                <div class="slider-label">Peak (0-1)
-                    <span class="slider-value" id="peak_val">0.98</span>
-                </div>
-                <input type="range" name="peak" id="peak" min="0" max="1" step="0.01" value="0.98" oninput="updateSliderValue('peak','peak_val')">
+            <input type="range" name="loudness_range" id="loudness_range" min="0" max="20" step="0.1" value="6"
+                oninput="updateSliderValue('loudness_range','loudness_range_val')">
+        </div>
+        <div class="slider-group">
+            <div class="slider-label">Peak (0-1)
+                <span class="slider-value" id="peak_val">0.98</span>
             </div>
-            <div class="slider-group">
-                <div class="slider-label">RMS (dB)
-                    <span class="slider-value" id="rms_val">-10</span>
-                </div>
-                <input type="range" name="rms" id="rms" min="-20" max="0" step="0.1" value="-10" oninput="updateSliderValue('rms','rms_val')">
+            <input type="range" name="peak" id="peak" min="0" max="1" step="0.01" value="0.98"
+                oninput="updateSliderValue('peak','peak_val')">
+        </div>
+        <div class="slider-group">
+            <div class="slider-label">RMS (dB)
+                <span class="slider-value" id="rms_val">-10</span>
             </div>
-            <div class="slider-group">
-                <div class="slider-label">Dynamics
-                    <span class="slider-value" id="dynamics_val">2.5</span>
-                </div>
-                <input type="range" name="dynamics" id="dynamics" min="0" max="10" step="0.1" value="2.5" oninput="updateSliderValue('dynamics','dynamics_val')">
+            <input type="range" name="rms" id="rms" min="-20" max="0" step="0.1" value="-10"
+                oninput="updateSliderValue('rms','rms_val')">
+        </div>
+        <div class="slider-group">
+            <div class="slider-label">Dynamics
+                <span class="slider-value" id="dynamics_val">2.5</span>
             </div>
-            <div class="slider-group">
-                <div class="slider-label">Sharpness
-                    <span class="slider-value" id="sharpness_val">2.2</span>
-                </div>
-                <input type="range" name="sharpness" id="sharpness" min="0" max="10" step="0.1" value="2.2" oninput="updateSliderValue('sharpness','sharpness_val')">
+            <input type="range" name="dynamics" id="dynamics" min="0" max="10" step="0.1" value="2.5"
+                oninput="updateSliderValue('dynamics','dynamics_val')">
+        </div>
+        <div class="slider-group">
+            <div class="slider-label">Sharpness
+                <span class="slider-value" id="sharpness_val">2.2</span>
             </div>
-            <div class="slider-group">
-                <div class="slider-label">Espacio (Space)
-                    <span class="slider-value" id="space_val">-3</span>
-                </div>
-                <input type="range" name="space" id="space" min="-10" max="10" step="0.1" value="-3" oninput="updateSliderValue('space','space_val')">
+            <input type="range" name="sharpness" id="sharpness" min="0" max="10" step="0.1" value="2.2"
+                oninput="updateSliderValue('sharpness','sharpness_val')">
+        </div>
+        <div class="slider-group">
+            <div class="slider-label">Espacio (Space)
+                <span class="slider-value" id="space_val">-3</span>
             </div>
-            <div class="slider-group">
-                <div class="slider-label">DRR
-                    <span class="slider-value" id="drr_val">12</span>
-                </div>
-                <input type="range" name="drr" id="drr" min="0" max="20" step="0.1" value="12" oninput="updateSliderValue('drr','drr_val')">
+            <input type="range" name="space" id="space" min="-10" max="10" step="0.1" value="-3"
+                oninput="updateSliderValue('space','space_val')">
+        </div>
+        <div class="slider-group">
+            <div class="slider-label">DRR
+                <span class="slider-value" id="drr_val">12</span>
             </div>
-            <div class="slider-group">
-                <div class="slider-label">Sample Rate (Hz)
-                    <span class="slider-value" id="sample_rate_val">44100</span>
-                </div>
-                <input type="range" name="sample_rate" id="sample_rate" min="22050" max="192000" step="1" value="44100" oninput="updateSliderValue('sample_rate','sample_rate_val')">
+            <input type="range" name="drr" id="drr" min="0" max="20" step="0.1" value="12"
+                oninput="updateSliderValue('drr','drr_val')">
+        </div>
+        <div class="slider-group">
+            <div class="slider-label">Sample Rate (Hz)
+                <span class="slider-value" id="sample_rate_val">44100</span>
             </div>
-            <div class="slider-group">
-                <div class="slider-label">Canales
-                    <span class="slider-value" id="channels_val">2</span>
-                </div>
-                <input type="range" name="channels" id="channels" min="1" max="8" step="1" value="2" oninput="updateSliderValue('channels','channels_val')">
+            <input type="range" name="sample_rate" id="sample_rate" min="22050" max="192000" step="1" value="44100"
+                oninput="updateSliderValue('sample_rate','sample_rate_val')">
+        </div>
+        <div class="slider-group">
+            <div class="slider-label">Canales
+                <span class="slider-value" id="channels_val">2</span>
             </div>
-            <div class="slider-group" style="background:#f0f6ff;">
-                <div class="slider-label" style="justify-content:center;">
-                    <label for="preset" style="font-weight:700;color:#232526;">Preset:</label>
-                    <select name="preset" id="preset" style="margin-left:12px;padding:4px 8px;border-radius:6px;font-size:1rem;">
-                        <option value="normal" selected>Normal</option>
-                        <option value="rock">Rock</option>
-                        <option value="trap">Trap</option>
-                        <option value="drill">Drill</option>
-                        <option value="reggaeton">Reggaeton</option>
-                        <option value="rap">Rap</option>
-                        <option value="pop">Pop</option>
-                        <option value="hyperpop">Hyperpop</option>
-                    </select>
-                </div>
+            <input type="range" name="channels" id="channels" min="1" max="8" step="1" value="2"
+                oninput="updateSliderValue('channels','channels_val')">
+        </div>
+        <div class="slider-group" style="background:#f0f6ff;">
+            <div class="slider-label" style="justify-content:center;">
+                <label for="preset" style="font-weight:700;color:#232526;">Preset:</label>
+                <select name="preset" id="preset"
+                    style="margin-left:12px;padding:4px 8px;border-radius:6px;font-size:1rem;">
+                    <option value="normal" selected>Normal</option>
+                    <option value="rock">Rock</option>
+                    <option value="trap">Trap</option>
+                    <option value="drill">Drill</option>
+                    <option value="reggaeton">Reggaeton</option>
+                    <option value="rap">Rap</option>
+                    <option value="pop">Pop</option>
+                    <option value="hyperpop">Hyperpop</option>
+                </select>
             </div>
-            <h2 style="margin-top:32px;margin-bottom:8px;font-size:1.2rem;color:#4f8cff;font-weight:700;">Bandas de Frecuencia</h2>
-            <div class="bands-row">
+        </div>
+        <h2 style="margin-top:32px;margin-bottom:8px;font-size:1.2rem;color:#4f8cff;font-weight:700;">Bandas de
+            Frecuencia</h2>
+        <div class="bands-row">
             {% for i in "0123" %}
             <div class="slider-group band-col" style="background:#eaf1fb;min-width:220px;">
                 <div style="font-weight:700;color:#232526;margin-bottom:8px;">Banda {{ forloop.counter }}</div>
                 <div class="slider-label">Low Freq (Hz)
                     <span class="slider-value" id="low_freq_{{i}}_val">20</span>
                 </div>
-                <input type="range" name="band_{{i}}_low_freq" id="low_freq_{{i}}" min="20" max="20000" step="1" value="20" oninput="updateSliderValue('low_freq_{{i}}','low_freq_{{i}}_val')">
+                <input type="range" name="band_{{i}}_low_freq" id="low_freq_{{i}}" min="20" max="20000" step="1"
+                    value="20" oninput="updateSliderValue('low_freq_{{i}}','low_freq_{{i}}_val')">
                 <div class="slider-label">High Freq (Hz)
                     <span class="slider-value" id="high_freq_{{i}}_val">20000</span>
                 </div>
-                <input type="range" name="band_{{i}}_high_freq" id="high_freq_{{i}}" min="20" max="20000" step="1" value="20000" oninput="updateSliderValue('high_freq_{{i}}','high_freq_{{i}}_val')">
+                <input type="range" name="band_{{i}}_high_freq" id="high_freq_{{i}}" min="20" max="20000" step="1"
+                    value="20000" oninput="updateSliderValue('high_freq_{{i}}','high_freq_{{i}}_val')">
                 <div class="slider-label">Loudness (LUFS)
                     <span class="slider-value" id="band_loudness_{{i}}_val">-18</span>
                 </div>
-                <input type="range" name="band_{{i}}_loudness" id="band_loudness_{{i}}" min="-30" max="0" step="0.1" value="-18" oninput="updateSliderValue('band_loudness_{{i}}','band_loudness_{{i}}_val')">
+                <input type="range" name="band_{{i}}_loudness" id="band_loudness_{{i}}" min="-30" max="0" step="0.1"
+                    value="-18" oninput="updateSliderValue('band_loudness_{{i}}','band_loudness_{{i}}_val')">
                 <div class="slider-label">Loudness Range (LU)
                     <span class="slider-value" id="band_loudness_range_{{i}}_val">6</span>
                 </div>
-                <input type="range" name="band_{{i}}_loudness_range" id="band_loudness_range_{{i}}" min="0" max="20" step="0.1" value="6" oninput="updateSliderValue('band_loudness_range_{{i}}','band_loudness_range_{{i}}_val')">
+                <input type="range" name="band_{{i}}_loudness_range" id="band_loudness_range_{{i}}" min="0" max="20"
+                    step="0.1" value="6"
+                    oninput="updateSliderValue('band_loudness_range_{{i}}','band_loudness_range_{{i}}_val')">
                 <div class="slider-label">Mid Mean (dB)
                     <span class="slider-value" id="band_mid_mean_{{i}}_val">-15</span>
                 </div>
-                <input type="range" name="band_{{i}}_mid_mean" id="band_mid_mean_{{i}}" min="-30" max="0" step="0.1" value="-15" oninput="updateSliderValue('band_mid_mean_{{i}}','band_mid_mean_{{i}}_val')">
+                <input type="range" name="band_{{i}}_mid_mean" id="band_mid_mean_{{i}}" min="-30" max="0" step="0.1"
+                    value="-15" oninput="updateSliderValue('band_mid_mean_{{i}}','band_mid_mean_{{i}}_val')">
                 <div class="slider-label">Mid to Side Loudness (dB)
                     <span class="slider-value" id="band_mid_to_side_loudness_{{i}}_val">-10</span>
                 </div>
-                <input type="range" name="band_{{i}}_mid_to_side_loudness" id="band_mid_to_side_loudness_{{i}}" min="-30" max="0" step="0.1" value="-10" oninput="updateSliderValue('band_mid_to_side_loudness_{{i}}','band_mid_to_side_loudness_{{i}}_val')">
+                <input type="range" name="band_{{i}}_mid_to_side_loudness" id="band_mid_to_side_loudness_{{i}}"
+                    min="-30" max="0" step="0.1" value="-10"
+                    oninput="updateSliderValue('band_mid_to_side_loudness_{{i}}','band_mid_to_side_loudness_{{i}}_val')">
                 <div class="slider-label">Mid to Side Loudness Range (LU)
                     <span class="slider-value" id="band_mid_to_side_loudness_range_{{i}}_val">10</span>
                 </div>
-                <input type="range" name="band_{{i}}_mid_to_side_loudness_range" id="band_mid_to_side_loudness_range_{{i}}" min="0" max="20" step="0.1" value="10" oninput="updateSliderValue('band_mid_to_side_loudness_range_{{i}}','band_mid_to_side_loudness_range_{{i}}_val')">
+                <input type="range" name="band_{{i}}_mid_to_side_loudness_range"
+                    id="band_mid_to_side_loudness_range_{{i}}" min="0" max="20" step="0.1" value="10"
+                    oninput="updateSliderValue('band_mid_to_side_loudness_range_{{i}}','band_mid_to_side_loudness_range_{{i}}_val')">
                 <div class="slider-label">Side Mean (dB)
                     <span class="slider-value" id="band_side_mean_{{i}}_val">-20</span>
                 </div>
-                <input type="range" name="band_{{i}}_side_mean" id="band_side_mean_{{i}}" min="-30" max="0" step="0.1" value="-20" oninput="updateSliderValue('band_side_mean_{{i}}','band_side_mean_{{i}}_val')">
+                <input type="range" name="band_{{i}}_side_mean" id="band_side_mean_{{i}}" min="-30" max="0" step="0.1"
+                    value="-20" oninput="updateSliderValue('band_side_mean_{{i}}','band_side_mean_{{i}}_val')">
             </div>
             {% endfor %}
-            </div>
-            <button type="submit">Masterizar</button>
-        </form>
-    </div>
-    <footer>
-        &copy; Vevi a los mandos 2025
-    </footer>
-    <script>
-        const PRESETS = {
-            normal: {
-                global: { loudness: -10, loudness_range: 8, peak: 0.95, rms: -12, dynamics: 3, sharpness: 2, space: 0, drr: 10, sample_rate: 44100, channels: 2 },
-                bands: [
-                    {low_freq: 20, high_freq: 200, loudness: -18, loudness_range: 6, mid_mean: -15, mid_to_side_loudness: -10, mid_to_side_loudness_range: 10, side_mean: -20},
-                    {low_freq: 200, high_freq: 1000, loudness: -16, loudness_range: 7, mid_mean: -13, mid_to_side_loudness: -8, mid_to_side_loudness_range: 9, side_mean: -18},
-                    {low_freq: 1000, high_freq: 5000, loudness: -17, loudness_range: 8, mid_mean: -14, mid_to_side_loudness: -7, mid_to_side_loudness_range: 8, side_mean: -17},
-                    {low_freq: 5000, high_freq: 20000, loudness: -19, loudness_range: 9, mid_mean: -16, mid_to_side_loudness: -6, mid_to_side_loudness_range: 7, side_mean: -16},
-                ]
-            },
-            rock: {
-                global: { loudness: -7, loudness_range: 6, peak: 0.98, rms: -9, dynamics: 2.2, sharpness: 2.5, space: -2, drr: 12, sample_rate: 44100, channels: 2 },
-                bands: [
-                    {low_freq: 20, high_freq: 180, loudness: -15, loudness_range: 5, mid_mean: -13, mid_to_side_loudness: -9, mid_to_side_loudness_range: 8, side_mean: -18},
-                    {low_freq: 180, high_freq: 800, loudness: -13, loudness_range: 6, mid_mean: -11, mid_to_side_loudness: -7, mid_to_side_loudness_range: 7, side_mean: -16},
-                    {low_freq: 800, high_freq: 4000, loudness: -14, loudness_range: 7, mid_mean: -12, mid_to_side_loudness: -6, mid_to_side_loudness_range: 7, side_mean: -15},
-                    {low_freq: 4000, high_freq: 20000, loudness: -17, loudness_range: 8, mid_mean: -14, mid_to_side_loudness: -7, mid_to_side_loudness_range: 8, side_mean: -17},
-                ]
-            },
-            trap: {
-                global: { loudness: -7, loudness_range: 4, peak: 0.99, rms: -8, dynamics: 1.8, sharpness: 2.8, space: -2, drr: 10, sample_rate: 44100, channels: 2 },
-                bands: [
-                    {low_freq: 20, high_freq: 120, loudness: -14, loudness_range: 4, mid_mean: -12, mid_to_side_loudness: -8, mid_to_side_loudness_range: 7, side_mean: -18},
-                    {low_freq: 120, high_freq: 300, loudness: -13, loudness_range: 5, mid_mean: -11, mid_to_side_loudness: -7, mid_to_side_loudness_range: 6, side_mean: -16},
-                    {low_freq: 300, high_freq: 800, loudness: -15, loudness_range: 6, mid_mean: -13, mid_to_side_loudness: -6, mid_to_side_loudness_range: 6, side_mean: -15},
-                    {low_freq: 800, high_freq: 20000, loudness: -16, loudness_range: 7, mid_mean: -14, mid_to_side_loudness: -5, mid_to_side_loudness_range: 5, side_mean: -14},
-                ]
-            },
-            drill: {
-                global: { loudness: -6, loudness_range: 5, peak: 0.99, rms: -7, dynamics: 1.5, sharpness: 3, space: -1, drr: 9, sample_rate: 44100, channels: 2 },
-                bands: [
-                    {low_freq: 20, high_freq: 100, loudness: -13, loudness_range: 4, mid_mean: -11, mid_to_side_loudness: -7, mid_to_side_loudness_range: 6, side_mean: -17},
-                    {low_freq: 100, high_freq: 400, loudness: -12, loudness_range: 5, mid_mean: -10, mid_to_side_loudness: -6, mid_to_side_loudness_range: 5, side_mean: -15},
-                    {low_freq: 400, high_freq: 2000, loudness: -14, loudness_range: 6, mid_mean: -12, mid_to_side_loudness: -5, mid_to_side_loudness_range: 5, side_mean: -14},
-                    {low_freq: 2000, high_freq: 20000, loudness: -15, loudness_range: 7, mid_mean: -13, mid_to_side_loudness: -6, mid_to_side_loudness_range: 6, side_mean: -16},
-                ]
-            },
-            reggaeton: {
-                global: { loudness: -8, loudness_range: 5, peak: 0.98, rms: -9, dynamics: 2, sharpness: 2.5, space: -1, drr: 11, sample_rate: 44100, channels: 2 },
-                bands: [
-                    {low_freq: 20, high_freq: 150, loudness: -15, loudness_range: 5, mid_mean: -13, mid_to_side_loudness: -9, mid_to_side_loudness_range: 8, side_mean: -18},
-                    {low_freq: 150, high_freq: 600, loudness: -13, loudness_range: 6, mid_mean: -11, mid_to_side_loudness: -7, mid_to_side_loudness_range: 7, side_mean: -16},
-                    {low_freq: 600, high_freq: 3000, loudness: -14, loudness_range: 7, mid_mean: -12, mid_to_side_loudness: -6, mid_to_side_loudness_range: 7, side_mean: -15},
-                    {low_freq: 3000, high_freq: 20000, loudness: -17, loudness_range: 8, mid_mean: -14, mid_to_side_loudness: -7, mid_to_side_loudness_range: 8, side_mean: -17},
-                ]
-            },
-            rap: {
-                global: { loudness: -8, loudness_range: 7, peak: 0.97, rms: -11, dynamics: 2.7, sharpness: 2.3, space: -2, drr: 10, sample_rate: 44100, channels: 2 },
-                bands: [
-                    {low_freq: 20, high_freq: 180, loudness: -16, loudness_range: 6, mid_mean: -14, mid_to_side_loudness: -9, mid_to_side_loudness_range: 9, side_mean: -19},
-                    {low_freq: 180, high_freq: 800, loudness: -14, loudness_range: 7, mid_mean: -12, mid_to_side_loudness: -7, mid_to_side_loudness_range: 8, side_mean: -17},
-                    {low_freq: 800, high_freq: 4000, loudness: -15, loudness_range: 8, mid_mean: -13, mid_to_side_loudness: -6, mid_to_side_loudness_range: 8, side_mean: -16},
-                    {low_freq: 4000, high_freq: 20000, loudness: -18, loudness_range: 9, mid_mean: -15, mid_to_side_loudness: -7, mid_to_side_loudness_range: 9, side_mean: -18},
-                ]
-            },
-            pop: {
-                global: { loudness: -8, loudness_range: 6, peak: 0.98, rms: -10, dynamics: 2.5, sharpness: 2.2, space: -3, drr: 12, sample_rate: 44100, channels: 2 },
-                bands: [
-                    {low_freq: 20, high_freq: 150, loudness: -18, loudness_range: 5, mid_mean: -15, mid_to_side_loudness: -10, mid_to_side_loudness_range: 10, side_mean: -25},
-                    {low_freq: 150, high_freq: 400, loudness: -16, loudness_range: 6, mid_mean: -13, mid_to_side_loudness: -8, mid_to_side_loudness_range: 9, side_mean: -20},
-                    {low_freq: 400, high_freq: 800, loudness: -17, loudness_range: 7, mid_mean: -14, mid_to_side_loudness: -7, mid_to_side_loudness_range: 8, side_mean: -18},
-                    {low_freq: 800, high_freq: 20000, loudness: -18, loudness_range: 8, mid_mean: -15, mid_to_side_loudness: -6, mid_to_side_loudness_range: 7, side_mean: -17},
-                ]
-            },
-            hyperpop: {
-                global: { loudness: -5, loudness_range: 3, peak: 1, rms: -6, dynamics: 1.2, sharpness: 3.5, space: 2, drr: 8, sample_rate: 44100, channels: 2 },
-                bands: [
-                    {low_freq: 20, high_freq: 200, loudness: -12, loudness_range: 3, mid_mean: -10, mid_to_side_loudness: -6, mid_to_side_loudness_range: 5, side_mean: -14},
-                    {low_freq: 200, high_freq: 1000, loudness: -10, loudness_range: 4, mid_mean: -8, mid_to_side_loudness: -5, mid_to_side_loudness_range: 5, side_mean: -12},
-                    {low_freq: 1000, high_freq: 5000, loudness: -11, loudness_range: 5, mid_mean: -9, mid_to_side_loudness: -4, mid_to_side_loudness_range: 4, side_mean: -11},
-                    {low_freq: 5000, high_freq: 20000, loudness: -13, loudness_range: 6, mid_mean: -11, mid_to_side_loudness: -5, mid_to_side_loudness_range: 5, side_mean: -13},
-                ]
-            },
-        };
+        </div>
+        <button type="submit">Masterizar</button>
+    </form>
+</div>
+{% endblock %}
 
-        function setPreset(preset) {
-            const g = PRESETS[preset].global;
-            document.getElementById('loudness').value = g.loudness;
-            document.getElementById('loudness_val').textContent = g.loudness;
-            document.getElementById('loudness_range').value = g.loudness_range;
-            document.getElementById('loudness_range_val').textContent = g.loudness_range;
-            document.getElementById('peak').value = g.peak;
-            document.getElementById('peak_val').textContent = g.peak;
-            document.getElementById('rms').value = g.rms;
-            document.getElementById('rms_val').textContent = g.rms;
-            document.getElementById('dynamics').value = g.dynamics;
-            document.getElementById('dynamics_val').textContent = g.dynamics;
-            document.getElementById('sharpness').value = g.sharpness;
-            document.getElementById('sharpness_val').textContent = g.sharpness;
-            document.getElementById('space').value = g.space;
-            document.getElementById('space_val').textContent = g.space;
-            document.getElementById('drr').value = g.drr;
-            document.getElementById('drr_val').textContent = g.drr;
-            document.getElementById('sample_rate').value = g.sample_rate;
-            document.getElementById('sample_rate_val').textContent = g.sample_rate;
-            document.getElementById('channels').value = g.channels;
-            document.getElementById('channels_val').textContent = g.channels;
-            const bands = PRESETS[preset].bands;
-            for (let i = 0; i < 4; i++) {
-                const b = bands[i];
-                document.getElementById(`low_freq_${i}`).value = b.low_freq;
-                document.getElementById(`low_freq_${i}_val`).textContent = b.low_freq;
-                document.getElementById(`high_freq_${i}`).value = b.high_freq;
-                document.getElementById(`high_freq_${i}_val`).textContent = b.high_freq;
-                document.getElementById(`band_loudness_${i}`).value = b.loudness;
-                document.getElementById(`band_loudness_${i}_val`).textContent = b.loudness;
-                document.getElementById(`band_loudness_range_${i}`).value = b.loudness_range;
-                document.getElementById(`band_loudness_range_${i}_val`).textContent = b.loudness_range;
-                document.getElementById(`band_mid_mean_${i}`).value = b.mid_mean;
-                document.getElementById(`band_mid_mean_${i}_val`).textContent = b.mid_mean;
-                document.getElementById(`band_mid_to_side_loudness_${i}`).value = b.mid_to_side_loudness;
-                document.getElementById(`band_mid_to_side_loudness_${i}_val`).textContent = b.mid_to_side_loudness;
-                document.getElementById(`band_mid_to_side_loudness_range_${i}`).value = b.mid_to_side_loudness_range;
-                document.getElementById(`band_mid_to_side_loudness_range_${i}_val`).textContent = b.mid_to_side_loudness_range;
-                document.getElementById(`band_side_mean_${i}`).value = b.side_mean;
-                document.getElementById(`band_side_mean_${i}_val`).textContent = b.side_mean;
-            }
+{% block extra_js %}
+<script>
+    function updateSliderValue(sliderId, valueId) {
+        document.getElementById(valueId).textContent = document.getElementById(sliderId).value;
+    }
+
+    const PRESETS = {
+        normal: {
+            global: { loudness: -10, loudness_range: 8, peak: 0.95, rms: -12, dynamics: 3, sharpness: 2, space: 0, drr: 10, sample_rate: 44100, channels: 2 },
+            bands: [
+                { low_freq: 20, high_freq: 200, loudness: -18, loudness_range: 6, mid_mean: -15, mid_to_side_loudness: -10, mid_to_side_loudness_range: 10, side_mean: -20 },
+                { low_freq: 200, high_freq: 1000, loudness: -16, loudness_range: 7, mid_mean: -13, mid_to_side_loudness: -8, mid_to_side_loudness_range: 9, side_mean: -18 },
+                { low_freq: 1000, high_freq: 5000, loudness: -17, loudness_range: 8, mid_mean: -14, mid_to_side_loudness: -7, mid_to_side_loudness_range: 8, side_mean: -17 },
+                { low_freq: 5000, high_freq: 20000, loudness: -19, loudness_range: 9, mid_mean: -16, mid_to_side_loudness: -6, mid_to_side_loudness_range: 7, side_mean: -16 },
+            ]
+        },
+        rock: {
+            global: { loudness: -7, loudness_range: 6, peak: 0.98, rms: -9, dynamics: 2.2, sharpness: 2.5, space: -2, drr: 12, sample_rate: 44100, channels: 2 },
+            bands: [
+                { low_freq: 20, high_freq: 180, loudness: -15, loudness_range: 5, mid_mean: -13, mid_to_side_loudness: -9, mid_to_side_loudness_range: 8, side_mean: -18 },
+                { low_freq: 180, high_freq: 800, loudness: -13, loudness_range: 6, mid_mean: -11, mid_to_side_loudness: -7, mid_to_side_loudness_range: 7, side_mean: -16 },
+                { low_freq: 800, high_freq: 4000, loudness: -14, loudness_range: 7, mid_mean: -12, mid_to_side_loudness: -6, mid_to_side_loudness_range: 7, side_mean: -15 },
+                { low_freq: 4000, high_freq: 20000, loudness: -17, loudness_range: 8, mid_mean: -14, mid_to_side_loudness: -7, mid_to_side_loudness_range: 8, side_mean: -17 },
+            ]
+        },
+        trap: {
+            global: { loudness: -7, loudness_range: 4, peak: 0.99, rms: -8, dynamics: 1.8, sharpness: 2.8, space: -2, drr: 10, sample_rate: 44100, channels: 2 },
+            bands: [
+                { low_freq: 20, high_freq: 120, loudness: -14, loudness_range: 4, mid_mean: -12, mid_to_side_loudness: -8, mid_to_side_loudness_range: 7, side_mean: -18 },
+                { low_freq: 120, high_freq: 300, loudness: -13, loudness_range: 5, mid_mean: -11, mid_to_side_loudness: -7, mid_to_side_loudness_range: 6, side_mean: -16 },
+                { low_freq: 300, high_freq: 800, loudness: -15, loudness_range: 6, mid_mean: -13, mid_to_side_loudness: -6, mid_to_side_loudness_range: 6, side_mean: -15 },
+                { low_freq: 800, high_freq: 20000, loudness: -16, loudness_range: 7, mid_mean: -14, mid_to_side_loudness: -5, mid_to_side_loudness_range: 5, side_mean: -14 },
+            ]
+        },
+        drill: {
+            global: { loudness: -6, loudness_range: 5, peak: 0.99, rms: -7, dynamics: 1.5, sharpness: 3, space: -1, drr: 9, sample_rate: 44100, channels: 2 },
+            bands: [
+                { low_freq: 20, high_freq: 100, loudness: -13, loudness_range: 4, mid_mean: -11, mid_to_side_loudness: -7, mid_to_side_loudness_range: 6, side_mean: -17 },
+                { low_freq: 100, high_freq: 400, loudness: -12, loudness_range: 5, mid_mean: -10, mid_to_side_loudness: -6, mid_to_side_loudness_range: 5, side_mean: -15 },
+                { low_freq: 400, high_freq: 2000, loudness: -14, loudness_range: 6, mid_mean: -12, mid_to_side_loudness: -5, mid_to_side_loudness_range: 5, side_mean: -14 },
+                { low_freq: 2000, high_freq: 20000, loudness: -15, loudness_range: 7, mid_mean: -13, mid_to_side_loudness: -6, mid_to_side_loudness_range: 6, side_mean: -16 },
+            ]
+        },
+        reggaeton: {
+            global: { loudness: -8, loudness_range: 5, peak: 0.98, rms: -9, dynamics: 2, sharpness: 2.5, space: -1, drr: 11, sample_rate: 44100, channels: 2 },
+            bands: [
+                { low_freq: 20, high_freq: 150, loudness: -15, loudness_range: 5, mid_mean: -13, mid_to_side_loudness: -9, mid_to_side_loudness_range: 8, side_mean: -18 },
+                { low_freq: 150, high_freq: 600, loudness: -13, loudness_range: 6, mid_mean: -11, mid_to_side_loudness: -7, mid_to_side_loudness_range: 7, side_mean: -16 },
+                { low_freq: 600, high_freq: 3000, loudness: -14, loudness_range: 7, mid_mean: -12, mid_to_side_loudness: -6, mid_to_side_loudness_range: 7, side_mean: -15 },
+                { low_freq: 3000, high_freq: 20000, loudness: -17, loudness_range: 8, mid_mean: -14, mid_to_side_loudness: -7, mid_to_side_loudness_range: 8, side_mean: -17 },
+            ]
+        },
+        rap: {
+            global: { loudness: -8, loudness_range: 7, peak: 0.97, rms: -11, dynamics: 2.7, sharpness: 2.3, space: -2, drr: 10, sample_rate: 44100, channels: 2 },
+            bands: [
+                { low_freq: 20, high_freq: 180, loudness: -16, loudness_range: 6, mid_mean: -14, mid_to_side_loudness: -9, mid_to_side_loudness_range: 9, side_mean: -19 },
+                { low_freq: 180, high_freq: 800, loudness: -14, loudness_range: 7, mid_mean: -12, mid_to_side_loudness: -7, mid_to_side_loudness_range: 8, side_mean: -17 },
+                { low_freq: 800, high_freq: 4000, loudness: -15, loudness_range: 8, mid_mean: -13, mid_to_side_loudness: -6, mid_to_side_loudness_range: 8, side_mean: -16 },
+                { low_freq: 4000, high_freq: 20000, loudness: -18, loudness_range: 9, mid_mean: -15, mid_to_side_loudness: -7, mid_to_side_loudness_range: 9, side_mean: -18 },
+            ]
+        },
+        pop: {
+            global: { loudness: -8, loudness_range: 6, peak: 0.98, rms: -10, dynamics: 2.5, sharpness: 2.2, space: -3, drr: 12, sample_rate: 44100, channels: 2 },
+            bands: [
+                { low_freq: 20, high_freq: 150, loudness: -18, loudness_range: 5, mid_mean: -15, mid_to_side_loudness: -10, mid_to_side_loudness_range: 10, side_mean: -25 },
+                { low_freq: 150, high_freq: 400, loudness: -16, loudness_range: 6, mid_mean: -13, mid_to_side_loudness: -8, mid_to_side_loudness_range: 9, side_mean: -20 },
+                { low_freq: 400, high_freq: 800, loudness: -17, loudness_range: 7, mid_mean: -14, mid_to_side_loudness: -7, mid_to_side_loudness_range: 8, side_mean: -18 },
+                { low_freq: 800, high_freq: 20000, loudness: -18, loudness_range: 8, mid_mean: -15, mid_to_side_loudness: -6, mid_to_side_loudness_range: 7, side_mean: -17 },
+            ]
+        },
+        hyperpop: {
+            global: { loudness: -5, loudness_range: 3, peak: 1, rms: -6, dynamics: 1.2, sharpness: 3.5, space: 2, drr: 8, sample_rate: 44100, channels: 2 },
+            bands: [
+                { low_freq: 20, high_freq: 200, loudness: -12, loudness_range: 3, mid_mean: -10, mid_to_side_loudness: -6, mid_to_side_loudness_range: 5, side_mean: -14 },
+                { low_freq: 200, high_freq: 1000, loudness: -10, loudness_range: 4, mid_mean: -8, mid_to_side_loudness: -5, mid_to_side_loudness_range: 5, side_mean: -12 },
+                { low_freq: 1000, high_freq: 5000, loudness: -11, loudness_range: 5, mid_mean: -9, mid_to_side_loudness: -4, mid_to_side_loudness_range: 4, side_mean: -11 },
+                { low_freq: 5000, high_freq: 20000, loudness: -13, loudness_range: 6, mid_mean: -11, mid_to_side_loudness: -5, mid_to_side_loudness_range: 5, side_mean: -13 },
+            ]
+        },
+    };
+
+    function setPreset(preset) {
+        const g = PRESETS[preset].global;
+        document.getElementById('loudness').value = g.loudness;
+        document.getElementById('loudness_val').textContent = g.loudness;
+        document.getElementById('loudness_range').value = g.loudness_range;
+        document.getElementById('loudness_range_val').textContent = g.loudness_range;
+        document.getElementById('peak').value = g.peak;
+        document.getElementById('peak_val').textContent = g.peak;
+        document.getElementById('rms').value = g.rms;
+        document.getElementById('rms_val').textContent = g.rms;
+        document.getElementById('dynamics').value = g.dynamics;
+        document.getElementById('dynamics_val').textContent = g.dynamics;
+        document.getElementById('sharpness').value = g.sharpness;
+        document.getElementById('sharpness_val').textContent = g.sharpness;
+        document.getElementById('space').value = g.space;
+        document.getElementById('space_val').textContent = g.space;
+        document.getElementById('drr').value = g.drr;
+        document.getElementById('drr_val').textContent = g.drr;
+        document.getElementById('sample_rate').value = g.sample_rate;
+        document.getElementById('sample_rate_val').textContent = g.sample_rate;
+        document.getElementById('channels').value = g.channels;
+        document.getElementById('channels_val').textContent = g.channels;
+        const bands = PRESETS[preset].bands;
+        for (let i = 0; i < 4; i++) {
+            const b = bands[i];
+            document.getElementById(`low_freq_${i}`).value = b.low_freq;
+            document.getElementById(`low_freq_${i}_val`).textContent = b.low_freq;
+            document.getElementById(`high_freq_${i}`).value = b.high_freq;
+            document.getElementById(`high_freq_${i}_val`).textContent = b.high_freq;
+            document.getElementById(`band_loudness_${i}`).value = b.loudness;
+            document.getElementById(`band_loudness_${i}_val`).textContent = b.loudness;
+            document.getElementById(`band_loudness_range_${i}`).value = b.loudness_range;
+            document.getElementById(`band_loudness_range_${i}_val`).textContent = b.loudness_range;
+            document.getElementById(`band_mid_mean_${i}`).value = b.mid_mean;
+            document.getElementById(`band_mid_mean_${i}_val`).textContent = b.mid_mean;
+            document.getElementById(`band_mid_to_side_loudness_${i}`).value = b.mid_to_side_loudness;
+            document.getElementById(`band_mid_to_side_loudness_${i}_val`).textContent = b.mid_to_side_loudness;
+            document.getElementById(`band_mid_to_side_loudness_range_${i}`).value = b.mid_to_side_loudness_range;
+            document.getElementById(`band_mid_to_side_loudness_range_${i}_val`).textContent = b.mid_to_side_loudness_range;
+            document.getElementById(`band_side_mean_${i}`).value = b.side_mean;
+            document.getElementById(`band_side_mean_${i}_val`).textContent = b.side_mean;
         }
-        document.getElementById('preset').addEventListener('change', function() {
-            setPreset(this.value);
-        });
-        window.onload = function() {
-            setPreset(document.getElementById('preset').value);
-        };
-    </script>
-</body>
-</html>
+    }
+    document.getElementById('preset').addEventListener('change', function () {
+        setPreset(this.value);
+    });
+    window.onload = function () {
+        setPreset(document.getElementById('preset').value);
+    };
+</script>
+{% endblock %}

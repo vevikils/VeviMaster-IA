@@ -1,0 +1,119 @@
+{% extends 'analyzer/base.html' %}
+
+{% block title %}Resultados del Análisis - Analizador de Música{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-lg-8 mx-auto">
+        <div class="card mb-4">
+            <div class="card-header">
+                <h2 class="mb-0">
+                    <i class="fas fa-chart-line"></i> Resultados del Análisis
+                </h2>
+            </div>
+            <div class="card-body">
+                <div class="mb-4">
+                    <h5><i class="fas fa-file-audio"></i> Archivo analizado:</h5>
+                    <p class="text-muted">{{ analysis.audio_file.name }}</p>
+                    <small class="text-muted">Analizado el {{ analysis.uploaded_at|date:"d/m/Y H:i" }}</small>
+                </div>
+
+                <div class="text-center mb-4">
+                    <h4>Estado de Ánimo Detectado</h4>
+                    <div class="mood-badge bg-primary text-white">
+                        <i class="fas fa-smile"></i> {{ analysis.mood|title }}
+                        <br>
+                        <small>Confianza: {{ analysis.mood_confidence|floatformat:1 }}%</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header">
+                <h3 class="mb-0">
+                    <i class="fas fa-music"></i> Géneros Musicales (Top 10)
+                </h3>
+            </div>
+            <div class="card-body">
+                {% for genre, percentage in top_genres %}
+                <div class="mb-3">
+                    <div class="d-flex justify-content-between align-items-center mb-1">
+                        <strong>{{ genre }}</strong>
+                        <span class="badge bg-light text-dark">{{ percentage|floatformat:2 }}%</span>
+                    </div>
+                    <div class="progress" style="height: 25px;">
+                        <div class="progress-bar" role="progressbar"
+                            style="width: {{ percentage }}%; background: linear-gradient(90deg, #6366f1, #8b5cf6);"
+                            aria-valuenow="{{ percentage }}" aria-valuemin="0" aria-valuemax="100">
+                            {{ percentage|floatformat:1 }}%
+                        </div>
+                    </div>
+                </div>
+                {% empty %}
+                <p class="text-muted">No se detectaron géneros.</p>
+                {% endfor %}
+            </div>
+        </div>
+
+        <div class="card mt-4">
+            <div class="card-header">
+                <h3 class="mb-0">
+                    <i class="fas fa-list"></i> Todos los Géneros
+                </h3>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    {% for genre, percentage in analysis.genres_percent.items|dictsortreversed:1 %}
+                    <div class="col-md-6 mb-2">
+                        <div class="d-flex justify-content-between">
+                            <span>{{ genre }}</span>
+                            <span class="text-muted">{{ percentage|floatformat:2 }}%</span>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+
+        <div class="text-center mt-4">
+            <a href="{% url 'analyzer:index' %}" class="btn btn-primary btn-lg">
+                <i class="fas fa-arrow-left"></i> Analizar Otro Archivo
+            </a>
+            <a href="{% url 'analyzer:api_results' analysis.id %}" class="btn btn-outline-primary btn-lg"
+                target="_blank">
+                <i class="fas fa-code"></i> Ver JSON
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+    .progress {
+        border-radius: 15px;
+        overflow: hidden;
+    }
+
+    .progress-bar {
+        transition: width 1s ease-in-out;
+    }
+</style>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    // Animación de las barras de progreso
+    document.addEventListener('DOMContentLoaded', function () {
+        const progressBars = document.querySelectorAll('.progress-bar');
+        progressBars.forEach(bar => {
+            const width = bar.style.width;
+            bar.style.width = '0%';
+            setTimeout(() => {
+                bar.style.width = width;
+            }, 100);
+        });
+    });
+</script>
+{% endblock %}

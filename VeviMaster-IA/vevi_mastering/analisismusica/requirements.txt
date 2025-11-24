@@ -1,0 +1,10 @@
+musicnn==0.1.0
+numpy>=1.19.0,<1.25
+scipy>=1.2.0
+librosa>=0.7.0
+soundfile>=0.10.0
+tensorflow>=2.5,<2.16
+colorama>=0.4
+django>=5.0
+
+
