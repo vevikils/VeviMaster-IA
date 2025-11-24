@@ -74,72 +74,39 @@ def upload_audio(request):
         output_filename = f'{base_name}_vevi_master_ia.wav'
         output_path = os.path.join(settings.MEDIA_ROOT, output_filename)
 
-        # Ejecutar masterización
+        # --- EJECUCIÓN CON PHASELIMITER (EXCLUSIVO DOCKER/LINUX) ---
         BASE_DIR = settings.BASE_DIR
         bin_dir = os.path.join(BASE_DIR, 'app_files', 'phaselimiter', 'phaselimiter', 'bin')
-        
-        # Detectar binario según SO
-        exe_name = 'phase_limiter' # El binario que tienes es Linux
+        exe_name = 'phase_limiter'
         exe_path = os.path.join(bin_dir, exe_name)
 
-        # Verificamos si podemos ejecutar PhaseLimiter
-        if os.name != 'nt' and os.path.exists(exe_path):
-            # Estamos en Linux/Mac y existe el binario
-            use_phaselimiter = True
-            # Asegurar permisos
+        print(f"Usando motor: PhaseLimiter en {exe_path}")
+        
+        # Asegurar permisos (solo si estamos en Linux/Mac, aunque en Docker ya debería estar)
+        if os.name != 'nt':
             try:
                 import stat
                 st = os.stat(exe_path)
                 os.chmod(exe_path, st.st_mode | stat.S_IEXEC)
             except Exception:
                 pass
-        
-        if use_phaselimiter:
-            # --- EJECUCIÓN CON PHASELIMITER (PRODUCCIÓN/DOCKER) ---
-            print("Usando motor: PhaseLimiter")
-            env = os.environ.copy()
-            env['PATH'] = bin_dir + os.pathsep + env['PATH']
-            
-            cmd = [
-                exe_path,
-                f'-input={input_path}',
-                f'-output={output_path}',
-                f'-mastering_reference_file={config_path}'
-            ]
-            
-            try:
-                result = subprocess.run(cmd, capture_output=True, text=True, timeout=300, cwd=BASE_DIR, env=env)
-                if result.returncode != 0:
-                    return HttpResponse(f'Error en PhaseLimiter:<br><pre>{result.stderr}</pre>', status=500)
-            except Exception as e:
-                return HttpResponse(f'Error ejecutando PhaseLimiter: {e}', status=500)
-                
-        else:
-            # --- EJECUCIÓN CON FFMPEG (DESARROLLO WINDOWS) ---
-            # Fallback porque PhaseLimiter no corre en Windows
-            print("Usando motor: FFmpeg (Fallback para Windows)")
-            
-            target_lufs = global_params['loudness']
-            target_peak = global_params['peak']
-            
-            filter_chain = "acompressor=threshold=-20dB:ratio=2:attack=5:release=50,"
-            filter_chain += "equalizer=f=60:width_type=o:width=2:g=2,"
-            filter_chain += "equalizer=f=12000:width_type=o:width=2:g=2,"
-            filter_chain += f"loudnorm=I={target_lufs}:TP={target_peak}:LRA=11,"
-            filter_chain += f"alimiter=limit=-0.5dB:level_in=1:level_out=1:attack=5:release=50"
 
-            cmd = [
-                'ffmpeg', '-y', '-i', input_path,
-                '-filter_complex', filter_chain,
-                '-ar', '44100', output_path
-            ]
-            
-            try:
-                result = subprocess.run(cmd, capture_output=True, text=True, encoding='utf-8', errors='replace', timeout=300)
-                if result.returncode != 0:
-                    return HttpResponse(f'Error en FFmpeg:<br><pre>{result.stderr}</pre>', status=500)
-            except Exception as e:
-                return HttpResponse(f'Error ejecutando FFmpeg: {e}', status=500)
+        env = os.environ.copy()
+        env['PATH'] = bin_dir + os.pathsep + env['PATH']
+        
+        cmd = [
+            exe_path,
+            f'-input={input_path}',
+            f'-output={output_path}',
+            f'-mastering_reference_file={config_path}'
+        ]
+        
+        try:
+            result = subprocess.run(cmd, capture_output=True, text=True, timeout=300, cwd=BASE_DIR, env=env)
+            if result.returncode != 0:
+                return HttpResponse(f'Error en PhaseLimiter:<br><pre>{result.stderr}</pre>', status=500)
+        except Exception as e:
+            return HttpResponse(f'Error ejecutando PhaseLimiter: {e}', status=500)
 
         # ANALIZAR OUTPUT (DESPUÉS)
         metrics_after = analyze_audio_metrics(output_path)
