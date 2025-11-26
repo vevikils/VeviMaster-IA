@@ -9,20 +9,33 @@ from typing import Dict, List, Tuple
 from .forms import AudioUploadForm
 from .models import AudioAnalysis
 
-# Importar funciones de análisis
-from musicnn.tagger import top_tags
+# Importar funciones de análisis (opcional)
+try:
+    from musicnn.tagger import top_tags
+    MUSICNN_AVAILABLE = True
+except ImportError:
+    MUSICNN_AVAILABLE = False
+    top_tags = None
 
 # Importar desde el módulo genres_moods en el directorio raíz del proyecto
 import sys
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, BASE_DIR)
 
-from genres_moods import (
-    TARGET_GENRES,
-    MOOD_CATEGORIES,
-    map_genre_tag_to_target,
-    map_tag_to_mood,
-)
+try:
+    from genres_moods import (
+        TARGET_GENRES,
+        MOOD_CATEGORIES,
+        map_genre_tag_to_target,
+        map_tag_to_mood,
+    )
+    GENRES_MOODS_AVAILABLE = True
+except ImportError:
+    GENRES_MOODS_AVAILABLE = False
+    TARGET_GENRES = []
+    MOOD_CATEGORIES = []
+    map_genre_tag_to_target = lambda x: None
+    map_tag_to_mood = lambda x: None
 
 
 def aggregate_genre_percentages(tags: List[str], scores: List[float]) -> Dict[str, float]:
@@ -57,6 +70,12 @@ def infer_mood(tags: List[str], scores: List[float]) -> Tuple[str, float, Dict[s
 
 def analyze_audio(audio_path: str, top_n: int = 50) -> Dict:
     """Analiza un archivo de audio y retorna los resultados"""
+    if not MUSICNN_AVAILABLE:
+        return {
+            'success': False,
+            'error': 'musicnn no está instalado. Instala las dependencias de análisis de música.'
+        }
+    
     try:
         # Obtener tags del modelo
         # Desactivar print_tags para evitar output en el servidor

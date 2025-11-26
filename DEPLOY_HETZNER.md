@@ -1,31 +1,98 @@
 # Guía de Despliegue en Hetzner con Docker
 
-## 🚀 Pasos para desplegar
+Esta guía te ayudará a desplegar **VeviMaster-IA** en un servidor Hetzner usando Docker.
 
-### 1. Crear servidor en Hetzner
+## 📋 Requisitos Previos
 
-1. Ve a https://www.hetzner.com/cloud
-2. Crea una cuenta si no tienes
-3. Crea un nuevo proyecto
-4. Crea un servidor (Cloud Server):
-   - **Ubicación**: Nuremberg, Germany (o la más cercana)
+- ✓ Cuenta en [Hetzner Cloud](https://www.hetzner.com/cloud)
+- ✓ Cuenta en [GitHub](https://github.com) (para clonar el repositorio)
+- ✓ Cliente SSH instalado en tu máquina local
+- ✓ ~€4-6/mes para el servidor
+
+## 🚀 Parte 1: Preparación desde Windows
+
+### Paso 1: Preparar archivos de configuración
+
+Ejecuta el script de preparación en tu máquina Windows:
+
+```powershell
+.\prepare_hetzner.ps1 -ServerIP TU_IP_DEL_SERVIDOR
+```
+
+Este script:
+- ✓ Genera una `SECRET_KEY` segura automáticamente
+- ✓ Crea el archivo `.env.hetzner` con la configuración correcta
+- ✓ Te ayuda a hacer commit y push de los cambios (opcional)
+
+**Ejemplo:**
+```powershell
+.\prepare_hetzner.ps1 -ServerIP 95.217.161.141
+```
+
+### Paso 2: Verificar configuración
+
+El script creará un archivo `.env.hetzner` que se verá así:
+
+```env
+DEBUG=False
+SECRET_KEY=tu_secret_key_generada_automaticamente
+ALLOWED_HOSTS=95.217.161.141
+DATABASE_URL=sqlite:///db.sqlite3
+```
+
+**Guarda este contenido**, lo necesitarás en el servidor.
+
+---
+
+## 🌐 Parte 2: Crear Servidor en Hetzner
+
+### Paso 1: Crear cuenta y proyecto
+
+1. Ve a [Hetzner Cloud](https://www.hetzner.com/cloud)
+2. Crea una cuenta si no tienes (necesitarás una tarjeta de crédito)
+3. Crea un nuevo proyecto (ej: "VeviMaster-IA")
+
+### Paso 2: Crear servidor
+
+1. Haz clic en **"Add Server"**
+2. Configura:
+   - **Ubicación**: Nuremberg, Germany (o la más cercana a ti)
    - **Imagen**: Ubuntu 22.04
-   - **Tipo**: CX11 (2GB RAM, ~€4/mes) o superior
-   - **SSH Key**: Agrega tu clave SSH pública
-5. Espera a que el servidor se cree (~1 minuto)
-6. Anota la IP pública del servidor
+   - **Tipo**: 
+     - **CX21** (4GB RAM, 40GB SSD) - **Recomendado** (~€6/mes)
+     - CX11 (2GB RAM, 20GB SSD) - Mínimo (~€4/mes)
+   - **Networking**: IPv4 (por defecto)
+   - **SSH Keys**: 
+     - Si tienes una clave SSH, agrégala aquí
+     - Si no, puedes usar contraseña (menos seguro)
+   - **Nombre**: vevi-master-ia
 
-### 2. Conectar al servidor
+3. Haz clic en **"Create & Buy now"**
+4. Espera ~1 minuto a que el servidor se cree
+5. **Anota la IP pública** que aparece (ej: `95.217.161.141`)
 
-Desde tu terminal local:
+### Paso 3: Conectar al servidor
 
-```bash
+Desde PowerShell o CMD en Windows:
+
+```powershell
 ssh root@TU_IP_DEL_SERVIDOR
 ```
 
-### 3. Ejecutar script de despliegue
+**Ejemplo:**
+```powershell
+ssh root@95.217.161.141
+```
 
-En el servidor, ejecuta:
+Si es la primera vez, te preguntará si confías en el servidor, escribe `yes`.
+
+---
+
+## 🐳 Parte 3: Desplegar en el Servidor
+
+### Paso 1: Ejecutar script de despliegue
+
+Una vez conectado al servidor vía SSH, ejecuta:
 
 ```bash
 # Descargar el script de despliegue
@@ -38,24 +105,50 @@ chmod +x deploy-hetzner.sh
 ./deploy-hetzner.sh
 ```
 
-El script te pedirá que configures las variables de entorno. Edita el archivo `.env`:
+### Paso 2: Configurar variables de entorno
+
+El script te pedirá que configures el archivo `.env`. Cuando veas el mensaje:
+
+```
+⚠️  IMPORTANTE: Edita el archivo .env con tus valores:
+   nano .env
+```
+
+Presiona Enter y luego:
 
 ```bash
 nano .env
 ```
 
-Configura:
-- `SECRET_KEY`: Genera una en https://djecrety.ir/
-- `ALLOWED_HOSTS`: Pon la IP de tu servidor (ej: `123.45.67.89`)
+**Copia el contenido del archivo `.env.hetzner`** que generaste en Windows (Parte 1, Paso 2).
 
-Guarda con `Ctrl+O`, Enter, `Ctrl+X`
+Para pegar en nano:
+- En PowerShell/Windows Terminal: Clic derecho
+- En PuTTY: Clic derecho
 
-### 4. Acceder a tu aplicación
+Guarda y cierra:
+- `Ctrl+O` (guardar)
+- `Enter` (confirmar)
+- `Ctrl+X` (salir)
 
-Abre en tu navegador:
+### Paso 3: Continuar con el despliegue
+
+Presiona `Enter` para continuar. El script:
+- ✓ Construirá la imagen Docker (~5-10 minutos)
+- ✓ Iniciará el contenedor
+- ✓ Ejecutará las migraciones de Django
+- ✓ Recolectará archivos estáticos
+
+### Paso 4: Acceder a tu aplicación
+
+Una vez completado, verás un mensaje como:
+
 ```
-http://TU_IP_DEL_SERVIDOR:8000
+✅ Despliegue completado!
+Tu aplicación está corriendo en: http://95.217.161.141:8000
 ```
+
+Abre esa URL en tu navegador. ¡Listo! 🎉
 
 ## 🔧 Comandos útiles
 

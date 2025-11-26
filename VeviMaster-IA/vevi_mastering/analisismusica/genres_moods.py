@@ -109,11 +109,13 @@ MOOD_SYNONYMS = {
 }
 
 
+from typing import Optional
+
 def normalize_tag(text: str) -> str:
     return (text or "").strip().lower()
 
 
-def map_genre_tag_to_target(tag: str) -> str | None:
+def map_genre_tag_to_target(tag: str) -> Optional[str]:
     tag_norm = normalize_tag(tag)
     if tag_norm in TARGET_GENRES:
         return tag_norm
@@ -122,7 +124,7 @@ def map_genre_tag_to_target(tag: str) -> str | None:
     return None
 
 
-def map_tag_to_mood(tag: str) -> str | None:
+def map_tag_to_mood(tag: str) -> Optional[str]:
     tag_norm = normalize_tag(tag)
     if tag_norm in MOOD_SYNONYMS:
         return MOOD_SYNONYMS[tag_norm]

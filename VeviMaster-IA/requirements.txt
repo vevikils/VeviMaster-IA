@@ -1,16 +1,21 @@
 Django>=4.0
 gunicorn
 whitenoise
-dj-database-url
+dj-database-url<3.0
 python-dotenv
 gdown
 
 # Dependencias para análisis de música con IA
-# IMPORTANTE: Instalar en este orden para evitar conflictos
-numpy>=1.19.0,<1.25
-scipy>=1.2.0
+# IMPORTANTE: musicnn requiere versiones específicas de numpy y tensorflow
+# Python 3.8 es necesario para compatibilidad
+numpy>=1.14.5,<1.17
+scipy>=1.2.0,<1.6
 soundfile>=0.10.0
-librosa>=0.7.0
-tensorflow>=2.5,<2.16
+librosa==0.8.1
+# TensorFlow compatible con musicnn y Python 3.8
+tensorflow==2.3.0
+# Protobuf compatible con TensorFlow 2.3.0
+protobuf==3.20.3
+# musicnn para análisis de audio
 musicnn==0.1.0
 colorama>=0.4

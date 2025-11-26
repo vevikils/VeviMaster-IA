@@ -1,0 +1,21 @@
+# Django y dependencias web
+Django>=4.0
+gunicorn
+whitenoise
+dj-database-url<3.0
+python-dotenv
+gdown
+
+# Dependencias para análisis de música con IA
+# Versiones compatibles con Python 3.11
+numpy>=1.21.0
+scipy>=1.7.0
+soundfile>=0.10.0
+librosa>=0.9.0
+# TensorFlow compatible con Python 3.11
+tensorflow>=2.13.0
+# Protobuf compatible
+protobuf>=3.20.0
+# musicnn para análisis de audio
+musicnn>=0.1.0
+colorama>=0.4

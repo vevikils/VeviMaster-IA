@@ -4,14 +4,15 @@ ENV DEBIAN_FRONTEND=noninteractive
 ENV PYTHONUNBUFFERED=1
 ENV PYTHONDONTWRITEBYTECODE=1
 
-# Instalar Python 3.11, ffmpeg y dependencias del sistema
+# Instalar Python 3.8, ffmpeg y dependencias del sistema
+# IMPORTANTE: Python 3.8 es necesario para compatibilidad con musicnn y numpy<1.17
 RUN apt-get update && apt-get install -y \
     software-properties-common \
     && add-apt-repository ppa:deadsnakes/ppa \
     && apt-get update && apt-get install -y \
-    python3.11 \
-    python3.11-venv \
-    python3.11-dev \
+    python3.8 \
+    python3.8-venv \
+    python3.8-dev \
     python3-pip \
     curl \
     unzip \
@@ -21,12 +22,12 @@ RUN apt-get update && apt-get install -y \
     ffmpeg \
     && rm -rf /var/lib/apt/lists/*
 
-# Configurar Python 3.11 como predeterminado
-RUN update-alternatives --install /usr/bin/python3 python3 /usr/bin/python3.11 1 \
-    && update-alternatives --install /usr/bin/python python /usr/bin/python3.11 1
+# Configurar Python 3.8 como predeterminado
+RUN update-alternatives --install /usr/bin/python3 python3 /usr/bin/python3.8 1 \
+    && update-alternatives --install /usr/bin/python python /usr/bin/python3.8 1
 
-# Asegurar pip actualizado
-RUN curl -sS https://bootstrap.pypa.io/get-pip.py | python3.11
+# Asegurar pip actualizado (usar URL específica para Python 3.8)
+RUN curl -sS https://bootstrap.pypa.io/pip/3.8/get-pip.py | python3.8
 
 WORKDIR /app
 
@@ -41,7 +42,7 @@ COPY VeviMaster-IA/vevi_mastering ./vevi_mastering
 # Nota: chmod +x es CRÍTICO para que el binario funcione en Linux
 RUN pip install gdown && \
     gdown "https://drive.google.com/uc?id=1CNe457Xc-m3DB4_W37Poba--IjXvnQ9k" -O app_files.zip && \
-    unzip -q app_files.zip -d vevi_mastering/ && \
+    unzip -o -q app_files.zip -d vevi_mastering/ && \
     rm app_files.zip && \
     chmod -R 755 vevi_mastering/app_files/phaselimiter/phaselimiter/bin/
 

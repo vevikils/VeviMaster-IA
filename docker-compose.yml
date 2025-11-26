@@ -1,13 +1,11 @@
-version: '3.8'
-
 services:
   web:
     build: .
     ports:
-      - "8000:8000"
+      - "8001:8000"
     environment:
       - SECRET_KEY=${SECRET_KEY}
-      - DEBUG=False
+      - DEBUG=True
       - ALLOWED_HOSTS=${ALLOWED_HOSTS}
       - DATABASE_URL=${DATABASE_URL:-sqlite:///db.sqlite3}
     volumes:

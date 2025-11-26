@@ -2,6 +2,9 @@ import subprocess
 import json
 import re
 import math
+import logging
+
+logger = logging.getLogger(__name__)
 
 def analyze_audio_metrics(file_path):
     """
@@ -15,10 +18,7 @@ def analyze_audio_metrics(file_path):
     }
 
     try:
-        # Comando para obtener LUFS (Integrated Loudness) y True Peak usando el filtro ebur128
-        # y volumedetect para RMS (aunque ebur128 es más completo para loudness)
-        
-        # 1. Análisis de Loudness (LUFS y True Peak) con ebur128
+        # 1. LUFS and True Peak using ebur128
         cmd_lufs = [
             'ffmpeg',
             '-i', file_path,
@@ -26,31 +26,45 @@ def analyze_audio_metrics(file_path):
             '-f', 'null',
             '-'
         ]
-        
         result_lufs = subprocess.run(
-            cmd_lufs, 
-            capture_output=True, 
-            text=True, 
+            cmd_lufs,
+            capture_output=True,
+            text=True,
             encoding='utf-8',
             errors='replace'
         )
-        
-        # Parsear salida de ebur128
         output = result_lufs.stderr
+
+        # Estrategia robusta: Buscar todas las ocurrencias de "I: ... LUFS"
+        # El resumen final siempre está al final de la salida.
+        # Las actualizaciones de progreso no suelen tener este formato exacto.
+        matches = re.findall(r'I:\s+([-]?\d+(?:\.\d+)?)\s+LUFS', output)
         
-        # Buscar Integrated loudness
-        lufs_match = re.search(r'I:\s+([-\d\.]+)\s+LUFS', output)
-        if lufs_match:
-            metrics['lufs'] = float(lufs_match.group(1))
-            
-        # Buscar True Peak (tomamos el máximo de todos los canales)
-        peak_matches = re.findall(r'Peak:\s+([-\d\.]+)\s+dBFS', output)
+        if matches:
+            # Tomamos el último valor encontrado, que corresponde al Summary
+            metrics['lufs'] = float(matches[-1])
+            logger.info(f"LUFS detectado (findall last match): {metrics['lufs']}")
+        else:
+            logger.warning(f"WARNING: No se pudo detectar LUFS en {file_path}")
+            logger.warning(f"Comando ejecutado: {' '.join(cmd_lufs)}")
+            # Log full output only on failure
+            logger.warning(f"Salida ffmpeg (últimos 1000 chars):\n{output[-1000:]}")
+        # Debug: always log the output to see what ffmpeg is returning
+        logger.info(f"Analizando LUFS para: {file_path}")
+        
+        if metrics['lufs'] == -70.0:
+            logger.warning(f"WARNING: No se pudo detectar LUFS en {file_path}")
+            logger.warning(f"Comando ejecutado: {' '.join(cmd_lufs)}")
+            # Log full output only on failure
+            logger.warning(f"Salida ffmpeg (últimos 1000 chars):\n{output[-1000:]}")
+
+        # True Peak: take max of all channels
+        peak_matches = re.findall(r'Peak:\s+([-]?\d+(?:\.\d+)?)\s+dBFS', output)
         if peak_matches:
-            # Convertir a float y tomar el máximo
             peaks = [float(p) for p in peak_matches]
             metrics['peak'] = max(peaks) if peaks else -70.0
 
-        # 2. Análisis de RMS con volumedetect (es rápido y estándar)
+        # 2. RMS using volumedetect
         cmd_rms = [
             'ffmpeg',
             '-i', file_path,
@@ -58,29 +72,27 @@ def analyze_audio_metrics(file_path):
             '-f', 'null',
             '-'
         ]
-        
         result_rms = subprocess.run(
-            cmd_rms, 
-            capture_output=True, 
-            text=True, 
+            cmd_rms,
+            capture_output=True,
+            text=True,
             encoding='utf-8',
             errors='replace'
         )
-        
         output_rms = result_rms.stderr
-        
-        # Buscar mean_volume (RMS)
-        rms_match = re.search(r'mean_volume:\s+([-\d\.]+)\s+dB', output_rms)
+
+        # mean_volume (RMS)
+        rms_match = re.search(r'mean_volume:\s+([-]?\d+(?:\.\d+)?)\s+dB', output_rms)
         if rms_match:
             metrics['rms'] = float(rms_match.group(1))
-            
-        # Si no encontramos Peak con ebur128, intentamos con volumedetect (max_volume)
+
+        # fallback for peak if not found earlier
         if metrics['peak'] == -70.0:
-            peak_match = re.search(r'max_volume:\s+([-\d\.]+)\s+dB', output_rms)
+            peak_match = re.search(r'max_volume:\s+([-]?\d+(?:\.\d+)?)\s+dB', output_rms)
             if peak_match:
                 metrics['peak'] = float(peak_match.group(1))
 
     except Exception as e:
-        print(f"Error analizando audio {file_path}: {e}")
-        
+        logger.error(f"Error analizando audio {file_path}: {e}", exc_info=True)
+
     return metrics
