@@ -98,8 +98,7 @@
                     <h4>Estado de Ánimo Detectado</h4>
                     <div class="mood-badge bg-primary text-white">
                         <i class="fas fa-smile"></i> {{ analysis.mood|title }}<br><small
-                            style="font-size: 0.6em; opacity: 0.9;">Confianza: {{ analysis.mood_confidence|floatformat:1
-                            }}%</small>
+                            style="font-size: 0.6em; opacity: 0.9;">Confianza: {{ mood_confidence_display }}%</small>
                     </div>
                 </div>
             </div>

@@ -283,9 +283,13 @@ def results(request, analysis_id):
     
     top_genres = analysis.get_top_genres(top_n=10)
     
+    # Format mood_confidence for display
+    mood_confidence_display = f"{analysis.mood_confidence:.1f}" if analysis.mood_confidence else "0.0"
+    
     return render(request, 'analyzer/results.html', {
         'analysis': analysis,
         'top_genres': top_genres,
+        'mood_confidence_display': mood_confidence_display,
     })
 
 
