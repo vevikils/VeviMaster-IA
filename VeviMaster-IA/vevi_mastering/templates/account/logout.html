@@ -1,0 +1,102 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block title %}Cerrar Sesión - VeviMaster IA{% endblock %}
+
+{% block extra_css %}
+<style>
+    body {
+        background: #0a0e27;
+    }
+
+    .main-content {
+        padding: 0 !important;
+        margin: 0 !important;
+        display: flex !important;
+        align-items: center;
+        justify-content: center;
+        min-height: 80vh;
+    }
+
+    .logout-card {
+        background: rgba(255, 255, 255, 0.03);
+        backdrop-filter: blur(20px);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 24px;
+        padding: 3rem;
+        max-width: 500px;
+        text-align: center;
+        box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+    }
+
+    .logout-title {
+        font-size: 2rem;
+        font-weight: 700;
+        color: white;
+        margin-bottom: 1rem;
+    }
+
+    .logout-text {
+        color: #94a3b8;
+        margin-bottom: 2rem;
+    }
+
+    .btn-logout {
+        width: 100%;
+        padding: 1rem;
+        background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+        border: none;
+        border-radius: 12px;
+        color: white;
+        font-size: 1rem;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 15px rgba(239, 68, 68, 0.4);
+        margin-bottom: 1rem;
+    }
+
+    .btn-logout:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 20px rgba(239, 68, 68, 0.5);
+    }
+
+    .btn-cancel {
+        width: 100%;
+        padding: 1rem;
+        background: rgba(255, 255, 255, 0.05);
+        border: 2px solid rgba(255, 255, 255, 0.1);
+        border-radius: 12px;
+        color: white;
+        font-size: 1rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        text-decoration: none;
+        display: block;
+    }
+
+    .btn-cancel:hover {
+        background: rgba(255, 255, 255, 0.1);
+        border-color: rgba(255, 255, 255, 0.2);
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="logout-card">
+    <h2 class="logout-title">¿Cerrar sesión?</h2>
+    <p class="logout-text">¿Estás seguro de que quieres cerrar tu sesión?</p>
+
+    <form method="POST" action="{% url 'account_logout' %}">
+        {% csrf_token %}
+        <button type="submit" class="btn-logout">
+            <i class="fas fa-sign-out-alt"></i> Sí, cerrar sesión
+        </button>
+    </form>
+
+    <a href="{% url 'mastering:upload' %}" class="btn-cancel">
+        Cancelar
+    </a>
+</div>
+{% endblock %}

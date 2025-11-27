@@ -106,7 +106,6 @@ TEMPLATES = [
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [
             os.path.join(BASE_DIR, 'templates'),
-            os.path.join(BASE_DIR, 'vevi_mastering', 'templates'),
         ],
         'APP_DIRS': True,
         'OPTIONS': {
