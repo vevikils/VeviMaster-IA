@@ -2,17 +2,15 @@
 {% load i18n %}
 {% load account socialaccount %}
 
-{% block title %}Iniciar Sesión - VeviMaster IA{% endblock %}
+{% block title %}Crear Cuenta - VeviMaster IA{% endblock %}
 
 {% block extra_css %}
 <style>
     body {
         background: #0f172a;
-        /* Fondo oscuro base */
         overflow-x: hidden;
     }
 
-    /* Fondo animado */
     .bg-animation {
         position: fixed;
         top: 0;
@@ -61,7 +59,6 @@
         }
     }
 
-    /* Tarjeta Glassmorphism */
     .auth-card {
         background: rgba(255, 255, 255, 0.03);
         backdrop-filter: blur(20px);
@@ -87,7 +84,6 @@
         margin-bottom: 0.5rem;
     }
 
-    /* Inputs personalizados */
     .form-floating>.form-control {
         background: rgba(15, 23, 42, 0.6);
         border: 1px solid rgba(255, 255, 255, 0.1);
@@ -105,7 +101,6 @@
         color: #94a3b8;
     }
 
-    /* Botones */
     .btn-google {
         background: white;
         color: #1e293b;
@@ -189,8 +184,8 @@
         <div class="col-md-6 col-lg-5 col-xl-4">
             <div class="auth-card">
                 <div class="text-center mb-5">
-                    <h2 class="auth-title">Bienvenido de nuevo</h2>
-                    <p class="text-secondary mb-0">Accede a tu estudio de masterización IA</p>
+                    <h2 class="auth-title">Crea tu cuenta</h2>
+                    <p class="text-secondary mb-0">Únete a la revolución del mastering IA</p>
                 </div>
 
                 {% get_providers as socialaccount_providers %}
@@ -202,50 +197,55 @@
                         href="{% provider_login_url provider.id process='login' scope=scope auth_params=auth_params %}">
                         <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google"
                             width="24" height="24">
-                        <span>Continuar con Google</span>
+                        <span>Registrarse con Google</span>
                     </a>
                     {% endif %}
                     {% endfor %}
                 </div>
 
                 <div class="divider">
-                    <span>o continúa con email</span>
+                    <span>o regístrate con email</span>
                 </div>
                 {% endif %}
 
-                <form class="login" method="POST" action="{% url 'account_login' %}">
+                <form class="signup" id="signup_form" method="POST" action="{% url 'account_signup' %}">
                     {% csrf_token %}
 
                     {% if form.errors %}
                     <div
                         class="alert alert-danger bg-danger bg-opacity-10 border-danger border-opacity-25 text-danger rounded-3 mb-4">
-                        <small><i class="fas fa-exclamation-circle me-2"></i>Credenciales incorrectas. Inténtalo de
-                            nuevo.</small>
+                        {% for field in form %}
+                        {% for error in field.errors %}
+                        <small><i class="fas fa-exclamation-circle me-2"></i>{{ error }}</small><br>
+                        {% endfor %}
+                        {% endfor %}
+                        {% for error in form.non_field_errors %}
+                        <small><i class="fas fa-exclamation-circle me-2"></i>{{ error }}</small>
+                        {% endfor %}
                     </div>
                     {% endif %}
 
+                    {% for field in form %}
+                    {% if field.name != 'remember' %}
                     <div class="form-floating mb-3">
-                        <input type="email" name="login" class="form-control" id="id_login"
-                            placeholder="name@example.com" required>
-                        <label for="id_login">Correo Electrónico</label>
+                        <input type="{{ field.field.widget.input_type }}" name="{{ field.name }}" class="form-control"
+                            id="{{ field.id_for_label }}" placeholder="{{ field.label }}" {% if field.field.required
+                            %}required{% endif %}>
+                        <label for="{{ field.id_for_label }}">{{ field.label }}</label>
                     </div>
+                    {% endif %}
+                    {% endfor %}
 
-                    <div class="form-floating mb-4">
-                        <input type="password" name="password" class="form-control" id="id_password"
-                            placeholder="Password" required>
-                        <label for="id_password">Contraseña</label>
-                    </div>
-
-                    <div class="d-grid">
+                    <div class="d-grid mt-4">
                         <button class="btn btn-submit" type="submit">
-                            Iniciar Sesión <i class="fas fa-arrow-right ms-2"></i>
+                            Crear Cuenta <i class="fas fa-user-plus ms-2"></i>
                         </button>
                     </div>
                 </form>
 
                 <div class="text-center mt-4">
-                    <p class="mb-0 text-secondary">¿Aún no tienes cuenta? <a href="{% url 'account_signup' %}"
-                            class="auth-link">Regístrate gratis</a></p>
+                    <p class="mb-0 text-secondary">¿Ya tienes cuenta? <a href="{% url 'account_login' %}"
+                            class="auth-link">Inicia sesión</a></p>
                 </div>
             </div>
         </div>
