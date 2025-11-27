@@ -12,6 +12,9 @@ from .utils import analyze_audio_metrics
 
 logger = logging.getLogger(__name__)
 
+from django.contrib.auth.decorators import login_required
+
+@login_required
 @csrf_exempt
 def upload_audio(request):
     """Handle audio upload, run PhaseLimiter and return metrics before/after."""
@@ -141,6 +144,7 @@ def upload_audio(request):
     # GET request – render upload form
     return render(request, 'mastering/upload.html')
 
+@login_required
 def download_master(request, filename):
     """Vista para descargar el archivo masterizado."""
     file_path = os.path.join(settings.MEDIA_ROOT, filename)

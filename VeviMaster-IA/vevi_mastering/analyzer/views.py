@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
+from django.contrib.auth.decorators import login_required
 import os
 import json
 from typing import Dict, List, Tuple
@@ -166,6 +167,7 @@ def analyze_audio(audio_path: str, top_n: int = 50) -> Dict:
         }
 
 
+@login_required
 def index(request):
     """Vista principal para subir y analizar audio"""
     if request.method == 'POST':
@@ -273,6 +275,7 @@ def index(request):
     })
 
 
+@login_required
 def results(request, analysis_id):
     """Vista para mostrar los resultados del análisis"""
     try:
@@ -293,6 +296,7 @@ def results(request, analysis_id):
     })
 
 
+@login_required
 def api_results(request, analysis_id):
     """API endpoint para obtener resultados en JSON"""
     try:

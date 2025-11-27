@@ -18,4 +18,9 @@ tensorflow==2.3.0
 protobuf==3.20.3
 # musicnn para análisis de audio
 musicnn==0.1.0
+
+# Autenticación y Social Login
+django-allauth>=0.54.0
+requests>=2.0.0
+pyjwt>=2.0.0
 colorama>=0.4
