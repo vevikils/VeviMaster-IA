@@ -106,13 +106,21 @@ TEMPLATES = [
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [
             BASE_DIR / 'templates',
+            BASE_DIR / 'mastering' / 'templates',
+            BASE_DIR / 'analyzer' / 'templates',
         ],
-        'APP_DIRS': True,
+        'APP_DIRS': False,  # Desactivado para usar loaders personalizados
         'OPTIONS': {
             'context_processors': [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+            ],
+            'loaders': [
+                # Primero busca en DIRS (nuestras plantillas personalizadas)
+                'django.template.loaders.filesystem.Loader',
+                # Luego busca en las apps
+                'django.template.loaders.app_directories.Loader',
             ],
         },
     },
