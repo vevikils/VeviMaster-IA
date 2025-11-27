@@ -24,3 +24,6 @@ django-allauth>=0.54.0
 requests>=2.0.0
 pyjwt>=2.0.0
 colorama>=0.4
+
+# Admin moderno
+django-unfold>=0.15.0
