@@ -7,246 +7,477 @@
 {% block extra_css %}
 <style>
     body {
-        background: #0f172a;
-        /* Fondo oscuro base */
+        background: #0a0e27;
         overflow-x: hidden;
+        margin: 0;
+        padding: 0;
     }
 
-    /* Fondo animado */
-    .bg-animation {
+    .main-content {
+        padding: 0 !important;
+        margin: 0 !important;
+        display: block !important;
+    }
+
+    /* Animated background */
+    .auth-background {
         position: fixed;
         top: 0;
         left: 0;
         width: 100%;
         height: 100%;
-        z-index: -1;
-        background: radial-gradient(circle at 50% 50%, #1e1b4b 0%, #0f172a 100%);
+        z-index: 0;
+        background: linear-gradient(135deg, #0a0e27 0%, #1a1f3a 50%, #0a0e27 100%);
+        overflow: hidden;
     }
 
-    .orb {
+    .gradient-orb {
         position: absolute;
         border-radius: 50%;
-        filter: blur(80px);
-        opacity: 0.4;
-        animation: float 10s infinite ease-in-out;
+        filter: blur(100px);
+        opacity: 0.3;
+        animation: float 15s infinite ease-in-out;
     }
 
     .orb-1 {
-        width: 300px;
-        height: 300px;
-        background: #6366f1;
-        top: 10%;
-        left: 20%;
+        width: 500px;
+        height: 500px;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        top: -10%;
+        left: -10%;
         animation-delay: 0s;
     }
 
     .orb-2 {
         width: 400px;
         height: 400px;
-        background: #8b5cf6;
-        bottom: 10%;
-        right: 10%;
-        animation-delay: -5s;
+        background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        bottom: -10%;
+        right: -10%;
+        animation-delay: -7s;
+    }
+
+    .orb-3 {
+        width: 350px;
+        height: 350px;
+        background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        animation-delay: -3s;
     }
 
     @keyframes float {
 
         0%,
         100% {
-            transform: translate(0, 0);
+            transform: translate(0, 0) scale(1);
+        }
+
+        33% {
+            transform: translate(50px, -50px) scale(1.1);
+        }
+
+        66% {
+            transform: translate(-30px, 30px) scale(0.9);
+        }
+    }
+
+    /* Container */
+    .auth-container {
+        position: relative;
+        z-index: 1;
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 2rem;
+    }
+
+    .auth-wrapper {
+        width: 100%;
+        max-width: 1200px;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 0;
+        background: rgba(255, 255, 255, 0.02);
+        border-radius: 30px;
+        overflow: hidden;
+        box-shadow: 0 30px 60px rgba(0, 0, 0, 0.5);
+        backdrop-filter: blur(20px);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        animation: slideUp 0.6s ease-out;
+    }
+
+    @keyframes slideUp {
+        from {
+            opacity: 0;
+            transform: translateY(30px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    /* Left side - Branding */
+    .auth-branding {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        padding: 4rem;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .auth-branding::before {
+        content: '';
+        position: absolute;
+        top: -50%;
+        left: -50%;
+        width: 200%;
+        height: 200%;
+        background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, transparent 70%);
+        animation: rotate 20s linear infinite;
+    }
+
+    @keyframes rotate {
+        from {
+            transform: rotate(0deg);
+        }
+
+        to {
+            transform: rotate(360deg);
+        }
+    }
+
+    .brand-content {
+        position: relative;
+        z-index: 1;
+    }
+
+    .brand-logo {
+        font-size: 4rem;
+        margin-bottom: 1.5rem;
+        animation: pulse 2s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+
+        0%,
+        100% {
+            transform: scale(1);
         }
 
         50% {
-            transform: translate(30px, -30px);
+            transform: scale(1.05);
         }
     }
 
-    /* Tarjeta Glassmorphism */
-    .auth-card {
-        background: rgba(255, 255, 255, 0.03);
-        backdrop-filter: blur(20px);
-        -webkit-backdrop-filter: blur(20px);
-        border: 1px solid rgba(255, 255, 255, 0.1);
-        border-radius: 24px;
-        box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
-        padding: 3rem;
-        color: white;
-        transition: transform 0.3s ease;
-    }
-
-    .auth-card:hover {
-        transform: translateY(-5px);
-        border-color: rgba(99, 102, 241, 0.3);
-    }
-
-    .auth-title {
+    .brand-title {
+        font-size: 2.5rem;
         font-weight: 800;
-        background: linear-gradient(135deg, #fff 0%, #a5b4fc 100%);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
+        color: white;
+        margin-bottom: 1rem;
+        text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+    }
+
+    .brand-subtitle {
+        font-size: 1.1rem;
+        color: rgba(255, 255, 255, 0.9);
+        line-height: 1.6;
+        max-width: 400px;
+    }
+
+    /* Right side - Form */
+    .auth-form-container {
+        padding: 4rem;
+        background: rgba(10, 14, 39, 0.8);
+        backdrop-filter: blur(10px);
+    }
+
+    .form-header {
+        margin-bottom: 2.5rem;
+    }
+
+    .form-title {
+        font-size: 2rem;
+        font-weight: 700;
+        color: white;
         margin-bottom: 0.5rem;
     }
 
-    /* Inputs personalizados */
-    .form-floating>.form-control {
-        background: rgba(15, 23, 42, 0.6);
-        border: 1px solid rgba(255, 255, 255, 0.1);
-        color: white;
-        border-radius: 12px;
-    }
-
-    .form-floating>.form-control:focus {
-        background: rgba(15, 23, 42, 0.8);
-        border-color: #6366f1;
-        box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.1);
-    }
-
-    .form-floating>label {
+    .form-subtitle {
         color: #94a3b8;
+        font-size: 1rem;
     }
 
-    /* Botones */
+    /* Google Button */
     .btn-google {
+        width: 100%;
         background: white;
         color: #1e293b;
         border: none;
-        font-weight: 600;
         border-radius: 12px;
-        transition: all 0.2s;
+        padding: 1rem;
+        font-weight: 600;
+        font-size: 1rem;
         display: flex;
         align-items: center;
         justify-content: center;
         gap: 12px;
-        padding: 0.8rem;
+        transition: all 0.3s ease;
+        cursor: pointer;
+        text-decoration: none;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     }
 
     .btn-google:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 12px rgba(0, 0, 0, 0.15);
         background: #f8fafc;
-        transform: translateY(-2px);
-        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
     }
 
-    .btn-submit {
-        background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
-        border: none;
-        color: white;
-        font-weight: 700;
-        border-radius: 12px;
-        padding: 1rem;
-        letter-spacing: 0.5px;
-        transition: all 0.3s;
-        box-shadow: 0 10px 15px -3px rgba(99, 102, 241, 0.3);
+    .btn-google img {
+        width: 24px;
+        height: 24px;
     }
 
-    .btn-submit:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 20px 25px -5px rgba(99, 102, 241, 0.4);
-        filter: brightness(1.1);
-    }
-
+    /* Divider */
     .divider {
         display: flex;
         align-items: center;
-        text-align: center;
-        color: #64748b;
         margin: 2rem 0;
+        color: #64748b;
+        font-size: 0.875rem;
     }
 
     .divider::before,
     .divider::after {
         content: '';
         flex: 1;
-        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        height: 1px;
+        background: rgba(255, 255, 255, 0.1);
     }
 
     .divider span {
         padding: 0 1rem;
-        font-size: 0.875rem;
     }
 
-    .auth-link {
+    /* Form inputs */
+    .form-group {
+        margin-bottom: 1.5rem;
+    }
+
+    .form-label {
+        display: block;
+        color: #cbd5e1;
+        font-size: 0.875rem;
+        font-weight: 600;
+        margin-bottom: 0.5rem;
+    }
+
+    .form-input {
+        width: 100%;
+        padding: 1rem;
+        background: rgba(15, 23, 42, 0.6);
+        border: 2px solid rgba(255, 255, 255, 0.1);
+        border-radius: 12px;
+        color: white;
+        font-size: 1rem;
+        transition: all 0.3s ease;
+    }
+
+    .form-input:focus {
+        outline: none;
+        border-color: #667eea;
+        background: rgba(15, 23, 42, 0.8);
+        box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
+    }
+
+    .form-input::placeholder {
+        color: #64748b;
+    }
+
+    /* Submit button */
+    .btn-submit {
+        width: 100%;
+        padding: 1rem;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        border: none;
+        border-radius: 12px;
+        color: white;
+        font-size: 1rem;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+    }
+
+    .btn-submit:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 20px rgba(102, 126, 234, 0.5);
+    }
+
+    .btn-submit:active {
+        transform: translateY(0);
+    }
+
+    /* Links */
+    .form-footer {
+        margin-top: 2rem;
+        text-align: center;
+    }
+
+    .form-link {
         color: #818cf8;
         text-decoration: none;
-        font-weight: 500;
+        font-weight: 600;
         transition: color 0.2s;
     }
 
-    .auth-link:hover {
+    .form-link:hover {
         color: #a5b4fc;
-        text-decoration: underline;
+    }
+
+    /* Error messages */
+    .alert-error {
+        background: rgba(239, 68, 68, 0.1);
+        border: 1px solid rgba(239, 68, 68, 0.3);
+        border-radius: 12px;
+        padding: 1rem;
+        color: #fca5a5;
+        margin-bottom: 1.5rem;
+        font-size: 0.875rem;
+    }
+
+    /* Responsive */
+    @media (max-width: 968px) {
+        .auth-wrapper {
+            grid-template-columns: 1fr;
+        }
+
+        .auth-branding {
+            padding: 3rem 2rem;
+        }
+
+        .brand-title {
+            font-size: 2rem;
+        }
+
+        .auth-form-container {
+            padding: 3rem 2rem;
+        }
+    }
+
+    @media (max-width: 640px) {
+        .auth-container {
+            padding: 1rem;
+        }
+
+        .auth-branding {
+            padding: 2rem 1.5rem;
+        }
+
+        .auth-form-container {
+            padding: 2rem 1.5rem;
+        }
+
+        .form-title {
+            font-size: 1.5rem;
+        }
     }
 </style>
 {% endblock %}
 
 {% block content %}
-<div class="bg-animation">
-    <div class="orb orb-1"></div>
-    <div class="orb orb-2"></div>
+<div class="auth-background">
+    <div class="gradient-orb orb-1"></div>
+    <div class="gradient-orb orb-2"></div>
+    <div class="gradient-orb orb-3"></div>
 </div>
 
-<div class="container">
-    <div class="row justify-content-center align-items-center" style="min-height: 85vh;">
-        <div class="col-md-6 col-lg-5 col-xl-4">
-            <div class="auth-card">
-                <div class="text-center mb-5">
-                    <h2 class="auth-title">Bienvenido de nuevo</h2>
-                    <p class="text-secondary mb-0">Accede a tu estudio de masterización IA</p>
+<div class="auth-container">
+    <div class="auth-wrapper">
+        <!-- Left side - Branding -->
+        <div class="auth-branding">
+            <div class="brand-content">
+                <div class="brand-logo">
+                    <i class="fas fa-wave-square"></i>
+                </div>
+                <h1 class="brand-title">VeviMaster IA</h1>
+                <p class="brand-subtitle">
+                    Masterización profesional con inteligencia artificial.
+                    Lleva tu música al siguiente nivel.
+                </p>
+            </div>
+        </div>
+
+        <!-- Right side - Form -->
+        <div class="auth-form-container">
+            <div class="form-header">
+                <h2 class="form-title">Bienvenido de nuevo</h2>
+                <p class="form-subtitle">Accede a tu estudio de masterización</p>
+            </div>
+
+            {% if form.errors %}
+            <div class="alert-error">
+                <i class="fas fa-exclamation-circle"></i>
+                Credenciales incorrectas. Por favor, inténtalo de nuevo.
+            </div>
+            {% endif %}
+
+            {% get_providers as socialaccount_providers %}
+            {% if socialaccount_providers %}
+            {% for provider in socialaccount_providers %}
+            {% if provider.id == "google" %}
+            <a href="{% provider_login_url provider.id process='login' scope=scope auth_params=auth_params %}"
+                class="btn-google">
+                <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google">
+                <span>Continuar con Google</span>
+            </a>
+            {% endif %}
+            {% endfor %}
+
+            <div class="divider">
+                <span>o continúa con email</span>
+            </div>
+            {% endif %}
+
+            <form method="POST" action="{% url 'account_login' %}">
+                {% csrf_token %}
+
+                <div class="form-group">
+                    <label for="id_login" class="form-label">Correo Electrónico</label>
+                    <input type="email" name="login" id="id_login" class="form-input" placeholder="tu@email.com"
+                        required>
                 </div>
 
-                {% get_providers as socialaccount_providers %}
-                {% if socialaccount_providers %}
-                <div class="d-grid gap-2 mb-4">
-                    {% for provider in socialaccount_providers %}
-                    {% if provider.id == "google" %}
-                    <a title="{{ provider.name }}" class="btn btn-google"
-                        href="{% provider_login_url provider.id process='login' scope=scope auth_params=auth_params %}">
-                        <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google"
-                            width="24" height="24">
-                        <span>Continuar con Google</span>
-                    </a>
-                    {% endif %}
-                    {% endfor %}
+                <div class="form-group">
+                    <label for="id_password" class="form-label">Contraseña</label>
+                    <input type="password" name="password" id="id_password" class="form-input" placeholder="••••••••"
+                        required>
                 </div>
 
-                <div class="divider">
-                    <span>o continúa con email</span>
-                </div>
-                {% endif %}
+                <button type="submit" class="btn-submit">
+                    <span>Iniciar Sesión</span>
+                    <i class="fas fa-arrow-right"></i>
+                </button>
+            </form>
 
-                <form class="login" method="POST" action="{% url 'account_login' %}">
-                    {% csrf_token %}
-
-                    {% if form.errors %}
-                    <div
-                        class="alert alert-danger bg-danger bg-opacity-10 border-danger border-opacity-25 text-danger rounded-3 mb-4">
-                        <small><i class="fas fa-exclamation-circle me-2"></i>Credenciales incorrectas. Inténtalo de
-                            nuevo.</small>
-                    </div>
-                    {% endif %}
-
-                    <div class="form-floating mb-3">
-                        <input type="email" name="login" class="form-control" id="id_login"
-                            placeholder="name@example.com" required>
-                        <label for="id_login">Correo Electrónico</label>
-                    </div>
-
-                    <div class="form-floating mb-4">
-                        <input type="password" name="password" class="form-control" id="id_password"
-                            placeholder="Password" required>
-                        <label for="id_password">Contraseña</label>
-                    </div>
-
-                    <div class="d-grid">
-                        <button class="btn btn-submit" type="submit">
-                            Iniciar Sesión <i class="fas fa-arrow-right ms-2"></i>
-                        </button>
-                    </div>
-                </form>
-
-                <div class="text-center mt-4">
-                    <p class="mb-0 text-secondary">¿Aún no tienes cuenta? <a href="{% url 'account_signup' %}"
-                            class="auth-link">Regístrate gratis</a></p>
-                </div>
+            <div class="form-footer">
+                <p style="color: #94a3b8;">
+                    ¿Aún no tienes cuenta?
+                    <a href="{% url 'account_signup' %}" class="form-link">Regístrate gratis</a>
+                </p>
             </div>
         </div>
     </div>
