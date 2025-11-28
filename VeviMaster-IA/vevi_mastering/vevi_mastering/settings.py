@@ -91,6 +91,7 @@ AUTHENTICATION_BACKENDS = [
 # Configuración de Allauth
 LOGIN_URL = 'account_login'
 LOGIN_REDIRECT_URL = 'mastering:upload'
+ACCOUNT_SIGNUP_REDIRECT_URL = 'mastering:upload'  # Redirect after signup
 LOGOUT_REDIRECT_URL = 'account_login'
 ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_USERNAME_REQUIRED = False
