@@ -34,6 +34,13 @@ ALLOWED_HOSTS = [host.strip() for host in os.environ.get('ALLOWED_HOSTS', '').sp
 if not ALLOWED_HOSTS:
     ALLOWED_HOSTS = ['localhost', '127.0.0.1', '0.0.0.0']
 
+# CSRF trusted origins for HTTPS
+CSRF_TRUSTED_ORIGINS = [
+    'https://vevimaster.com',
+    'https://www.vevimaster.com',
+]
+
+
 
 # Application definition
 
