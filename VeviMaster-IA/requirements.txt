@@ -4,6 +4,7 @@ whitenoise
 dj-database-url<3.0
 python-dotenv
 gdown
+psycopg2-binary>=2.9.0
 
 # Dependencias para análisis de música con IA
 # IMPORTANTE: musicnn requiere versiones específicas de numpy y tensorflow
