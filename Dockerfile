@@ -54,4 +54,4 @@ EXPOSE 8000
 WORKDIR /app/vevi_mastering
 
 # Comando de inicio con Gunicorn
-CMD ["gunicorn", "--bind", "0.0.0.0:8000", "--workers", "3", "--timeout", "300", "vevi_mastering.wsgi:application"]
+CMD ["gunicorn", "--bind", "0.0.0.0:8000", "--workers", "1", "--timeout", "300", "vevi_mastering.wsgi:application"]
