@@ -3,235 +3,383 @@
 {% block title %}Resultados de Masterización - VeviMaster-IA{% endblock %}
 
 {% block extra_css %}
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 <style>
-    .main-content {
-        padding: 2rem 1rem;
+    :root {
+        --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        --glass-bg: rgba(255, 255, 255, 0.03);
+        --glass-border: rgba(255, 255, 255, 0.05);
+        --text-main: #ffffff;
+        --text-muted: #94a3b8;
+        --accent-color: #8b5cf6;
+        --success-color: #10b981;
+        --warning-color: #f59e0b;
     }
 
-    .card {
-        border: none;
-        border-radius: 15px;
-        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-        backdrop-filter: blur(10px);
-        background: rgba(255, 255, 255, 0.95);
+    body {
+        background: #0f172a;
+        color: var(--text-main);
+        font-family: 'Inter', system-ui, -apple-system, sans-serif;
     }
 
-    .card-header {
-        background: linear-gradient(135deg, #4f8cff, #232526);
+    .results-container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 3rem 1rem;
+    }
+
+    .results-card {
+        background: var(--glass-bg);
+        backdrop-filter: blur(20px);
+        border: 1px solid var(--glass-border);
+        border-radius: 24px;
+        padding: 0;
+        overflow: hidden;
+        box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+    }
+
+    .results-header {
+        background: var(--primary-gradient);
+        padding: 3rem 2rem;
+        text-align: center;
+        position: relative;
+    }
+
+    .results-title {
+        font-size: 2.5rem;
+        font-weight: 800;
+        margin-bottom: 0.5rem;
         color: white;
-        border-radius: 15px 15px 0 0 !important;
-        padding: 1.5rem;
+    }
+
+    .results-subtitle {
+        color: rgba(255, 255, 255, 0.8);
+        font-size: 1.1rem;
+    }
+
+    .results-body {
+        padding: 3rem 2rem;
+    }
+
+    .download-section {
+        text-align: center;
+        margin-bottom: 4rem;
+        padding: 2rem;
+        background: rgba(255, 255, 255, 0.02);
+        border-radius: 16px;
+        border: 1px dashed rgba(255, 255, 255, 0.1);
+    }
+
+    .file-name {
+        font-size: 1.25rem;
+        color: var(--accent-color);
+        margin-bottom: 1.5rem;
+        font-weight: 600;
+    }
+
+    .btn-download {
+        background: white;
+        color: #7c3aed;
+        border: none;
+        padding: 1rem 2.5rem;
+        font-size: 1.2rem;
+        font-weight: 700;
+        border-radius: 12px;
+        transition: all 0.3s ease;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.75rem;
+        box-shadow: 0 10px 25px -5px rgba(255, 255, 255, 0.2);
+    }
+
+    .btn-download:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 20px 30px -10px rgba(255, 255, 255, 0.3);
+        color: #6d28d9;
+    }
+
+    .metrics-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 2rem;
+        margin-bottom: 4rem;
     }
 
     .metric-card {
-        background: #f8fafc;
-        border-radius: 10px;
-        padding: 1.5rem;
+        background: rgba(255, 255, 255, 0.03);
+        border: 1px solid rgba(255, 255, 255, 0.05);
+        border-radius: 16px;
+        padding: 2rem;
         text-align: center;
-        transition: transform 0.2s;
-        height: 100%;
+        transition: transform 0.3s ease;
     }
 
     .metric-card:hover {
         transform: translateY(-5px);
-        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-    }
-
-    .metric-value {
-        font-size: 2rem;
-        font-weight: 700;
-        color: #232526;
+        background: rgba(255, 255, 255, 0.05);
     }
 
     .metric-label {
-        color: #64748b;
-        font-weight: 600;
-        text-transform: uppercase;
-        font-size: 0.8rem;
-        letter-spacing: 1px;
-    }
-
-    .metric-diff {
-        font-weight: 600;
+        color: var(--text-muted);
         font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        margin-bottom: 1.5rem;
+        font-weight: 600;
     }
 
-    .diff-positive {
-        color: #10b981;
+    .metric-comparison {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 2rem;
     }
 
-    .diff-negative {
-        color: #ef4444;
+    .metric-value-box {
+        display: flex;
+        flex-direction: column;
+        gap: 0.25rem;
     }
 
-    .diff-neutral {
-        color: #64748b;
+    .metric-value-label {
+        font-size: 0.8rem;
+        color: var(--text-muted);
     }
 
-    .btn-download {
-        background: linear-gradient(90deg, #4f8cff 0%, #232526 100%);
-        color: white;
-        border: none;
-        padding: 1rem 2rem;
-        font-size: 1.2rem;
+    .metric-value {
+        font-size: 1.75rem;
         font-weight: 700;
-        border-radius: 10px;
-        transition: all 0.3s;
-        text-decoration: none;
-        display: inline-block;
+        font-family: 'JetBrains Mono', monospace;
     }
 
-    .btn-download:hover {
-        transform: scale(1.05);
-        color: white;
-        box-shadow: 0 10px 20px rgba(79, 140, 255, 0.3);
+    .value-before {
+        color: rgba(255, 255, 255, 0.5);
+    }
+
+    .value-after {
+        color: var(--accent-color);
+    }
+
+    .metric-arrow {
+        color: rgba(255, 255, 255, 0.2);
+        font-size: 1.25rem;
+    }
+
+    /* Table Styling */
+    .table-container {
+        background: rgba(255, 255, 255, 0.02);
+        border-radius: 16px;
+        overflow: hidden;
+        border: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .comparison-table {
+        width: 100%;
+        border-collapse: collapse;
     }
 
     .comparison-table th {
-        background-color: #f1f5f9;
+        background: rgba(255, 255, 255, 0.05);
+        padding: 1.25rem;
+        text-align: left;
+        font-weight: 600;
+        color: var(--text-muted);
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+    .comparison-table td {
+        padding: 1.25rem;
+        border-top: 1px solid rgba(255, 255, 255, 0.05);
+        color: white;
+    }
+
+    .comparison-table tr:hover td {
+        background: rgba(255, 255, 255, 0.02);
+    }
+
+    .badge {
+        padding: 0.35rem 0.75rem;
+        border-radius: 9999px;
+        font-size: 0.8rem;
+        font-weight: 600;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.4rem;
+    }
+
+    .badge-success {
+        background: rgba(16, 185, 129, 0.2);
+        color: #34d399;
+    }
+
+    .badge-warning {
+        background: rgba(245, 158, 11, 0.2);
+        color: #fbbf24;
+    }
+
+    .badge-info {
+        background: rgba(59, 130, 246, 0.2);
+        color: #60a5fa;
+    }
+
+    .badge-neutral {
+        background: rgba(148, 163, 184, 0.2);
+        color: #cbd5e1;
+    }
+
+    .action-buttons {
+        text-align: center;
+        margin-top: 3rem;
+    }
+
+    .btn-secondary {
+        background: transparent;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        color: white;
+        padding: 0.75rem 1.5rem;
+        border-radius: 10px;
+        text-decoration: none;
+        transition: all 0.2s;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .btn-secondary:hover {
+        border-color: white;
+        background: rgba(255, 255, 255, 0.05);
     }
 </style>
 {% endblock %}
 
 {% block content %}
-<div class="container py-5">
-    <div class="row justify-content-center">
-        <div class="col-lg-10">
-            <div class="card mb-5">
-                <div class="card-header text-center">
-                    <h2 class="mb-0"><i class="fas fa-sliders-h"></i> Resultados de Masterización</h2>
-                    <p class="mb-0 mt-2 opacity-75">Comparativa Antes vs Después</p>
+<div class="results-container">
+    <div class="results-card">
+        <div class="results-header">
+            <h2 class="results-title">Masterización Completada</h2>
+            <p class="results-subtitle">Tu canción ha sido procesada con éxito por nuestra IA</p>
+        </div>
+
+        <div class="results-body">
+            <div class="download-section">
+                <div class="file-name">
+                    <i class="fas fa-music me-2"></i> {{ original_filename }}
                 </div>
-                <div class="card-body p-5">
+                <a href="{% url 'mastering:download' output_filename %}" class="btn-download">
+                    <i class="fas fa-download"></i> Descargar Master (.wav)
+                </a>
+            </div>
 
-                    <div class="text-center mb-5">
-                        <h4 class="mb-3">Archivo: <span class="text-primary">{{ original_filename }}</span></h4>
-                        <a href="{% url 'mastering:download' output_filename %}" class="btn-download">
-                            <i class="fas fa-download me-2"></i> Descargar Master (.wav)
-                        </a>
-                    </div>
-
-                    <div class="row mb-5">
-                        <div class="col-md-4 mb-3">
-                            <div class="metric-card">
-                                <div class="metric-label">Loudness (LUFS)</div>
-                                <div class="d-flex justify-content-around align-items-center mt-2">
-                                    <div>
-                                        <small class="d-block text-muted">Antes</small>
-                                        <span class="h5">{{ metrics_before.lufs|floatformat:1 }}</span>
-                                    </div>
-                                    <i class="fas fa-arrow-right text-muted"></i>
-                                    <div>
-                                        <small class="d-block text-muted">Después</small>
-                                        <span class="h4 text-primary">{{ metrics_after.lufs|floatformat:1 }}</span>
-                                    </div>
-                                </div>
-                                <div class="mt-2 metric-diff">
-                                    {% with diff=metrics_after.lufs|add:metrics_before.lufs|stringformat:"f" %}
-                                    <!-- Nota: add resta si el segundo es negativo, pero aquí queremos diff = after - before. 
-                                         Como lufs son negativos, es confuso. Haremos cálculo simple en vista o template tags si fuera necesario, 
-                                         pero visualmente basta con ver el incremento. -->
-                                    {% endwith %}
-                                </div>
-                            </div>
+            <div class="metrics-grid">
+                <!-- Loudness Card -->
+                <div class="metric-card">
+                    <div class="metric-label">Loudness (LUFS)</div>
+                    <div class="metric-comparison">
+                        <div class="metric-value-box">
+                            <span class="metric-value-label">Original</span>
+                            <span class="metric-value value-before">{{ metrics_before.lufs|floatformat:1 }}</span>
                         </div>
-                        <div class="col-md-4 mb-3">
-                            <div class="metric-card">
-                                <div class="metric-label">True Peak (dB)</div>
-                                <div class="d-flex justify-content-around align-items-center mt-2">
-                                    <div>
-                                        <small class="d-block text-muted">Antes</small>
-                                        <span class="h5">{{ metrics_before.peak|floatformat:2 }}</span>
-                                    </div>
-                                    <i class="fas fa-arrow-right text-muted"></i>
-                                    <div>
-                                        <small class="d-block text-muted">Después</small>
-                                        <span class="h4 text-primary">{{ metrics_after.peak|floatformat:2 }}</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-4 mb-3">
-                            <div class="metric-card">
-                                <div class="metric-label">RMS (dB)</div>
-                                <div class="d-flex justify-content-around align-items-center mt-2">
-                                    <div>
-                                        <small class="d-block text-muted">Antes</small>
-                                        <span class="h5">{{ metrics_before.rms|floatformat:1 }}</span>
-                                    </div>
-                                    <i class="fas fa-arrow-right text-muted"></i>
-                                    <div>
-                                        <small class="d-block text-muted">Después</small>
-                                        <span class="h4 text-primary">{{ metrics_after.rms|floatformat:1 }}</span>
-                                    </div>
-                                </div>
-                            </div>
+                        <div class="metric-arrow"><i class="fas fa-arrow-right"></i></div>
+                        <div class="metric-value-box">
+                            <span class="metric-value-label">Master</span>
+                            <span class="metric-value value-after">{{ metrics_after.lufs|floatformat:1 }}</span>
                         </div>
                     </div>
-
-                    <div class="table-responsive">
-                        <table class="table table-hover comparison-table text-center align-middle">
-                            <thead>
-                                <tr>
-                                    <th>Métrica</th>
-                                    <th>Original</th>
-                                    <th>Masterizado</th>
-                                    <th>Cambio</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td class="text-start fw-bold">Loudness Integrado (LUFS)</td>
-                                    <td>{{ metrics_before.lufs|floatformat:2 }} LUFS</td>
-                                    <td class="fw-bold text-primary">{{ metrics_after.lufs|floatformat:2 }} LUFS</td>
-                                    <td>
-                                        <!-- Calculo aproximado visual -->
-                                        {% if metrics_after.lufs > metrics_before.lufs %}
-                                        <span class="badge bg-success"><i class="fas fa-arrow-up"></i> Aumento</span>
-                                        {% else %}
-                                        <span class="badge bg-secondary"><i class="fas fa-minus"></i> Igual/Menor</span>
-                                        {% endif %}
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td class="text-start fw-bold">True Peak (dBTP)</td>
-                                    <td>{{ metrics_before.peak|floatformat:2 }} dB</td>
-                                    <td class="fw-bold text-primary">{{ metrics_after.peak|floatformat:2 }} dB</td>
-                                    <td>
-                                        {% if metrics_after.peak > metrics_before.peak %}
-                                        <span class="badge bg-warning text-dark"><i class="fas fa-arrow-up"></i>
-                                            Aumento</span>
-                                        {% else %}
-                                        <span class="badge bg-success"><i class="fas fa-check"></i> Controlado</span>
-                                        {% endif %}
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td class="text-start fw-bold">RMS Promedio (dB)</td>
-                                    <td>{{ metrics_before.rms|floatformat:2 }} dB</td>
-                                    <td class="fw-bold text-primary">{{ metrics_after.rms|floatformat:2 }} dB</td>
-                                    <td>
-                                        <span class="badge bg-info text-dark">Más cuerpo</span>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-
-                    <div class="text-center mt-5">
-                        <a href="{% url 'mastering:upload' %}" class="btn btn-outline-secondary">
-                            <i class="fas fa-undo"></i> Masterizar Otro Archivo
-                        </a>
-                    </div>
-
                 </div>
+
+                <!-- Peak Card -->
+                <div class="metric-card">
+                    <div class="metric-label">True Peak (dB)</div>
+                    <div class="metric-comparison">
+                        <div class="metric-value-box">
+                            <span class="metric-value-label">Original</span>
+                            <span class="metric-value value-before">{{ metrics_before.peak|floatformat:2 }}</span>
+                        </div>
+                        <div class="metric-arrow"><i class="fas fa-arrow-right"></i></div>
+                        <div class="metric-value-box">
+                            <span class="metric-value-label">Master</span>
+                            <span class="metric-value value-after">{{ metrics_after.peak|floatformat:2 }}</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- RMS Card -->
+                <div class="metric-card">
+                    <div class="metric-label">RMS (dB)</div>
+                    <div class="metric-comparison">
+                        <div class="metric-value-box">
+                            <span class="metric-value-label">Original</span>
+                            <span class="metric-value value-before">{{ metrics_before.rms|floatformat:1 }}</span>
+                        </div>
+                        <div class="metric-arrow"><i class="fas fa-arrow-right"></i></div>
+                        <div class="metric-value-box">
+                            <span class="metric-value-label">Master</span>
+                            <span class="metric-value value-after">{{ metrics_after.rms|floatformat:1 }}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="table-container">
+                <table class="comparison-table">
+                    <thead>
+                        <tr>
+                            <th>Métrica</th>
+                            <th>Original</th>
+                            <th>Masterizado</th>
+                            <th>Análisis</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Loudness Integrado</td>
+                            <td>{{ metrics_before.lufs|floatformat:2 }} LUFS</td>
+                            <td style="color: var(--accent-color); font-weight: 700;">{{
+                                metrics_after.lufs|floatformat:2 }} LUFS</td>
+                            <td>
+                                {% if metrics_after.lufs > metrics_before.lufs %}
+                                <span class="badge badge-success"><i class="fas fa-arrow-up"></i> Aumento de
+                                    Volumen</span>
+                                {% else %}
+                                <span class="badge badge-neutral"><i class="fas fa-minus"></i> Nivel Mantenido</span>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>True Peak</td>
+                            <td>{{ metrics_before.peak|floatformat:2 }} dB</td>
+                            <td style="color: var(--accent-color); font-weight: 700;">{{
+                                metrics_after.peak|floatformat:2 }} dB</td>
+                            <td>
+                                {% if metrics_after.peak > metrics_before.peak %}
+                                <span class="badge badge-warning"><i class="fas fa-arrow-up"></i> Ganancia de
+                                    Pico</span>
+                                {% else %}
+                                <span class="badge badge-success"><i class="fas fa-check"></i> Picos Controlados</span>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>RMS Promedio</td>
+                            <td>{{ metrics_before.rms|floatformat:2 }} dB</td>
+                            <td style="color: var(--accent-color); font-weight: 700;">{{ metrics_after.rms|floatformat:2
+                                }} dB</td>
+                            <td>
+                                <span class="badge badge-info"><i class="fas fa-wave-square"></i> Mayor Densidad</span>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="action-buttons">
+                <a href="{% url 'mastering:upload' %}" class="btn-secondary">
+                    <i class="fas fa-undo"></i> Masterizar Otro Archivo
+                </a>
             </div>
         </div>
     </div>
 </div>
-{% endblock %}
-
-{% block extra_js %}
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 {% endblock %}
