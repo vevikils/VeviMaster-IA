@@ -34,10 +34,19 @@ ALLOWED_HOSTS = [host.strip() for host in os.environ.get('ALLOWED_HOSTS', '').sp
 if not ALLOWED_HOSTS:
     ALLOWED_HOSTS = ['localhost', '127.0.0.1', '0.0.0.0']
 
+# Add Render domains (they use pattern like vevimaster-ia-1.onrender.com)
+ALLOWED_HOSTS.extend([
+    'vevimaster-ia.onrender.com',
+    'vevimaster-ia-1.onrender.com',
+    '.onrender.com',  # Allow all Render subdomains
+])
+
 # CSRF trusted origins for HTTPS
 CSRF_TRUSTED_ORIGINS = [
     'https://vevimaster.com',
     'https://www.vevimaster.com',
+    'https://vevimaster-ia.onrender.com',
+    'https://vevimaster-ia-1.onrender.com',
 ]
 
 
