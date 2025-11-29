@@ -53,5 +53,10 @@ EXPOSE 8000
 
 WORKDIR /app/vevi_mastering
 
+# Copiar script de entrada
+COPY VeviMaster-IA/vevi_mastering/entrypoint.sh ./entrypoint.sh
+RUN chmod +x ./entrypoint.sh
+
 # Comando de inicio con Gunicorn
+ENTRYPOINT ["./entrypoint.sh"]
 CMD ["gunicorn", "--bind", "0.0.0.0:8000", "--workers", "1", "--timeout", "300", "vevi_mastering.wsgi:application"]
