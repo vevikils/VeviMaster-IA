@@ -51,7 +51,9 @@
             --brand-primary: #8b5cf6;
             --brand-secondary: #06b6d4;
             --brand-accent: #ec4899;
-            --glass-bg: rgba(15, 23, 42, 0.6);
+            --neon-blue: #60a5fa;
+            --neon-purple: #a855f7;
+            --glass-bg: rgba(15, 23, 42, 0.7);
             --glass-border: rgba(255, 255, 255, 0.08);
             --text-main: #f8fafc;
             --text-muted: #94a3b8;
@@ -67,8 +69,8 @@
         body {
             background-color: var(--bg-deep);
             background-image: 
-                radial-gradient(at 0% 0%, rgba(139, 92, 246, 0.15) 0px, transparent 50%),
-                radial-gradient(at 100% 0%, rgba(6, 182, 212, 0.15) 0px, transparent 50%);
+                radial-gradient(at 0% 0%, rgba(139, 92, 246, 0.2) 0px, transparent 50%),
+                radial-gradient(at 100% 0%, rgba(6, 182, 212, 0.2) 0px, transparent 50%);
             background-attachment: fixed;
             min-height: 100vh;
             color: var(--text-main);
@@ -80,9 +82,9 @@
 
         /* Navbar UI/UX PRO MAX */
         .navbar {
-            background: var(--glass-bg);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
+            background: rgba(3, 7, 18, 0.85);
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
             border-bottom: 1px solid var(--glass-border);
             height: var(--nav-height);
             position: sticky;
@@ -116,26 +118,81 @@
 
         .navbar-brand:hover {
             transform: translateY(-1px);
-            filter: drop-shadow(0 0 10px rgba(139, 92, 246, 0.5));
+            filter: drop-shadow(0 0 15px rgba(96, 165, 250, 0.6));
         }
 
         .navbar-brand i {
             font-size: 1.8rem;
-            background: linear-gradient(135deg, var(--brand-secondary), var(--brand-primary));
+            background: linear-gradient(135deg, var(--neon-blue), var(--neon-purple));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            filter: drop-shadow(0 0 8px rgba(6, 182, 212, 0.3));
+            filter: drop-shadow(0 0 8px rgba(6, 182, 212, 0.4));
         }
 
+        /* Tarjetas Bento con Borde Neón Mágico */
+        .bento-card {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            backdrop-filter: blur(10px);
+            transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .bento-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            border-radius: inherit;
+            padding: 2px;
+            background: linear-gradient(135deg, var(--neon-blue), var(--neon-purple));
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+            opacity: 0;
+            transition: opacity 0.4s ease;
+        }
+
+        .bento-card:hover {
+            transform: translateY(-10px) scale(1.02);
+            background: rgba(15, 23, 42, 0.85);
+            box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.5), 0 0 20px rgba(96, 165, 250, 0.15);
+        }
+
+        .bento-card:hover::before {
+            opacity: 1;
+        }
+
+        /* Botones con Explosión de Brillo */
+        .btn-neon {
+            background: linear-gradient(135deg, var(--brand-primary), var(--brand-accent));
+            color: white;
+            padding: 0.8rem 1.8rem;
+            border-radius: 14px;
+            font-weight: 700;
+            text-decoration: none;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 4px 15px rgba(139, 92, 246, 0.3);
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            border: none;
+            cursor: pointer;
+        }
+
+        .btn-neon:hover {
+            transform: translateY(-2px) scale(1.05);
+            box-shadow: 0 0 30px rgba(139, 92, 246, 0.6);
+            filter: brightness(1.2);
+        }
+
+        /* Estilos de Navbar Menu */
         .navbar-menu {
             display: flex;
             align-items: center;
             list-style: none;
             gap: 0.5rem;
-        }
-
-        .navbar-menu li {
-            height: 100%;
         }
 
         .navbar-menu a {
@@ -148,50 +205,32 @@
             font-weight: 600;
             font-size: 0.95rem;
             border-radius: 12px;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: all 0.3s;
         }
 
         .navbar-menu a:hover {
             color: #fff;
-            background: rgba(255, 255, 255, 0.05);
+            background: rgba(255, 255, 255, 0.08);
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
         }
 
         .navbar-menu a.active {
             color: #fff;
-            background: rgba(139, 92, 246, 0.1);
-            box-shadow: inset 0 0 0 1px rgba(139, 92, 246, 0.2);
+            background: rgba(139, 92, 246, 0.15);
+            box-shadow: inset 0 0 0 1px rgba(139, 92, 246, 0.3);
         }
 
-        .navbar-menu a i {
-            font-size: 1rem;
-            opacity: 0.7;
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
-        .navbar-menu a.active i {
-            color: var(--brand-primary);
-            opacity: 1;
-        }
-
-        /* Mobile Adjustments */
-        .menu-toggle {
-            display: none;
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid var(--glass-border);
-            color: #fff;
-            font-size: 1.2rem;
-            cursor: pointer;
-            width: 45px;
-            height: 45px;
-            border-radius: 12px;
-            transition: all 0.3s;
-        }
-
-        /* Main content Transition */
         .main-content {
             flex: 1;
             padding: 2rem 1rem;
             animation: fadeIn 0.8s cubic-bezier(0.4, 0, 0.2, 1);
         }
+
 
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(10px); }
