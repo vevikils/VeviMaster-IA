@@ -1,0 +1,376 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Planes y Precios - VeviMaster IA{% endblock %}
+
+{% block extra_css %}
+<style>
+    /* Premium Background Override */
+    body {
+        background: #0a0e27;
+        overflow-x: hidden;
+    }
+
+    .plans-wrapper {
+        position: relative;
+        padding: 4rem 2rem;
+        min-height: 80vh;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    }
+
+    /* Ambient Background Orbs */
+    .bg-orb {
+        position: absolute;
+        border-radius: 50%;
+        filter: blur(80px);
+        opacity: 0.4;
+        z-index: 0;
+    }
+
+    .orb-1 {
+        width: 400px;
+        height: 400px;
+        background: #4f46e5;
+        top: -100px;
+        left: -100px;
+    }
+
+    .orb-2 {
+        width: 300px;
+        height: 300px;
+        background: #d946ef;
+        bottom: 0;
+        right: -50px;
+    }
+
+    .plans-container {
+        position: relative;
+        z-index: 2;
+        max-width: 1200px;
+        margin: 0 auto;
+        width: 100%;
+    }
+
+    .section-header {
+        text-align: center;
+        margin-bottom: 4rem;
+    }
+
+    .section-title {
+        font-size: 3.5rem;
+        font-weight: 800;
+        margin-bottom: 1rem;
+        background: linear-gradient(135deg, #fff 0%, #a5b4fc 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        letter-spacing: -1px;
+    }
+
+    .section-subtitle {
+        color: #94a3b8;
+        font-size: 1.2rem;
+        max-width: 600px;
+        margin: 0 auto;
+    }
+
+    .plans-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 2rem;
+        align-items: stretch;
+    }
+
+    .plan-card {
+        background: rgba(255, 255, 255, 0.03);
+        border: 1px solid rgba(255, 255, 255, 0.05);
+        border-radius: 24px;
+        padding: 2.5rem 1.5rem;
+        text-align: center;
+        transition: all 0.3s ease;
+        position: relative;
+        overflow: hidden;
+        backdrop-filter: blur(20px);
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+    }
+
+    .plan-card:hover {
+        transform: translateY(-10px);
+        border-color: rgba(99, 102, 241, 0.3);
+        box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.5);
+    }
+
+    .plan-card.pro {
+        background: linear-gradient(145deg, rgba(30, 27, 75, 0.6), rgba(15, 23, 42, 0.8));
+        border: 1px solid rgba(99, 102, 241, 0.5);
+        z-index: 2;
+        box-shadow: 0 20px 50px -12px rgba(79, 70, 229, 0.25);
+    }
+
+    .popular-badge {
+        position: absolute;
+        top: 0;
+        right: 0;
+        background: linear-gradient(135deg, #6366f1, #8b5cf6);
+        color: white;
+        padding: 8px 20px;
+        border-bottom-left-radius: 20px;
+        font-weight: 700;
+        font-size: 0.85rem;
+        letter-spacing: 1px;
+        box-shadow: -5px 5px 15px rgba(99, 102, 241, 0.3);
+    }
+
+    .savings-badge {
+        background: #10b981;
+        color: white;
+        padding: 4px 12px;
+        border-radius: 50px;
+        font-size: 0.75rem;
+        font-weight: 800;
+        display: inline-block;
+        margin-top: 0.5rem;
+        box-shadow: 0 4px 10px rgba(16, 185, 129, 0.3);
+    }
+
+    .plan-name {
+        font-size: 1.6rem;
+        font-weight: 700;
+        margin-bottom: 0.5rem;
+        color: white;
+    }
+
+    .plan-price {
+        font-size: 3.5rem;
+        font-weight: 800;
+        color: white;
+        margin: 1rem 0 0.5rem;
+        line-height: 1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 5px;
+    }
+
+    .currency {
+        font-size: 1.8rem;
+        vertical-align: top;
+        opacity: 0.7;
+    }
+
+    .plan-period {
+        color: #94a3b8;
+        font-size: 0.95rem;
+        margin-bottom: 2rem;
+        font-weight: 500;
+    }
+
+    .feature-list {
+        list-style: none;
+        padding: 0;
+        margin-bottom: 2.5rem;
+        text-align: left;
+        flex-grow: 1;
+    }
+
+    .feature-item {
+        padding: 0.6rem 0;
+        color: #cbd5e1;
+        display: flex;
+        align-items: start;
+        gap: 12px;
+        font-size: 0.95rem;
+    }
+
+    .feature-item i {
+        color: #818cf8;
+        margin-top: 4px;
+        flex-shrink: 0;
+    }
+
+    .btn-plan {
+        display: inline-block;
+        width: 100%;
+        padding: 1.1rem;
+        border-radius: 50px;
+        font-weight: 700;
+        text-decoration: none;
+        transition: all 0.3s ease;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        font-size: 0.85rem;
+    }
+
+    .btn-free {
+        background: rgba(255, 255, 255, 0.08);
+        color: white;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .btn-pro {
+        background: linear-gradient(135deg, #6366f1 0%, #a855f7 100%);
+        color: white;
+        box-shadow: 0 10px 30px -5px rgba(99, 102, 241, 0.4);
+    }
+
+    .btn-pro:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 20px 40px -5px rgba(99, 102, 241, 0.6);
+    }
+
+    /* Social Reward Section */
+    .social-reward {
+        grid-column: 1 / -1;
+        background: linear-gradient(145deg, rgba(16, 185, 129, 0.05), rgba(6, 78, 59, 0.15));
+        border: 1px solid rgba(16, 185, 129, 0.2);
+        border-radius: 24px;
+        padding: 2.5rem;
+        margin-top: 3rem;
+        text-align: center;
+        backdrop-filter: blur(10px);
+    }
+
+    .social-title {
+        font-size: 1.8rem;
+        font-weight: 800;
+        color: #fff;
+        margin-bottom: 0.5rem;
+        background: linear-gradient(135deg, #fff, #34d399);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+    }
+
+    .btn-social {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        padding: 0.8rem 1.5rem;
+        border-radius: 50px;
+        text-decoration: none;
+        font-weight: 700;
+        color: white;
+        transition: all 0.3s;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        margin: 0.5rem;
+    }
+
+    .btn-spotify { background: #1DB954; }
+    .btn-youtube { background: #FF0000; }
+
+    @media (max-width: 768px) {
+        .plans-grid {
+            grid-template-columns: 1fr;
+        }
+        .section-title {
+            font-size: 2.8rem;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="plans-wrapper">
+    <div class="bg-orb orb-1"></div>
+    <div class="bg-orb orb-2"></div>
+
+    <div class="plans-container">
+        <div class="section-header">
+            <h1 class="section-title">Elige tu Plan</h1>
+            <p class="section-subtitle">
+                Tecnología de estudio profesional al alcance de tu mano. Cancela cuando quieras.
+            </p>
+        </div>
+
+        <div class="plans-grid">
+            <!-- FREE PLAN -->
+            <div class="plan-card">
+                <h2 class="plan-name">Inicial</h2>
+                <div class="plan-price"><span class="currency">€</span>0</div>
+                <div class="plan-period">Para siempre</div>
+
+                <ul class="feature-list">
+                    <li class="feature-item"><i class="fas fa-check-circle"></i> 1 Masterización mensual</li>
+                    <li class="feature-item"><i class="fas fa-check-circle"></i> Calidad Estándar MP3/WAV 16-bit</li>
+                    <li class="feature-item"><i class="fas fa-check-circle"></i> Acceso básico al Analizador IA</li>
+                    <li class="feature-item"><i class="fas fa-check-circle"></i> Soporte por email</li>
+                </ul>
+
+                {% if user.is_authenticated %}
+                <a href="{% url 'mastering:studio' %}" class="btn-plan btn-free">Ir a mi Estudio</a>
+                {% else %}
+                <a href="{% url 'account_signup' %}" class="btn-plan btn-free">Crear cuenta Gratis</a>
+                {% endif %}
+            </div>
+
+            <!-- PRO PLAN -->
+            <div class="plan-card pro">
+                <div class="popular-badge">MÁS POPULAR</div>
+                <h2 class="plan-name">Vevi Pro Mensual</h2>
+                <div class="plan-price"><span class="currency">€</span>9</div>
+                <div class="plan-period">al mes</div>
+
+                <ul class="feature-list">
+                    <li class="feature-item"><i class="fas fa-check-circle" style="color: #a5b4fc;"></i>
+                        <strong>Masterizaciones ILIMITADAS</strong></li>
+                    <li class="feature-item"><i class="fas fa-check-circle" style="color: #a5b4fc;"></i> Calidad 24-bit / 32-bit Float</li>
+                    <li class="feature-item"><i class="fas fa-check-circle" style="color: #a5b4fc;"></i> Análisis Espectral Avanzado</li>
+                    <li class="feature-item"><i class="fas fa-check-circle" style="color: #a5b4fc;"></i> Soporte Prioritario</li>
+                </ul>
+
+                <a href="{% url 'mastering:create_checkout_session' %}" class="btn-plan btn-pro">Suscribirse Mensual</a>
+            </div>
+
+            <!-- ANNUAL PLAN -->
+            <div class="plan-card pro" style="border-color: #10b981;">
+                <h2 class="plan-name" style="color: #10b981;">Vevi Pro Anual</h2>
+                <div class="plan-price"><span class="currency">€</span>89,99</div>
+                <div class="plan-period">al año</div>
+                <div><span class="savings-badge">Ahorra 2 meses (18€)</span></div>
+
+                <ul class="feature-list">
+                    <li class="feature-item"><i class="fas fa-crown" style="color: #10b981;"></i>
+                        <strong>Todo lo del plan PRO</strong></li>
+                    <li class="feature-item"><i class="fas fa-check-circle" style="color: #10b981;"></i> Facturación anual única</li>
+                    <li class="feature-item"><i class="fas fa-check-circle" style="color: #10b981;"></i> Acceso ininterrumpido</li>
+                    <li class="feature-item"><i class="fas fa-star" style="color: #10b981;"></i> La mejor oferta</li>
+                </ul>
+
+                <a href="{% url 'mastering:create_checkout_session_annual' %}" class="btn-plan btn-pro" style="background: linear-gradient(135deg, #10b981 0%, #059669 100%);">Obtener Oferta Anual</a>
+            </div>
+        </div>
+
+        <!-- SOCIAL REWARD -->
+        <div class="social-reward" id="socialZone">
+            <h2 class="social-title">🚀 Impulso para Creadores</h2>
+            <p style="color: #94a3b8; margin-bottom: 1.5rem;">Síguenos y recibe <strong>3 Créditos Premium</strong> instantáneos.</p>
+            <div class="social-buttons">
+                <a href="https://open.spotify.com/intl-es/artist/5rAfUyNXtZVQq7mR90pJoS" target="_blank" class="btn-social btn-spotify" onclick="registerClick('spotify')"><i class="fab fa-spotify"></i> Seguir</a>
+                <a href="https://www.youtube.com/channel/UCHjW9TdrivAGKbfzMhimMMg/" target="_blank" class="btn-social btn-youtube" onclick="registerClick('youtube')"><i class="fab fa-youtube"></i> Suscribirse</a>
+            </div>
+            <div id="claimSection" style="margin-top: 1.5rem; display: none;">
+                <form action="{% url 'mastering:claim_reward' %}" method="POST">
+                    {% csrf_token %}
+                    <button type="submit" class="btn-plan btn-pro" style="max-width: 300px; margin: 0 auto; background: #10b981;">Reclamar 3 Créditos</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    let spotifyClicked = false;
+    let youtubeClicked = false;
+    function registerClick(platform) {
+        if (platform === 'spotify') spotifyClicked = true;
+        if (platform === 'youtube') youtubeClicked = true;
+        if (spotifyClicked && youtubeClicked) document.getElementById('claimSection').style.display = 'block';
+    }
+</script>
+{% endblock %}

@@ -1,0 +1,378 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Conversor de Audio | VeviMaster IA{% endblock %}
+
+{% block extra_css %}
+<style>
+    :root {
+        --primary-gradient: linear-gradient(135deg, #8b5cf6 0%, #6366f1 100%);
+        --secondary-gradient: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+        --glass-bg: rgba(30, 41, 59, 0.4);
+        --glass-border: rgba(139, 92, 246, 0.2);
+        --text-main: #f8fafc;
+        --text-muted: #cbd5e1;
+        --accent-color: #8b5cf6;
+        --accent-hover: #a78bfa;
+        --bg-dark: #0f172a;
+        --bg-darker: #020617;
+    }
+
+    body {
+        background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 100%);
+        color: var(--text-main);
+        font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    }
+
+    .converter-container {
+        max-width: 800px;
+        margin: 4rem auto;
+        padding: 0 1rem;
+    }
+
+    .header-section {
+        text-align: center;
+        margin-bottom: 3rem;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 1rem;
+    }
+
+    .header-icon {
+        font-size: 3.5rem;
+        background: var(--primary-gradient);
+        -webkit-background-clip: text;
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
+        filter: drop-shadow(0 0 15px rgba(139, 92, 246, 0.4));
+    }
+
+    .title {
+        font-size: 2.5rem;
+        font-weight: 800;
+        background: var(--primary-gradient);
+        -webkit-background-clip: text;
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
+        margin-bottom: 0.5rem;
+    }
+
+    .subtitle {
+        color: var(--text-muted);
+        font-size: 1.1rem;
+    }
+
+    .converter-card {
+        background: var(--glass-bg);
+        backdrop-filter: blur(20px);
+        border: 1px solid var(--glass-border);
+        border-radius: 24px;
+        padding: 2.5rem;
+        box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+    }
+
+    /* File Upload Styling - Match Studio */
+    .drop-zone {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 3.5rem 2rem;
+        border: 2px dashed rgba(255, 255, 255, 0.1);
+        border-radius: 20px;
+        background: rgba(255, 255, 255, 0.02);
+        cursor: pointer;
+        transition: all 0.3s ease;
+        margin-bottom: 2rem;
+    }
+
+    .drop-zone:hover,
+    .drop-zone.active {
+        border-color: var(--accent-color);
+        background: rgba(139, 92, 246, 0.05);
+        transform: translateY(-2px);
+    }
+
+    .drop-zone i {
+        font-size: 3rem;
+        color: var(--accent-color);
+        margin-bottom: 1.5rem;
+    }
+
+    .drop-zone p {
+        color: var(--text-main);
+        font-size: 1.2rem;
+        font-weight: 600;
+        margin-bottom: 0.5rem;
+    }
+
+    .drop-zone span {
+        color: var(--text-muted);
+        font-size: 0.9rem;
+    }
+
+    .file-info {
+        display: none;
+        margin-top: 1.5rem;
+        padding: 1rem 1.5rem;
+        background: rgba(30, 41, 59, 0.6);
+        border-radius: 12px;
+        border: 1px solid rgba(139, 92, 246, 0.3);
+        width: 100%;
+    }
+
+    .options-grid {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+        margin-bottom: 2rem;
+    }
+
+    .select-label {
+        color: var(--text-muted);
+        font-weight: 600;
+        font-size: 0.95rem;
+        margin-bottom: 0.75rem;
+        display: block;
+    }
+
+    .format-select {
+        background: rgba(15, 23, 42, 0.6);
+        border: 1px solid rgba(139, 92, 246, 0.3);
+        color: white;
+        padding: 1rem;
+        border-radius: 12px;
+        font-size: 1rem;
+        width: 100%;
+        cursor: pointer;
+        outline: none;
+        transition: all 0.3s;
+    }
+
+    .format-select:focus {
+        border-color: var(--accent-color);
+        background: rgba(15, 23, 42, 0.8);
+    }
+
+    .btn-convert {
+        width: 100%;
+        padding: 1.25rem;
+        background: var(--primary-gradient);
+        color: white;
+        border: none;
+        border-radius: 16px;
+        font-size: 1.1rem;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        text-transform: uppercase;
+        letter-spacing: 1px;
+    }
+
+    .btn-convert:hover:not(:disabled) {
+        transform: translateY(-2px);
+        filter: brightness(1.1);
+        box-shadow: 0 10px 20px rgba(139, 92, 246, 0.3);
+    }
+
+    .btn-convert:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+    }
+
+    .progress-container {
+        display: none;
+        margin-top: 2rem;
+        padding: 1.5rem;
+        background: rgba(15, 23, 42, 0.4);
+        border-radius: 16px;
+    }
+
+    .progress-bar {
+        height: 6px;
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 3px;
+        overflow: hidden;
+    }
+
+    .progress-fill {
+        height: 100%;
+        background: var(--primary-gradient);
+        width: 0%;
+        transition: width 0.4s ease;
+    }
+
+    .status-text {
+        text-align: center;
+        margin-top: 1rem;
+        color: var(--accent-color);
+        font-weight: 600;
+        font-size: 0.9rem;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="converter-container">
+    <div class="header-section">
+        <i class="fas fa-sync-alt header-icon"></i>
+        <h1 class="title">SonicShift Converter</h1>
+        <p class="subtitle">Conversión de audio de alta fidelidad con FFmpeg</p>
+    </div>
+
+    <div class="converter-card">
+        <form id="convert-form">
+            {% csrf_token %}
+            <div class="drop-zone" id="drop-zone" onclick="document.getElementById('file-input').click()">
+                <i class="fas fa-file-audio"></i>
+                <p id="drop-text">Arrastra tu archivo aquí o haz clic para subir</p>
+                <span>Soporta WAV, MP3, FLAC y MPEG de alta calidad</span>
+                <input type="file" id="file-input" name="audio" accept=".wav,.mp3,.flac,.mpeg,.mpg" hidden
+                    onchange="handleFileSelect(this)">
+
+                <div id="file-info" class="file-info">
+                    <span id="file-name" style="color: #fff; font-weight: 600;"></span>
+                    <span id="file-size" style="display: block; font-size: 0.8rem; color: #94a3b8;"></span>
+                </div>
+            </div>
+
+            <div class="options-grid">
+                <div class="select-wrapper">
+                    <label class="select-label">Convertir a:</label>
+                    <select id="format-select" class="format-select">
+                        <option value="wav">WAV (Waveform Audio File Format)</option>
+                        <option value="mp3">MP3 (MPEG-1 Audio Layer III)</option>
+                        <option value="flac">FLAC (Free Lossless Audio Codec)</option>
+                        <option value="mpeg">MPEG (MPEG Audio Video)</option>
+                    </select>
+                </div>
+            </div>
+
+            <button type="submit" id="convert-btn" class="btn-convert" disabled>Iniciar Conversión</button>
+        </form>
+
+        <div class="progress-container" id="progress-container">
+            <div class="progress-bar">
+                <div class="progress-fill" id="progress-fill"></div>
+            </div>
+            <p class="status-text" id="status-text">Procesando archivo...</p>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    const form = document.getElementById('convert-form');
+    const fileInput = document.getElementById('file-input');
+    const dropZone = document.getElementById('drop-zone');
+    const convertBtn = document.getElementById('convert-btn');
+    const dropText = document.getElementById('drop-text');
+    const fileInfo = document.getElementById('file-info');
+
+    function handleFileSelect(input) {
+        if (input.files && input.files[0]) {
+            const file = input.files[0];
+            document.getElementById('file-name').textContent = file.name;
+            document.getElementById('file-size').textContent = (file.size / (1024 * 1024)).toFixed(2) + ' MB';
+
+            dropText.style.display = 'none';
+            fileInfo.style.display = 'block';
+            convertBtn.disabled = false;
+
+            showToast('Archivo seleccionado correctamente');
+        }
+    }
+
+    form.onsubmit = async (e) => {
+        e.preventDefault();
+
+        const formData = new FormData();
+        formData.append('audio', fileInput.files[0]);
+        formData.append('format', document.getElementById('format-select').value);
+
+        document.getElementById('progress-container').style.display = 'block';
+        convertBtn.disabled = true;
+
+        let progress = 0;
+        const interval = setInterval(() => {
+            if (progress < 90) {
+                progress += (90 - progress) / 20;
+                document.getElementById('progress-fill').style.width = progress + '%';
+            }
+        }, 200);
+
+        try {
+            const response = await fetch('{% url "mastering:convert_audio_api" %}', {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'X-CSRFToken': '{{ csrf_token }}'
+                }
+            });
+
+            clearInterval(interval);
+            document.getElementById('progress-fill').style.width = '100%';
+
+            if (response.ok) {
+                const blob = await response.blob();
+                const url = window.URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                const fileName = fileInput.files[0].name.split('.')[0] + '.' + document.getElementById('format-select').value;
+                a.download = fileName;
+                document.body.appendChild(a);
+                a.click();
+                a.remove();
+
+                document.getElementById('status-text').textContent = '¡Conversión completada! Descarga iniciada.';
+                showToast('¡Éxito! Tu archivo está listo.');
+            } else {
+                throw new Error('Error en el servidor');
+            }
+        } catch (error) {
+            clearInterval(interval);
+            showToast('Hubo un error al convertir el archivo');
+            document.getElementById('status-text').textContent = 'Error: No se pudo completar la conversión.';
+        } finally {
+            convertBtn.disabled = false;
+        }
+    };
+
+    function showToast(message) {
+        const toast = document.createElement('div');
+        toast.style.cssText = `
+            position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%);
+            background: linear-gradient(135deg, #4f8cff, #a855f7);
+            color: white; padding: 1rem 2rem; border-radius: 50px;
+            z-index: 10000; box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+            font-weight: 600; animation: slideUp 0.3s ease-out;
+        `;
+        toast.textContent = message;
+        document.body.appendChild(toast);
+        setTimeout(() => {
+            toast.style.opacity = '0';
+            toast.style.transition = 'opacity 0.5s';
+            setTimeout(() => toast.remove(), 500);
+        }, 3000);
+    }
+
+    // Drag & Drop support
+    ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+        dropZone.addEventListener(eventName, e => {
+            e.preventDefault();
+            e.stopPropagation();
+        }, false);
+    });
+
+    dropZone.addEventListener('dragover', () => dropZone.classList.add('active'));
+    dropZone.addEventListener('dragleave', () => dropZone.classList.remove('active'));
+    dropZone.addEventListener('drop', (e) => {
+        dropZone.classList.remove('active');
+        fileInput.files = e.dataTransfer.files;
+        handleFileSelect(fileInput);
+    });
+</script>
+{% endblock %}

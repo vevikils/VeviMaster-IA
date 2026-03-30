@@ -1,0 +1,7 @@
+# Dependencias básicas de Django (sin análisis de música)
+Django>=4.0
+gunicorn
+whitenoise
+dj-database-url<3.0
+python-dotenv
+colorama>=0.4

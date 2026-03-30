@@ -1,0 +1,1 @@
+web: source download_app_files.sh && cd vevi_mastering && gunicorn vevi_mastering.wsgi

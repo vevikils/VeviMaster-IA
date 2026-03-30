@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+
+{% block title %}Cómo hacer que tu mezcla suene más ancha (Imagen Estéreo) | VeviMaster IA{% endblock %}
+
+{% block extra_css %}
+<style>
+    body { background: #0a0e27 !important; }
+    .article-container { position: relative; max-width: 900px; margin: 0 auto; padding: 8rem 1rem 6rem; }
+    .gradient-orb { position: absolute; border-radius: 50%; filter: blur(100px); opacity: 0.3; z-index: 0; }
+    article {
+        background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.05);
+        border-radius: 24px; padding: 3rem; backdrop-filter: blur(10px); position: relative; z-index: 1;
+    }
+    h1.article-title {
+        font-size: 2.5rem; margin-bottom: 2rem; font-weight: 800; color: #fff;
+        background: linear-gradient(135deg, #fff 0%, #38bdf8 100%);
+        -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
+    }
+    h2 { font-size: 1.8rem; color: #fff; margin: 2.5rem 0 1.5rem; font-weight: 700; }
+    h3 { font-size: 1.4rem; color: #38bdf8; margin: 1.5rem 0 1rem; }
+    p { margin-bottom: 1.5rem; color: #e2e8f0; line-height: 1.8; font-size: 1.1rem; }
+    ul { margin-bottom: 1.5rem; color: #e2e8f0; list-style-type: disc; margin-left: 2rem; }
+    li { margin-bottom: 0.5rem; line-height: 1.6; }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="article-container">
+    <div class="gradient-orb" style="width: 500px; height: 500px; top: 0; left: -10%; background: radial-gradient(circle, rgba(14,165,233,0.15) 0%, rgba(0,0,0,0) 70%);"></div>
+    
+    <article>
+        <div style="margin-bottom: 1rem; color: #38bdf8; font-weight: 600; text-transform: uppercase; font-size: 0.9rem; letter-spacing: 1px;">
+            Técnicas de Mezcla
+        </div>
+
+        <h1 class="article-title">Cómo hacer que tu mezcla suene más ancha: El secreto de la Imagen Estéreo</h1>
+
+        <div style="margin-bottom: 3rem; color: #94a3b8; font-size: 0.95rem; display: flex; align-items: center; gap: 1rem; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 2rem;">
+            <div style="display: flex; align-items: center; gap: 8px;"><i class="far fa-calendar"></i> 22 Marzo, 2026</div>
+            <div style="display: flex; align-items: center; gap: 8px;"><i class="far fa-user"></i> VeviMaster IA</div>
+        </div>
+
+        <div>
+            <p>Es una de las frustraciones más normales al producir música en casa: Escuchas una referencia (un tema de la lista de éxitos) y suena grandísima, invasiva y que llena "todo el cuarto". Luego pones tu pista, y suena tímida, encerrada y apretujada en el medio. Esto es lo que los ingenieros llaman falta de <strong>Imagen Estéreo</strong> o campo estéreo deficiente. A continuación, exploraremos cómo conseguir mezclas verdaderamente inmersivas y súper anchas.</p>
+
+            <h2>El Paneo Correcto desde la Mezcla</h2>
+            <p>La regla de oro irrompible del <em>Stereo Width</em> comienza organizando espacialmente tus elementos antes de llegar al master. Mantén el <strong>Bombo (Kick), la Caja (Snare), el Bajo 808 o Synth Bass, y la Voz Principal (Lead Vocal)</strong> en absoluto y rotundo centro (mono).</p>
+            <p>El "ancho" se logra mandando lo secundario hacia los laterales (100% Left y 100% Right). Abusa del paneo extremo de teclados de acompañamiento, arpegios secundarios y los coros (doubles o adlibs).</p>
+
+            <h2>El Milagro del Haas Effect y Ensanchadores</h2>
+            <p>Para sonidos mono aburridos que necesitan un papel protagonista panorámico (como una guitarra solista de rock o un lead agresivo), utiliza retardos estéreo de milisegundos cortos (por ejemplo 14ms al Left y 27ms al Right), y estarás evocando la famosa psicoacústica del Efecto Haas. Esto engaña al cerebro para que perciba el sonido saliendo simultáneamente hacia todo tu alrededor de forma enorme.</p>
+
+            <h2>Ecualización M/S (Mid/Side) en el Mastering</h2>
+            <p>Si la mezcla final todavía parece comprimida y con demasiada acumulación aburrida en el canal central, intervendremos en el procesado <strong>Mid/Side de Masterización</strong>.</p>
+            <p>Subir la brillantez (agudos a partir de 8kHz) en el canal Side (Lados) usando un excitador harmónico añadirá un increíble nivel de viveza a la reverberación sin estropear las vocales del núcleo, devolviendo vida y sensación tridimensional en milisegundos.</p>
+            
+            <h2>Enchufa el "Estéreo Inteligente" de VeviMaster</h2>
+            <p>Los ingenieros necesitan equipos y escuchas precisas en cabinas acorazadas para detectar colisiones o "cancelación de fase" al tocar la amplitud del estéreo. Si un ensanchador artificial (Stereo Widener) se usa mal, los elementos desaparecerán en altavoces de teléfono o discoteca que suman la imagen a mono. <strong>VeviMaster IA</strong> incorpora de forma intrínseca en todos tus procesos una mejora hiper-limpia estéreo que respeta rigurosamente las leyes de fase globales de ingeniería de sala acústica moderna.</p>
+        </div>
+
+        <div style="margin-top: 4rem; padding-top: 3rem; border-top: 1px solid rgba(255,255,255,0.1); text-align: center;">
+            <h3 style="color: white; margin-bottom: 1.5rem; font-size: 1.5rem;">Expande Tu Mezcla Lateralmente</h3>
+            <p style="margin-bottom: 2rem;">¿Quieres que tu canción abrace al oyente? Pulsa un botón y escucha la diferencia estéreo instantánea.</p>
+            <a href="{% url 'mastering:studio' %}" style="display: inline-block; background: linear-gradient(135deg, #0ea5e9 0%, #0284c7 100%); color: white; padding: 1rem 3rem; border-radius: 50px; text-decoration: none; font-weight: 700; font-size: 1.1rem; box-shadow: 0 10px 20px -5px rgba(14, 165, 233, 0.4); transition: transform 0.2s;">
+                Comprobar IA de Mastering En Vivo
+            </a>
+        </div>
+    </article>
+</div>
+{% endblock %}

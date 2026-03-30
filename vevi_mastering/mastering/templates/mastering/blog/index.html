@@ -1,0 +1,244 @@
+{% extends "base.html" %}
+
+{% block title %}Blog - VeviMaster IA{% endblock %}
+
+{% block extra_css %}
+<style>
+    body {
+        background: #0a0e27 !important;
+    }
+
+    .blog-hero {
+        position: relative;
+        padding: 8rem 2rem 4rem;
+        text-align: center;
+        overflow: hidden;
+    }
+
+    .gradient-orb {
+        position: absolute;
+        border-radius: 50%;
+        filter: blur(100px);
+        opacity: 0.3;
+        z-index: 0;
+    }
+
+    article {
+        background: rgba(255, 255, 255, 0.03);
+        border: 1px solid rgba(255, 255, 255, 0.05);
+        border-radius: 24px;
+        padding: 2.5rem;
+        height: 100%;
+        transition: all 0.3s ease;
+        backdrop-filter: blur(10px);
+        position: relative;
+        z-index: 1;
+    }
+
+    article:hover {
+        transform: translateY(-10px);
+        background: rgba(255, 255, 255, 0.05);
+        border-color: rgba(99, 102, 241, 0.3);
+        box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.3);
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div style="width: 100%; display: flex; flex-direction: column;">
+<div class="blog-hero">
+    <!-- Background Orbs -->
+    <div class="gradient-orb"
+        style="width: 500px; height: 500px; top: -10%; left: -10%; background: radial-gradient(circle, rgba(99,102,241,0.15) 0%, rgba(0,0,0,0) 70%);">
+    </div>
+    <div class="gradient-orb"
+        style="width: 400px; height: 400px; bottom: 10%; right: -5%; background: radial-gradient(circle, rgba(139,92,246,0.15) 0%, rgba(0,0,0,0) 70%);">
+    </div>
+
+    <div style="position: relative; z-index: 2; max-width: 900px; margin: 0 auto;">
+        <h1
+            style="font-size: 3.5rem; font-weight: 800; margin-bottom: 1.5rem; color: #fff; background: linear-gradient(135deg, #fff 0%, #a5b4fc 100%); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;">
+            Blog & Recursos
+        </h1>
+        <p style="font-size: 1.3rem; color: #94a3b8; max-width: 700px; margin: 0 auto;">
+            Aprende sobre producción musical, masterización e inteligencia artificial con nuestras guías y artículos.
+        </p>
+    </div>
+</div>
+
+<div class="container" style="max-width: 1200px; margin: 0 auto; padding: 0 2rem 6rem;">
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 2.5rem;">
+
+        <!-- Post 1 -->
+        <a href="{% url 'mastering:blog_post_ai' %}" style="text-decoration: none; color: inherit;">
+            <article>
+                <div
+                    style="color: #6366f1; font-size: 0.85rem; font-weight: 700; margin-bottom: 1rem; text-transform: uppercase; letter-spacing: 1px;">
+                    Tecnología
+                </div>
+                <h2 style="font-size: 1.75rem; color: white; margin-bottom: 1rem; line-height: 1.3;">
+                    ¿Qué es la Masterización con IA y por qué está revolucionando la música?
+                </h2>
+                <p style="color: #94a3b8; line-height: 1.6; margin-bottom: 2rem;">
+                    Descubre cómo los algoritmos de aprendizaje automático están democratizando el sonido de estudio
+                    profesional.
+                </p>
+                <div style="display: flex; align-items: center; color: #a5b4fc; font-weight: 600;">
+                    Leer artículo <i class="fas fa-arrow-right" style="margin-left: 8px;"></i>
+                </div>
+            </article>
+        </a>
+
+        <!-- Post 2 -->
+        <a href="{% url 'mastering:blog_post_prepare' %}" style="text-decoration: none; color: inherit;">
+            <article>
+                <div
+                    style="color: #10b981; font-size: 0.85rem; font-weight: 700; margin-bottom: 1rem; text-transform: uppercase; letter-spacing: 1px;">
+                    Tutoriales
+                </div>
+                <h2 style="font-size: 1.75rem; color: white; margin-bottom: 1rem; line-height: 1.3;">
+                    Guía Definitiva: Cómo preparar tu mezcla para el Mastering
+                </h2>
+                <p style="color: #94a3b8; line-height: 1.6; margin-bottom: 2rem;">
+                    5 pasos cruciales que debes seguir antes de subir tu canción. Evita errores comunes como la falta de
+                    headroom.
+                </p>
+                <div style="display: flex; align-items: center; color: #a5b4fc; font-weight: 600;">
+                    Leer artículo <i class="fas fa-arrow-right" style="margin-left: 8px;"></i>
+                </div>
+            </article>
+        </a>
+
+        <!-- Post 3 -->
+        <a href="{% url 'mastering:blog_post_diff' %}" style="text-decoration: none; color: inherit;">
+            <article>
+                <div
+                    style="color: #f59e0b; font-size: 0.85rem; font-weight: 700; margin-bottom: 1rem; text-transform: uppercase; letter-spacing: 1px;">
+                    Conceptos Básicos
+                </div>
+                <h2 style="font-size: 1.75rem; color: white; margin-bottom: 1rem; line-height: 1.3;">
+                    Mezcla vs Mastering: ¿Cuál es la diferencia real?
+                </h2>
+                <p style="color: #94a3b8; line-height: 1.6; margin-bottom: 2rem;">
+                    Entiende qué hace cada proceso y por qué ambos son esenciales para conseguir un sonido competitivo.
+                </p>
+                <div style="display: flex; align-items: center; color: #a5b4fc; font-weight: 600;">
+                    Leer artículo <i class="fas fa-arrow-right" style="margin-left: 8px;"></i>
+                </div>
+            </article>
+        </a>
+
+        <!-- Post Trap FL Studio -->
+        <a href="{% url 'mastering:blog_trap_fl_studio' %}" style="text-decoration: none; color: inherit;">
+            <article>
+                <div
+                    style="color: #fca5a5; font-size: 0.85rem; font-weight: 700; margin-bottom: 1rem; text-transform: uppercase; letter-spacing: 1px;">
+                    Producción Urbana
+                </div>
+                <h2 style="font-size: 1.75rem; color: white; margin-bottom: 1rem; line-height: 1.3;">
+                    Cómo Masterizar una Base de Trap en FL Studio
+                </h2>
+                <p style="color: #94a3b8; line-height: 1.6; margin-bottom: 2rem;">
+                    Aprende los secretos para que tu 808 rompa los altavoces sin saturar el master. Guía paso a paso.
+                </p>
+                <div style="display: flex; align-items: center; color: #fca5a5; font-weight: 600;">
+                    Leer artículo <i class="fas fa-arrow-right" style="margin-left: 8px;"></i>
+                </div>
+            </article>
+        </a>
+
+        <!-- Post Reggaeton -->
+        <a href="{% url 'mastering:blog_masterizar_reggaeton' %}" style="text-decoration: none; color: inherit;">
+            <article>
+                <div
+                    style="color: #a7f3d0; font-size: 0.85rem; font-weight: 700; margin-bottom: 1rem; text-transform: uppercase; letter-spacing: 1px;">
+                    Mezcla Urbana
+                </div>
+                <h2 style="font-size: 1.75rem; color: white; margin-bottom: 1rem; line-height: 1.3;">
+                    La Mejor Configuración para Masterizar Reggaeton
+                </h2>
+                <p style="color: #94a3b8; line-height: 1.6; margin-bottom: 2rem;">
+                    Voces claras y bajos pesados. Descubre cómo llegar a -9 LUFS y competir en la industria musical
+                    latina.
+                </p>
+                <div style="display: flex; align-items: center; color: #a7f3d0; font-weight: 600;">
+                    Leer artículo <i class="fas fa-arrow-right" style="margin-left: 8px;"></i>
+                </div>
+            </article>
+        </a>
+
+        <!-- Post LUFS -->
+        <a href="{% url 'mastering:blog_lufs_spotify' %}" style="text-decoration: none; color: inherit;">
+            <article>
+                <div style="color: #60a5fa; font-size: 0.85rem; font-weight: 700; margin-bottom: 1rem; text-transform: uppercase; letter-spacing: 1px;">
+                    Distribución y Plataformas
+                </div>
+                <h2 style="font-size: 1.75rem; color: white; margin-bottom: 1rem; line-height: 1.3;">
+                    A cuántos LUFS masterizar para Spotify y Apple Music en 2026
+                </h2>
+                <p style="color: #94a3b8; line-height: 1.6; margin-bottom: 2rem;">
+                    Conoce el estándar actual de sonoridad. Evita que las plataformas bajen el volumen de tus canciones al distribuirlas.
+                </p>
+                <div style="display: flex; align-items: center; color: #60a5fa; font-weight: 600;">
+                    Leer artículo <i class="fas fa-arrow-right" style="margin-left: 8px;"></i>
+                </div>
+            </article>
+        </a>
+
+        <!-- Post Plugins -->
+        <a href="{% url 'mastering:blog_plugins_mastering' %}" style="text-decoration: none; color: inherit;">
+            <article>
+                <div style="color: #c084fc; font-size: 0.85rem; font-weight: 700; margin-bottom: 1rem; text-transform: uppercase; letter-spacing: 1px;">
+                    Herramientas VST
+                </div>
+                <h2 style="font-size: 1.75rem; color: white; margin-bottom: 1rem; line-height: 1.3;">
+                    Mejores Plugins de Mastering Gratis (Alternativas a Ozone)
+                </h2>
+                <p style="color: #94a3b8; line-height: 1.6; margin-bottom: 2rem;">
+                    Consigue un sonido masivo y cristalino en tu DAW sin gastar un solo euro gracias a estas herramientas libres.
+                </p>
+                <div style="display: flex; align-items: center; color: #c084fc; font-weight: 600;">
+                    Leer artículo <i class="fas fa-arrow-right" style="margin-left: 8px;"></i>
+                </div>
+            </article>
+        </a>
+
+        <!-- Post Estereo -->
+        <a href="{% url 'mastering:blog_imagen_estereo' %}" style="text-decoration: none; color: inherit;">
+            <article>
+                <div style="color: #38bdf8; font-size: 0.85rem; font-weight: 700; margin-bottom: 1rem; text-transform: uppercase; letter-spacing: 1px;">
+                    Técnicas de Mezcla
+                </div>
+                <h2 style="font-size: 1.75rem; color: white; margin-bottom: 1rem; line-height: 1.3;">
+                    Cómo hacer que tu mezcla suene más ancha (Imagen Estéreo)
+                </h2>
+                <p style="color: #94a3b8; line-height: 1.6; margin-bottom: 2rem;">
+                    Soluciona mezclas estrechas y aburridas utilizando ecualización Mid/Side y panorama correctamente en el master.
+                </p>
+                <div style="display: flex; align-items: center; color: #38bdf8; font-weight: 600;">
+                    Leer artículo <i class="fas fa-arrow-right" style="margin-left: 8px;"></i>
+                </div>
+            </article>
+        </a>
+
+        <!-- Post IA vs Ingeniero -->
+        <a href="{% url 'mastering:blog_mastering_ia_vs_ingeniero' %}" style="text-decoration: none; color: inherit;">
+            <article>
+                <div style="color: #fb7185; font-size: 0.85rem; font-weight: 700; margin-bottom: 1rem; text-transform: uppercase; letter-spacing: 1px;">
+                    Debate en la Industria
+                </div>
+                <h2 style="font-size: 1.75rem; color: white; margin-bottom: 1rem; line-height: 1.3;">
+                    Mastering Online IA vs Ingeniero de Sonido Humano
+                </h2>
+                <p style="color: #94a3b8; line-height: 1.6; margin-bottom: 2rem;">
+                    Analizamos las pros, los contras y el ahorro de costes del uso de algoritmos inteligentes en contraste con un estudio tradicional.
+                </p>
+                <div style="display: flex; align-items: center; color: #fb7185; font-weight: 600;">
+                    Leer artículo <i class="fas fa-arrow-right" style="margin-left: 8px;"></i>
+                </div>
+            </article>
+        </a>
+    </div>
+</div>
+</div>
+{% endblock %}

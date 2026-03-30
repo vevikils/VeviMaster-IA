@@ -1,0 +1,72 @@
+{% extends "base.html" %}
+
+{% block title %}¿A cuántos LUFS masterizar para Spotify y Apple Music en 2026? | VeviMaster IA{% endblock %}
+
+{% block extra_css %}
+<style>
+    body { background: #0a0e27 !important; }
+    .article-container { position: relative; max-width: 900px; margin: 0 auto; padding: 8rem 1rem 6rem; }
+    .gradient-orb { position: absolute; border-radius: 50%; filter: blur(100px); opacity: 0.3; z-index: 0; }
+    article {
+        background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.05);
+        border-radius: 24px; padding: 3rem; backdrop-filter: blur(10px); position: relative; z-index: 1;
+    }
+    h1.article-title {
+        font-size: 2.5rem; margin-bottom: 2rem; font-weight: 800; color: #fff;
+        background: linear-gradient(135deg, #fff 0%, #60a5fa 100%);
+        -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
+    }
+    h2 { font-size: 1.8rem; color: #fff; margin: 2.5rem 0 1.5rem; font-weight: 700; }
+    h3 { font-size: 1.4rem; color: #60a5fa; margin: 1.5rem 0 1rem; }
+    p { margin-bottom: 1.5rem; color: #e2e8f0; line-height: 1.8; font-size: 1.1rem; }
+    ul { margin-bottom: 1.5rem; color: #e2e8f0; list-style-type: disc; margin-left: 2rem; }
+    li { margin-bottom: 0.5rem; line-height: 1.6; }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="article-container">
+    <div class="gradient-orb" style="width: 500px; height: 500px; top: 0; left: -10%; background: radial-gradient(circle, rgba(59,130,246,0.15) 0%, rgba(0,0,0,0) 70%);"></div>
+    
+    <article>
+        <div style="margin-bottom: 1rem; color: #60a5fa; font-weight: 600; text-transform: uppercase; font-size: 0.9rem; letter-spacing: 1px;">
+            Distribución y Plataformas
+        </div>
+
+        <h1 class="article-title">¿A cuántos LUFS masterizar para Spotify, Apple Music y YouTube en 2026?</h1>
+
+        <div style="margin-bottom: 3rem; color: #94a3b8; font-size: 0.95rem; display: flex; align-items: center; gap: 1rem; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 2rem;">
+            <div style="display: flex; align-items: center; gap: 8px;"><i class="far fa-calendar"></i> 22 Marzo, 2026</div>
+            <div style="display: flex; align-items: center; gap: 8px;"><i class="far fa-user"></i> VeviMaster IA</div>
+        </div>
+
+        <div>
+            <p>Una de las preguntas más repetidas y debatidas en el mundo de la producción musical es correcta o incorrectamente conocida como "la guerra del volumen". Si vas a distribuir tu música a plataformas de streaming (Spotify, Apple Music, YouTube Music, Tidal), tienes que conocer los estándares de <strong>LUFS (Loudness Units relative to Full Scale)</strong> o te arriesgas a que tu canción suene más baja o distorsionada que el resto de los artistas.</p>
+
+            <h2>¿Qué es la normalización de volumen?</h2>
+            <p>Las plataformas digitales hoy día emplean sistemas de <em>normalización</em>. Esto significa que si subes una pista excesivamente fuerte, Spotify automáticamente bajará su volumen para que coincida con el resto de su biblioteca. Y si la subes demasiado baja (sin suficiente compresión en el master), la plataforma la subirá, a menudo revelando "ruido de fondo" o artefactos indeseados.</p>
+
+            <h2>Los estándares de LUFS por plataforma en 2026</h2>
+            <p>Aunque varía ligeramente, hay un consenso absoluto en la industria en este momento:</p>
+            <ul>
+                <li><strong>Spotify:</strong> Apunta a un volumen integrado de forma oficial de <strong>-14 LUFS</strong>, asegurando el pico máximo real (True Peak) a <strong>-1 dBTP</strong>.</li>
+                <li><strong>Apple Music:</strong> Su Sound Check opera muy similarmente rondando los <strong>-16 LUFS</strong>. Recomendamos priorizar la claridad sobre la distorsión.</li>
+                <li><strong>YouTube:</strong> Regularmente limita y normaliza cerca de los <strong>-14 LUFS</strong> y es muy estricto cuando te pasas de agresividad.</li>
+            </ul>
+
+            <h2>Pero... la música actual comercial suena a -8 LUFS. ¿Qué hago?</h2>
+            <p>Aquí está el "secreto a voces" de la música urbana, pop y electrónica: Aunque Spotify recomienda -14 LUFS, artistas tope comercial (Bad Bunny, Taylor Swift o David Guetta) suelen mandar los master a volúmenes altísimos (entre -9 y -7 LUFS) para retener la "pegada transitiva de club" cuando suena en sistemas de DJ masivos, sin preocuparse de que Spotify baje digitalmente su archivo después.</p>
+
+            <p>Por eso, en <strong>VeviMaster IA</strong> analizamos automáticamente tu archivo y si detectamos que es Reggaeton, Trap o EDM, aplicamos una limitación algorítmica brillante que preserva el peso en -9 LUFS sin destruir la canción. Si subes música clásica o acústica, nuestra Inteligencia Artificial respeta dinámicas orgánicas más cercanas a los -13 LUFS.</p>
+        </div>
+
+        <div style="margin-top: 4rem; padding-top: 3rem; border-top: 1px solid rgba(255,255,255,0.1); text-align: center;">
+            <h3 style="color: white; margin-bottom: 1.5rem; font-size: 1.5rem;">Domina el Volumen Directamente</h3>
+            <p style="margin-bottom: 2rem;">¿Inseguro del volumen final? Deja que el algoritmo inteligente lo decida por ti.</p>
+            <a href="{% url 'mastering:studio' %}" style="display: inline-block; background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%); color: white; padding: 1rem 3rem; border-radius: 50px; text-decoration: none; font-weight: 700; font-size: 1.1rem; box-shadow: 0 10px 20px -5px rgba(59, 130, 246, 0.4); transition: transform 0.2s;">
+                Masterizar Mi Pista Gratis
+            </a>
+        </div>
+    </article>
+</div>
+{% endblock %}

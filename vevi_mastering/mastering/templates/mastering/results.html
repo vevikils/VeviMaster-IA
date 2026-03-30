@@ -1,0 +1,544 @@
+{% extends 'base.html' %}
+
+{% block title %}Resultados de Masterización - VeviMaster-IA{% endblock %}
+
+{% block extra_css %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<style>
+    .results-container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 4rem 1.5rem;
+    }
+
+    .mastery-hero {
+        text-align: center;
+        margin-bottom: 4rem;
+        animation: fadeInDown 0.8s ease-out;
+    }
+
+    @keyframes fadeInDown {
+        from { opacity: 0; transform: translateY(-20px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    .hero-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        background: rgba(16, 185, 129, 0.1);
+        border: 1px solid rgba(16, 185, 129, 0.2);
+        color: #34d399;
+        padding: 6px 16px;
+        border-radius: 100px;
+        font-size: 0.8rem;
+        font-weight: 800;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        margin-bottom: 1.5rem;
+    }
+
+    .hero-title {
+        font-size: 3.5rem;
+        font-weight: 800;
+        letter-spacing: -2px;
+        background: linear-gradient(to bottom, #fff 0%, #94a3b8 100%);
+        -webkit-background-clip: text;
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
+        margin-bottom: 1rem;
+    }
+
+    /* Command Center Player */
+    .command-center {
+        background: var(--glass-bg);
+        backdrop-filter: blur(25px);
+        -webkit-backdrop-filter: blur(25px);
+        border: 1px solid var(--glass-border);
+        border-radius: 32px;
+        padding: 3rem;
+        box-shadow: 0 40px 100px -20px rgba(0, 0, 0, 0.6);
+        margin-bottom: 3rem;
+    }
+
+    .track-meta {
+        text-align: center;
+        margin-bottom: 2.5rem;
+    }
+
+    .track-name-pro {
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: #fff;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 12px;
+    }
+
+    .track-name-pro i {
+        color: var(--brand-primary);
+        filter: drop-shadow(0 0 10px var(--brand-primary));
+    }
+
+    /* Premium Player UI */
+    .player-bridge {
+        background: rgba(0,0,0,0.3);
+        border-radius: 24px;
+        padding: 2rem;
+        border: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .player-controls-row {
+        display: flex;
+        align-items: center;
+        gap: 2rem;
+        margin-bottom: 2rem;
+    }
+
+    .play-trigger {
+        width: 64px;
+        height: 64px;
+        border-radius: 50%;
+        background: var(--brand-primary);
+        border: none;
+        color: #fff;
+        font-size: 1.5rem;
+        cursor: pointer;
+        transition: all 0.3s;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 0 30px rgba(139, 92, 246, 0.4);
+    }
+
+    .play-trigger:hover {
+        transform: scale(1.1);
+        box-shadow: 0 0 45px var(--brand-primary);
+    }
+
+    .scrubber-pro {
+        flex: 1;
+        position: relative;
+    }
+
+    .scrubber-track {
+        height: 8px;
+        background: rgba(255,255,255,0.05);
+        border-radius: 100px;
+        cursor: pointer;
+        overflow: hidden;
+    }
+
+    .scrubber-fill {
+        height: 100%;
+        width: 0%;
+        background: linear-gradient(90deg, var(--brand-primary), var(--brand-secondary));
+        box-shadow: 0 0 15px var(--brand-primary);
+    }
+
+    .time-pro {
+        font-family: 'monospace';
+        font-weight: 700;
+        color: var(--text-muted);
+        font-size: 0.9rem;
+        min-width: 100px;
+    }
+
+    /* A/B Switch Pro */
+    .source-panel {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 1rem;
+        background: rgba(0,0,0,0.5);
+        padding: 6px;
+        border-radius: 16px;
+        border: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .source-btn {
+        padding: 12px;
+        border-radius: 12px;
+        border: none;
+        background: transparent;
+        color: var(--text-muted);
+        font-weight: 800;
+        cursor: pointer;
+        transition: all 0.3s;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        font-size: 0.8rem;
+    }
+
+    .source-btn.active {
+        background: rgba(255,255,255,0.05);
+        color: #fff;
+        box-shadow: inset 0 0 10px rgba(255,255,255,0.05);
+    }
+
+    .source-btn.active#btnMaster {
+        background: var(--brand-primary);
+        color: #fff;
+        box-shadow: 0 10px 20px -5px rgba(139, 92, 246, 0.4);
+    }
+
+    /* Spectrum Pro */
+    .spectrum-bridge {
+        height: 250px;
+        margin-top: 2rem;
+        background: linear-gradient(to bottom, rgba(0,0,0,0.4), transparent);
+        border-radius: 16px;
+        padding: 1rem;
+    }
+
+    /* Technical Scan Grid */
+    .scan-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 1.5rem;
+        margin-bottom: 3rem;
+    }
+
+    .scan-card {
+        background: rgba(255,255,255,0.02);
+        border: 1px solid var(--glass-border);
+        padding: 1.5rem;
+        border-radius: 24px;
+        transition: all 0.3s;
+    }
+
+    .scan-card:hover {
+        background: rgba(255,255,255,0.05);
+        border-color: rgba(139, 92, 246, 0.3);
+        transform: translateY(-5px);
+    }
+
+    .scan-label {
+        font-size: 0.8rem;
+        font-weight: 800;
+        color: var(--text-muted);
+        text-transform: uppercase;
+        letter-spacing: 1.5px;
+        margin-bottom: 1rem;
+        display: block;
+    }
+
+    .scan-value-row {
+        display: flex;
+        align-items: center;
+        gap: 1.5rem;
+    }
+
+    .scan-val {
+        font-size: 1.8rem;
+        font-weight: 800;
+        color: #fff;
+    }
+
+    .scan-val.master {
+        color: var(--brand-primary);
+        filter: drop-shadow(0 0 10px rgba(139, 92, 246, 0.3));
+    }
+
+    .scan-arrow {
+        color: rgba(255,255,255,0.1);
+        font-size: 1rem;
+    }
+
+    /* Action Deck */
+    .action-deck {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 2rem;
+        margin-top: 4rem;
+    }
+
+    .download-final {
+        background: linear-gradient(135deg, var(--brand-primary) 0%, var(--brand-secondary) 100%);
+        padding: 1.2rem 3rem;
+        border-radius: 20px;
+        color: #fff;
+        font-size: 1.3rem;
+        font-weight: 800;
+        text-decoration: none;
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        box-shadow: 0 20px 40px -10px rgba(139, 92, 246, 0.5);
+    }
+
+    .download-final:hover {
+        transform: translateY(-5px) scale(1.05);
+        box-shadow: 0 30px 60px -15px rgba(139, 92, 246, 0.7);
+    }
+
+    .return-link {
+        color: var(--text-muted);
+        text-decoration: none;
+        font-weight: 700;
+        font-size: 0.9rem;
+        transition: 0.3s;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .return-link:hover { color: #fff; }
+
+    /* Badges */
+    .badge-pro {
+        padding: 4px 12px;
+        border-radius: 100px;
+        font-size: 0.7rem;
+        font-weight: 800;
+        text-transform: uppercase;
+    }
+
+    .badge-glow-green { background: rgba(16, 185, 129, 0.1); color: #34d399; border: 1px solid rgba(16, 185, 129, 0.2); }
+    .badge-glow-blue { background: rgba(59, 130, 246, 0.1); color: #60a5fa; border: 1px solid rgba(59, 130, 246, 0.2); }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="results-container">
+    <div class="mastery-hero">
+        <div class="hero-badge"><i class="fas fa-check-circle"></i> Procesamiento de Alta Fidelidad</div>
+        <h1 class="hero-title">Masterización de Élite</h1>
+        <p style="color: var(--text-muted); font-size: 1.1rem; font-weight: 600;">Resultados listos para plataformas digitales</p>
+    </div>
+
+    <!-- Command Center Player Card -->
+    <div class="command-center">
+        <div class="track-meta">
+            <div class="track-name-pro">
+                <i class="fas fa-compact-disc fa-spin" style="animation-duration: 4s;"></i>
+                {{ original_filename }}
+            </div>
+            <p style="color: var(--text-muted); margin-top: 5px; font-size: 0.8rem;">ENGINE v4.0 NEURAL AUDIO SCAN</p>
+        </div>
+
+        <div class="player-bridge">
+            <div class="player-controls-row">
+                <button id="playPauseBtn" class="play-trigger"><i class="fas fa-play"></i></button>
+                <div class="scrubber-pro" id="progressBarWrapper">
+                    <div class="scrubber-track">
+                        <div class="scrubber-fill" id="progressBarFill"></div>
+                    </div>
+                </div>
+                <div class="time-pro" id="timeDisplay">0:00 / 0:00</div>
+            </div>
+
+            <div class="source-panel">
+                <button class="source-btn active" id="btnOriginal" onclick="switchSource('original')">Bypass (Original)</button>
+                <button class="source-btn" id="btnMaster" onclick="switchSource('master')">Master HD <i class="fas fa-sparkles"></i></button>
+            </div>
+
+            <div class="spectrum-bridge">
+                <canvas id="spectrumChart"></canvas>
+            </div>
+        </div>
+
+        <audio id="audioOriginal" src="/media/{{ input_filename }}" crossorigin="anonymous"></audio>
+        <audio id="audioMaster" src="/media/{{ output_filename }}" crossorigin="anonymous"></audio>
+    </div>
+
+    <!-- Scanning Metrics Grid -->
+    <div class="scan-grid">
+        <!-- LUFS -->
+        <div class="scan-card">
+            <span class="scan-label">Loudness Analysis</span>
+            <div class="scan-value-row">
+                <div class="scan-val">{{ metrics_before.lufs|floatformat:1 }}</div>
+                <div class="scan-arrow"><i class="fas fa-arrow-right"></i></div>
+                <div class="scan-val master">{{ metrics_after.lufs|floatformat:1 }}</div>
+            </div>
+            <div style="margin-top: 1rem;">
+                <span class="badge-pro badge-glow-green">Integrated LUFS</span>
+            </div>
+        </div>
+
+        <!-- PEAK -->
+        <div class="scan-card">
+            <span class="scan-label">Dynamic Headroom</span>
+            <div class="scan-value-row">
+                <div class="scan-val">{{ metrics_before.peak|floatformat:2 }}</div>
+                <div class="scan-arrow"><i class="fas fa-arrow-right"></i></div>
+                <div class="scan-val master">{{ metrics_after.peak|floatformat:2 }}</div>
+            </div>
+            <div style="margin-top: 1rem;">
+                <span class="badge-pro badge-glow-blue">dB True Peak</span>
+            </div>
+        </div>
+
+        <!-- RMS -->
+        <div class="scan-card">
+            <span class="scan-label">RMS Energy Balance</span>
+            <div class="scan-value-row">
+                <div class="scan-val">{{ metrics_before.rms|floatformat:1 }}</div>
+                <div class="scan-arrow"><i class="fas fa-arrow-right"></i></div>
+                <div class="scan-val master">{{ metrics_after.rms|floatformat:1 }}</div>
+            </div>
+            <div style="margin-top: 1rem;">
+                <span class="badge-pro badge-glow-green">Power (Avg)</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- AI Scan Report -->
+    <div class="command-center" style="padding: 2.5rem;">
+        <h3 style="color: #fff; font-weight: 800; margin-bottom: 2rem; display: flex; align-items: center; gap: 12px;">
+            <i class="fas fa-microchip" style="color: var(--brand-primary);"></i> Intelligent Mastering Report
+        </h3>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem;">
+            <div style="padding: 1.5rem; background: rgba(255,255,255,0.03); border-radius: 20px; border: 1px solid rgba(255,255,255,0.05);">
+                <div style="color: var(--brand-primary); font-weight: 800; font-size: 0.9rem; margin-bottom: 10px; display: flex; align-items: center; gap: 8px;">
+                    <i class="fas fa-balance-scale"></i> SPECTRAL BALANCE
+                </div>
+                <p style="color: var(--text-muted); font-size: 0.85rem; line-height: 1.6;">Reajuste de curvas de ecualización para corregir picos sibilantes y aportar aire en el rango de los 12kHz.</p>
+            </div>
+            <div style="padding: 1.5rem; background: rgba(255,255,255,0.03); border-radius: 20px; border: 1px solid rgba(255,255,255,0.05);">
+                <div style="color: #f472b6; font-weight: 800; font-size: 0.9rem; margin-bottom: 10px; display: flex; align-items: center; gap: 8px;">
+                    <i class="fas fa-compress-alt"></i> DYNAMIC COHESION
+                </div>
+                <p style="color: var(--text-muted); font-size: 0.85rem; line-height: 1.6;">Compresión paralela y limitación brickwall aplicada para maximizar la pegada sin sacrificar transientes.</p>
+            </div>
+            <div style="padding: 1.5rem; background: rgba(255,255,255,0.03); border-radius: 20px; border: 1px solid rgba(255,255,255,0.05);">
+                <div style="color: #60a5fa; font-weight: 800; font-size: 0.9rem; margin-bottom: 10px; display: flex; align-items: center; gap: 8px;">
+                    <i class="fas fa-vector-square"></i> STEREO IMAGE
+                </div>
+                <p style="color: var(--text-muted); font-size: 0.85rem; line-height: 1.6;">Ampliación controlada del campo estéreo mediante procesamiento Mid/Side para una mayor profundidad.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Final Actions -->
+    <div class="action-deck">
+        <a href="{% url 'mastering:download' output_filename %}" class="download-final">
+            <i class="fas fa-cloud-download-alt"></i> Descargar Master (.WAV)
+        </a>
+        <a href="{% url 'mastering:upload' %}" class="return-link">
+            <i class="fas fa-chevron-left"></i> Masterizar Otro Archivo
+        </a>
+    </div>
+</div>
+
+<script>
+    const audioOriginal = document.getElementById('audioOriginal');
+    const audioMaster = document.getElementById('audioMaster');
+    const playPauseBtn = document.getElementById('playPauseBtn');
+    const progressBarWrapper = document.getElementById('progressBarWrapper');
+    const progressBarFill = document.getElementById('progressBarFill');
+    const timeDisplay = document.getElementById('timeDisplay');
+
+    // Chart Setup
+    const ctx = document.getElementById('spectrumChart').getContext('2d');
+    const specBefore = JSON.parse('{{ spectrum_before_json|safe }}');
+    const specAfter = JSON.parse('{{ spectrum_after_json|safe }}');
+
+    new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: specBefore.labels,
+            datasets: [
+                {
+                    label: 'Original',
+                    data: specBefore.data,
+                    borderColor: 'rgba(148, 163, 184, 0.4)',
+                    borderWidth: 2,
+                    pointRadius: 0,
+                    tension: 0.4,
+                    fill: true,
+                    backgroundColor: 'rgba(148, 163, 184, 0.05)'
+                },
+                {
+                    label: 'Masterizado',
+                    data: specAfter.data,
+                    borderColor: '#8b5cf6',
+                    borderWidth: 2,
+                    pointRadius: 0,
+                    tension: 0.4,
+                    fill: true,
+                    backgroundColor: 'rgba(139, 92, 246, 0.1)'
+                }
+            ]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: { legend: { display: false } },
+            scales: {
+                x: { type: 'logarithmic', grid: { display: false }, ticks: { display: false } },
+                y: { grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: '#64748b', font: { family: 'monospace' } } }
+            }
+        }
+    });
+
+    let currentAudio = audioOriginal;
+    let isPlaying = false;
+
+    function syncAudio(time) {
+        audioOriginal.currentTime = time;
+        audioMaster.currentTime = time;
+    }
+
+    function switchSource(source) {
+        const time = currentAudio.currentTime;
+        const wasPlaying = !currentAudio.paused;
+        currentAudio.pause();
+        if (source === 'original') {
+            currentAudio = audioOriginal;
+            document.getElementById('btnOriginal').classList.add('active');
+            document.getElementById('btnMaster').classList.remove('active');
+        } else {
+            currentAudio = audioMaster;
+            document.getElementById('btnMaster').classList.add('active');
+            document.getElementById('btnOriginal').classList.remove('active');
+        }
+        syncAudio(time);
+        if (wasPlaying) currentAudio.play();
+    }
+
+    function togglePlay() {
+        if (isPlaying) {
+            currentAudio.pause();
+            playPauseBtn.innerHTML = '<i class="fas fa-play"></i>';
+        } else {
+            syncAudio(currentAudio.currentTime);
+            currentAudio.play();
+            playPauseBtn.innerHTML = '<i class="fas fa-pause"></i>';
+        }
+        isPlaying = !isPlaying;
+    }
+
+    playPauseBtn.addEventListener('click', togglePlay);
+
+    function updateProgress() {
+        if (!currentAudio.duration) return;
+        const percent = (currentAudio.currentTime / currentAudio.duration) * 100;
+        progressBarFill.style.width = percent + '%';
+        timeDisplay.textContent = formatTime(currentAudio.currentTime) + ' / ' + formatTime(currentAudio.duration);
+        if (!currentAudio.paused) requestAnimationFrame(updateProgress);
+    }
+
+    audioOriginal.addEventListener('play', () => requestAnimationFrame(updateProgress));
+    audioMaster.addEventListener('play', () => requestAnimationFrame(updateProgress));
+
+    progressBarWrapper.addEventListener('click', (e) => {
+        const rect = progressBarWrapper.getBoundingClientRect();
+        const percent = (e.clientX - rect.left) / rect.width;
+        syncAudio(percent * currentAudio.duration);
+    });
+
+    function formatTime(s) {
+        const m = Math.floor(s / 60);
+        const sec = Math.floor(s % 60);
+        return m + ':' + sec.toString().padStart(2, '0');
+    }
+
+    audioOriginal.addEventListener('loadedmetadata', updateProgress);
+    audioMaster.addEventListener('loadedmetadata', updateProgress);
+</script>
+{% endblock %}
+ndblock %}

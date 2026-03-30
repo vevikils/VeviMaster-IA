@@ -1,0 +1,153 @@
+{% extends "base.html" %}
+
+{% block title %}Mezcla vs Mastering - Blog VeviMaster{% endblock %}
+
+{% block extra_css %}
+<style>
+    body {
+        background: #0a0e27 !important;
+    }
+
+    .article-container {
+        position: relative;
+        max-width: 900px;
+        margin: 0 auto;
+        padding: 8rem 1rem 6rem;
+    }
+
+    .gradient-orb {
+        position: absolute;
+        border-radius: 50%;
+        filter: blur(100px);
+        opacity: 0.3;
+        z-index: 0;
+    }
+
+    article {
+        background: rgba(255, 255, 255, 0.03);
+        border: 1px solid rgba(255, 255, 255, 0.05);
+        border-radius: 24px;
+        padding: 3rem;
+        backdrop-filter: blur(10px);
+        position: relative;
+        z-index: 1;
+    }
+
+    h1.article-title {
+        font-size: 2.5rem;
+        margin-bottom: 2rem;
+        font-weight: 800;
+        color: #fff;
+        background: linear-gradient(135deg, #fff 0%, #a5b4fc 100%);
+        -webkit-background-clip: text;
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+
+    h2 {
+        font-size: 1.8rem;
+        color: #fff;
+        margin: 2.5rem 0 1.5rem;
+        font-weight: 700;
+    }
+
+    p {
+        margin-bottom: 1.5rem;
+        color: #e2e8f0;
+        line-height: 1.8;
+        font-size: 1.1rem;
+    }
+
+    ul {
+        margin-bottom: 1.5rem;
+        color: #e2e8f0;
+    }
+
+    li {
+        margin-bottom: 0.5rem;
+        line-height: 1.6;
+    }
+
+    @media (max-width: 768px) {
+        article {
+            padding: 1.5rem;
+        }
+
+        h1.article-title {
+            font-size: 2rem;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="article-container">
+    <!-- Background Orbs -->
+    <div class="gradient-orb"
+        style="width: 500px; height: 500px; top: 0; left: -10%; background: radial-gradient(circle, rgba(99,102,241,0.15) 0%, rgba(0,0,0,0) 70%);">
+    </div>
+    <div class="gradient-orb"
+        style="width: 400px; height: 400px; bottom: 0; right: -5%; background: radial-gradient(circle, rgba(139,92,246,0.15) 0%, rgba(0,0,0,0) 70%);">
+    </div>
+
+    <article>
+        <div
+            style="margin-bottom: 1rem; color: #f59e0b; font-weight: 600; text-transform: uppercase; font-size: 0.9rem; letter-spacing: 1px;">
+            Conceptos Básicos
+        </div>
+
+        <h1 class="article-title">Mezcla vs Mastering: ¿Cuál es la diferencia real?</h1>
+
+        <div
+            style="margin-bottom: 3rem; color: #94a3b8; font-size: 0.95rem; display: flex; align-items: center; gap: 1rem; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 2rem;">
+            <div style="display: flex; align-items: center; gap: 8px;">
+                <i class="far fa-calendar"></i> 26 Diciembre, 2025
+            </div>
+            <div style="display: flex; align-items: center; gap: 8px;">
+                <i class="far fa-user"></i> VeviMaster Team
+            </div>
+        </div>
+
+        <div>
+            <p>Es la pregunta más común entre los productores principiantes: "¿Mi canción necesita mezcla o mastering?".
+                La respuesta corta es: ambas. Pero son procesos muy diferentes.</p>
+
+            <h2>La Mezcla (Mixing)</h2>
+            <p>La mezcla es como cocinar el plato. Tienes todos los ingredientes individuales (batería, bajo, voz,
+                guitarra) y tienes que combinarlos para que sepan bien juntos.</p>
+            <ul style="list-style-type: disc; margin-left: 2rem;">
+                <li><strong>Objetivo:</strong> Equilibrar los instrumentos individuales.</li>
+                <li><strong>Herramientas:</strong> Faders de volumen, EQ en cada pista, Paneo (izquierda/derecha),
+                    efectos creativos (Reverb, Delay).</li>
+                <li><strong>Resultado:</strong> Un archivo estéreo (o multicanal) donde todo se escucha claramente.</li>
+            </ul>
+
+            <h2>El Mastering</h2>
+            <p>El mastering es el emplatado final y el control de calidad antes de servirlo al cliente. Se trabaja sobre
+                el archivo estéreo final que salió de la mezcla.</p>
+            <ul style="list-style-type: disc; margin-left: 2rem;">
+                <li><strong>Objetivo:</strong> Consistencia, volumen competitivo y traducción (que suene bien en
+                    cualquier sitio).</li>
+                <li><strong>Herramientas:</strong> EQ, Compresión Multibanda, Limitación, Saturación, Imagen Estéreo.
+                </li>
+                <li><strong>Resultado:</strong> El archivo final listo para Spotify, Apple Music, CD, etc.</li>
+            </ul>
+
+            <h2>¿Por qué VeviMaster IA se enfoca en el Mastering?</h2>
+            <p>La mezcla es un proceso artístico y subjetivo (¿cuánto volumen debe tener la voz?). El mastering es más
+                técnico y objetivo (¿está equilibrado el espectro? ¿tiene el volumen correcto?). Por eso la IA es
+                excepcionalmente buena masterizando: puede analizar objetivamente los datos del audio y corregir
+                problemas técnicos con una precisión que supera al oído humano promedio.</p>
+        </div>
+
+        <div
+            style="margin-top: 4rem; padding-top: 3rem; border-top: 1px solid rgba(255,255,255,0.1); text-align: center;">
+            <h3 style="color: white; margin-bottom: 1.5rem; font-size: 1.5rem;">Dale el toque final a tu mezcla</h3>
+            <a href="{% url 'mastering:studio' %}"
+                style="display: inline-block; background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%); color: white; padding: 1rem 3rem; border-radius: 50px; text-decoration: none; font-weight: 700; font-size: 1.1rem; box-shadow: 0 10px 20px -5px rgba(99, 102, 241, 0.4); transition: transform 0.2s;">
+                Probar VeviMaster IA Gratis
+            </a>
+        </div>
+    </article>
+</div>
+{% endblock %}

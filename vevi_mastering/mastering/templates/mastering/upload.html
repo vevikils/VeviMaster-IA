@@ -1,0 +1,826 @@
+{% extends "base.html" %}
+
+{% block title %}AI Mastering Studio - Masterizar Online Gratis - VeviMaster IA{% endblock %}
+{% block meta_description %}Sube tu audio (WAV o MP3) y masteriza gratis online. Nuestra IA optimiza el volumen y la
+ecualización de tus pistas con resultados instantáneos y calidad profesional.{% endblock %}
+
+{% block extra_css %}
+<style>
+    .mastering-container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 4rem 1.5rem;
+    }
+
+    .studio-header {
+        text-align: center;
+        margin-bottom: 4rem;
+    }
+
+    .studio-logo {
+        width: 80px;
+        height: 80px;
+        margin-bottom: 1.5rem;
+        filter: drop-shadow(0 0 20px var(--brand-primary));
+        animation: pulse 4s infinite ease-in-out;
+    }
+
+    @keyframes pulse {
+        0%, 100% { transform: scale(1); opacity: 0.8; }
+        50% { transform: scale(1.05); opacity: 1; }
+    }
+
+    .studio-title {
+        font-size: 3.5rem;
+        font-weight: 800;
+        letter-spacing: -2px;
+        background: linear-gradient(to bottom, #fff 0%, #94a3b8 100%);
+        -webkit-background-clip: text;
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
+        margin-bottom: 0.5rem;
+    }
+
+    .studio-subtitle {
+        color: var(--brand-secondary);
+        font-size: 1.1rem;
+        font-weight: 600;
+        letter-spacing: 1px;
+        text-transform: uppercase;
+    }
+
+    /* Bento Control Panel */
+    .control-panel {
+        background: var(--glass-bg);
+        backdrop-filter: blur(25px);
+        -webkit-backdrop-filter: blur(25px);
+        border: 1px solid var(--glass-border);
+        border-radius: 32px;
+        padding: 3rem 2rem;
+        box-shadow: 0 40px 100px -20px rgba(0, 0, 0, 0.6);
+    }
+
+    /* Portal Upload */
+    .file-upload-portal {
+        border: 2px dashed rgba(139, 92, 246, 0.2);
+        border-radius: 24px;
+        padding: 4rem 2rem;
+        text-align: center;
+        background: rgba(255, 255, 255, 0.02);
+        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        cursor: pointer;
+        position: relative;
+        overflow: hidden;
+        margin-bottom: 3rem;
+    }
+
+    .file-upload-portal:hover {
+        border-color: var(--brand-primary);
+        background: rgba(139, 92, 246, 0.05);
+        transform: scale(1.01);
+    }
+
+    .portal-icon {
+        font-size: 3.5rem;
+        color: var(--brand-primary);
+        margin-bottom: 1.5rem;
+        filter: drop-shadow(0 0 10px rgba(139, 92, 246, 0.4));
+    }
+
+    /* Controls Architecture */
+    .controls-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        gap: 1.2rem;
+        margin-bottom: 2rem;
+    }
+
+    .bento-control-card {
+        background: rgba(255, 255, 255, 0.03);
+        border: 1px solid var(--glass-border);
+        padding: 1.5rem;
+        border-radius: 24px;
+        transition: all 0.3s;
+    }
+
+    .bento-control-card:hover {
+        background: rgba(255, 255, 255, 0.06);
+        border-color: rgba(139, 92, 246, 0.3);
+    }
+
+    .control-head {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 1.2rem;
+    }
+
+    .label-pro {
+        font-weight: 700;
+        font-size: 0.9rem;
+        color: var(--text-muted);
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .value-chip {
+        font-family: 'monospace';
+        font-size: 0.8rem;
+        padding: 4px 10px;
+        background: rgba(139, 92, 246, 0.15);
+        color: var(--brand-primary);
+        border-radius: 100px;
+        font-weight: 800;
+    }
+
+    /* Custom Sliders PRO MAX */
+    input[type="range"] {
+        -webkit-appearance: none;
+        appearance: none;
+        width: 100%;
+        height: 6px;
+        background: rgba(255, 255, 255, 0.05);
+        border-radius: 100px;
+        outline: none;
+    }
+
+    input[type="range"]::-webkit-slider-thumb {
+        -webkit-appearance: none;
+        width: 20px;
+        height: 20px;
+        background: #fff;
+        border: 4px solid var(--brand-primary);
+        border-radius: 50%;
+        cursor: pointer;
+        box-shadow: 0 0 15px rgba(139, 92, 246, 0.5);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    input[type="range"]::-webkit-slider-thumb:hover {
+        transform: scale(1.2);
+        box-shadow: 0 0 25px var(--brand-primary);
+    }
+
+    /* Preset Select Pro */
+    .select-pro {
+        background: rgba(255, 255, 255, 0.05);
+        border: 2px solid var(--glass-border);
+        color: #fff;
+        padding: 1rem 1.5rem;
+        border-radius: 16px;
+        font-weight: 700;
+        width: 100%;
+        margin-top: 1rem;
+        cursor: pointer;
+        transition: all 0.3s;
+    }
+
+    .select-pro:focus {
+        border-color: var(--brand-primary);
+        outline: none;
+        box-shadow: 0 0 20px rgba(139, 92, 246, 0.2);
+    }
+
+    /* Section Divider Pro */
+    .pro-divider {
+        height: 1px;
+        background: linear-gradient(90deg, transparent, var(--glass-border), transparent);
+        margin: 3rem 0;
+    }
+
+    /* Loading Overlay PRO MAX */
+    .loading-overlay {
+        position: fixed;
+        inset: 0;
+        background: rgba(2, 6, 23, 0.95);
+        backdrop-filter: blur(20px);
+        z-index: 99999;
+        display: none;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        padding: 2rem;
+    }
+
+    .loading-overlay.active { display: flex; }
+
+    .loading-orb {
+        width: 100px;
+        height: 100px;
+        border-radius: 50%;
+        background: radial-gradient(circle at 30% 30%, var(--brand-primary), transparent);
+        box-shadow: 0 0 50px rgba(139, 92, 246, 0.5);
+        margin-bottom: 2rem;
+        animation: orb-flow 3s infinite ease-in-out;
+    }
+
+    @keyframes orb-flow {
+        0%, 100% { transform: scale(1); filter: hue-rotate(0deg); }
+        50% { transform: scale(1.1); filter: hue-rotate(45deg); }
+    }
+
+    .loading-title {
+        font-size: 2.2rem;
+        font-weight: 800;
+        letter-spacing: -1px;
+        margin-bottom: 1rem;
+    }
+
+    .progress-bar-pro {
+        width: 100%;
+        max-width: 400px;
+        height: 8px;
+        background: rgba(255, 255, 255, 0.05);
+        border-radius: 100px;
+        overflow: hidden;
+        border: 1px solid var(--glass-border);
+    }
+
+    .progress-fill-pro {
+        height: 100%;
+        width: 0%;
+        background: linear-gradient(90deg, var(--brand-primary), var(--brand-secondary));
+        box-shadow: 0 0 15px var(--brand-primary);
+        transition: width 0.4s ease;
+    }
+
+    /* Additional UI Refinements */
+    .section-header-pro {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin: 3rem 0 1.5rem;
+    }
+
+    .header-dot {
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        background: var(--brand-primary);
+        box-shadow: 0 0 15px var(--brand-primary);
+    }
+
+    .header-text {
+        font-weight: 800;
+        font-size: 1.2rem;
+        color: #fff;
+        letter-spacing: 0.5px;
+    }
+
+    .submit-btn-pro {
+        width: 100%;
+        padding: 1.5rem;
+        margin-top: 4rem;
+        background: linear-gradient(135deg, var(--brand-primary) 0%, var(--brand-secondary) 100%);
+        border: none;
+        border-radius: 20px;
+        color: #fff;
+        font-size: 1.25rem;
+        font-weight: 800;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+        cursor: pointer;
+        transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        box-shadow: 0 20px 40px -10px rgba(139, 92, 246, 0.4);
+    }
+
+    .submit-btn-pro:hover {
+        transform: translateY(-5px) scale(1.02);
+        box-shadow: 0 30px 60px -15px rgba(139, 92, 246, 0.6);
+        filter: brightness(1.1);
+    }
+
+    .submit-btn-pro:active { transform: scale(0.98); }
+
+    .band-grid-pro {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 1.5rem;
+    }
+
+    .input-number-pro {
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid var(--glass-border);
+        color: var(--brand-primary);
+        padding: 5px 10px;
+        border-radius: 8px;
+        font-family: 'monospace';
+        font-weight: 700;
+        width: 80px;
+        text-align: center;
+        outline: none;
+    }
+
+    .input-number-pro:focus { border-color: var(--brand-primary); }
+</style>
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="mastering-container">
+    <!-- Header PRO MAX -->
+    <div class="studio-header">
+        <div class="studio-logo">
+            <svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M8 24L8 8L12 12L12 20L8 24Z" fill="white" />
+                <path d="M24 24L24 8L20 12L20 20L24 24Z" fill="white" />
+                <rect x="14" y="10" width="4" height="12" fill="white" />
+            </svg>
+        </div>
+        <h1 class="studio-title">Mastering Studio</h1>
+        <p class="studio-subtitle">Audio Intelligence Framework v4.0</p>
+    </div>
+
+    <form method="post" enctype="multipart/form-data" class="control-panel">
+        {% csrf_token %}
+
+        <!-- Sonic Portal Upload -->
+        <div class="file-upload-portal" onclick="document.getElementById('audio-input').click()">
+            <i class="fas fa-compact-disc portal-icon"></i>
+            <div class="upload-info">
+                <h4 style="font-weight: 800; font-size: 1.4rem;">Inyectar Audio</h4>
+                <p class="upload-hint">Sube tu mezcla final (WAV/MP3) para el procesamiento</p>
+            </div>
+            <input type="file" id="audio-input" name="audio" accept=".wav,.mp3" required onchange="updateFileName(this)" style="display: none;">
+            <div id="file-name-display"></div>
+        </div>
+
+        <!-- Live Analysis Stats -->
+        <div id="original-stats-container" style="display: none; margin-bottom: 3rem;">
+            <div class="recent-section-header">
+                <div class="recent-dot"></div>
+                <h3 style="font-weight: 700; color: #fff;">Telemetría Original</h3>
+            </div>
+
+            <div class="controls-grid">
+                <div class="bento-control-card">
+                    <div class="control-head"><span class="label-pro">Loudness</span></div>
+                    <div style="font-size: 2rem; font-weight: 800;" id="original_lufs">--</div>
+                    <div style="font-size: 0.8rem; color: var(--text-muted);">LUFS (Integrated)</div>
+                </div>
+                <div class="bento-control-card">
+                    <div class="control-head"><span class="label-pro">True Peak</span></div>
+                    <div style="font-size: 2rem; font-weight: 800;" id="original_peak">--</div>
+                    <div style="font-size: 0.8rem; color: var(--text-muted);">dBTP (Ceiling)</div>
+                </div>
+                <div class="bento-control-card">
+                    <div class="control-head"><span class="label-pro">Energy (RMS)</span></div>
+                    <div style="font-size: 2rem; font-weight: 800;" id="original_rms">--</div>
+                    <div style="font-size: 0.8rem; color: var(--text-muted);">dB (Avg)</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Engine Preset -->
+        <div class="bento-control-card" style="margin-bottom: 3rem;">
+            <label class="label-pro" style="margin-bottom: 1rem;"><i class="fas fa-bolt"></i> Perfil Sonoro Avanzado</label>
+            <select name="preset" id="preset" class="select-pro">
+                <option value="normal" selected>Normal (Referencia Transparente)</option>
+                <option value="rock">Rock / Metal (Punch & Grit)</option>
+                <option value="trap">Trap / Hip-Hop (Sub-Focus)</option>
+                <option value="drill">Drill (Clinical Bass)</option>
+                <option value="reggaeton">Reggaeton (Warm Density)</option>
+                <option value="rap">Rap / Boom Bap (Natural Body)</option>
+                <option value="pop">Pop Moderno (Silk & Air)</option>
+                <option value="hyperpop">Hyperpop (Extreme Dynamics)</option>
+            </select>
+        </div>
+
+        <div class="pro-divider"></div>
+
+        <!-- Global Control Parameters -->
+        <div class="recent-section-header">
+            <div class="recent-dot" style="background: var(--brand-primary); box-shadow: 0 0 10px var(--brand-primary);"></div>
+            <h3 style="font-weight: 700; color: #fff;">Faders Globales</h3>
+        </div>
+
+        <div class="controls-grid">
+            <!-- Loudness -->
+            <div class="bento-control-card">
+                <div class="control-head">
+                    <span class="label-pro">Target Loudness</span>
+                    <span class="value-chip" id="loudness_val">-14 LUFS</span>
+                </div>
+                <input type="range" name="loudness" id="loudness" min="-20" max="0" step="0.1" value="-14" oninput="updateSliderValue('loudness','loudness_val', ' LUFS')">
+            </div>
+
+            <!-- Dynamics -->
+            <div class="bento-control-card">
+                <div class="control-head">
+                    <span class="label-pro">Impact / Dynamics</span>
+                    <span class="value-chip" id="dynamics_val">2.5</span>
+                </div>
+                <input type="range" name="dynamics" id="dynamics" min="0" max="10" step="0.1" value="2.5" oninput="updateSliderValue('dynamics','dynamics_val', '')">
+            </div>
+
+            <!-- Space -->
+            <div class="bento-control-card">
+                <div class="control-head">
+                    <span class="label-pro">Stereo Width</span>
+                    <span class="value-chip" id="space_val">-3</span>
+                </div>
+                <input type="range" name="space" id="space" min="-10" max="10" step="0.1" value="-3" oninput="updateSliderValue('space','space_val', '')">
+            </div>
+
+            <!-- Sharpness -->
+            <div class="bento-control-card">
+                <div class="control-head">
+                    <span class="label-pro">Aura / Air</span>
+                    <span class="value-chip" id="sharpness_val">2.2</span>
+                </div>
+                <input type="range" name="sharpness" id="sharpness" min="0" max="10" step="0.1" value="2.2" oninput="updateSliderValue('sharpness','sharpness_val', '')">
+            </div>
+        </div>
+
+        <!-- Rest of Global Faders -->
+        <div class="controls-grid" style="margin-top: 1.2rem;">
+            <!-- LRA -->
+            <div class="bento-control-card">
+                <div class="control-head">
+                    <span class="label-pro">Loudness Range</span>
+                    <span class="value-chip" id="loudness_range_val">6 LU</span>
+                </div>
+                <input type="range" name="loudness_range" id="loudness_range" min="0" max="20" step="0.1" value="6" oninput="updateSliderValue('loudness_range','loudness_range_val', ' LU')">
+            </div>
+
+            <!-- Peak -->
+            <div class="bento-control-card">
+                <div class="control-head">
+                    <span class="label-pro">Ceiling (dBTP)</span>
+                    <span class="value-chip" id="peak_val">0.98</span>
+                </div>
+                <input type="range" name="peak" id="peak" min="0" max="1" step="0.01" value="0.98" oninput="updateSliderValue('peak','peak_val', '')">
+            </div>
+
+            <!-- RMS -->
+            <div class="bento-control-card">
+                <div class="control-head">
+                    <span class="label-pro">Target RMS</span>
+                    <span class="value-chip" id="rms_val">-16 dB</span>
+                </div>
+                <input type="range" name="rms" id="rms" min="-20" max="0" step="0.1" value="-16" oninput="updateSliderValue('rms','rms_val', ' dB')">
+            </div>
+
+            <!-- DRR -->
+            <div class="bento-control-card">
+                <div class="control-head">
+                    <span class="label-pro">DRR Depth</span>
+                    <span class="value-chip" id="drr_val">12</span>
+                </div>
+                <input type="range" name="drr" id="drr" min="0" max="20" step="0.1" value="12" oninput="updateSliderValue('drr','drr_val', '')">
+            </div>
+
+            <!-- Sample Rate -->
+            <div class="bento-control-card">
+                <div class="control-head">
+                    <span class="label-pro">Sample Rate</span>
+                    <span class="value-chip" id="sample_rate_val">44100 Hz</span>
+                </div>
+                <input type="range" name="sample_rate" id="sample_rate" min="22050" max="192000" step="1" value="44100" oninput="updateSliderValue('sample_rate','sample_rate_val', ' Hz')">
+            </div>
+
+            <!-- Channels -->
+            <div class="bento-control-card">
+                <div class="control-head">
+                    <span class="label-pro">Output Channels</span>
+                    <span class="value-chip" id="channels_val">2</span>
+                </div>
+                <input type="range" name="channels" id="channels" min="1" max="8" step="1" value="2" oninput="updateSliderValue('channels','channels_val', '')">
+            </div>
+        </div>
+
+        <div class="pro-divider"></div>
+
+        <!-- Frequency EQ Lab -->
+        <div class="section-header-pro">
+            <div class="header-dot"></div>
+            <div class="header-text">Multi-Band EQ Matrix</div>
+        </div>
+
+        <div class="band-grid-pro">
+            {% for i in "0123" %}
+            <div class="bento-control-card">
+                <div style="font-weight: 800; font-size: 1rem; color: #fff; margin-bottom: 1.5rem; display: flex; justify-content: space-between;">
+                    <span>Banda {{ forloop.counter }}</span>
+                    <span style="color: var(--brand-primary); font-size: 0.8rem;">Filter Pack {{ i }}</span>
+                </div>
+
+                <div style="display: flex; gap: 8px; align-items: center; margin-bottom: 1.5rem; background: rgba(0,0,0,0.2); padding: 8px; border-radius: 12px;">
+                    <input type="number" name="band_{{i}}_low_freq" id="low_freq_{{i}}" class="input-number-pro" value="20">
+                    <span style="color: var(--text-muted);">-</span>
+                    <input type="number" name="band_{{i}}_high_freq" id="high_freq_{{i}}" class="input-number-pro" value="20000">
+                </div>
+
+                <div style="display: flex; flex-direction: column; gap: 15px;">
+                    <div>
+                        <div class="control-head"><span class="label-pro">Loudness</span><span class="value-chip" id="band_loudness_{{i}}_val">-18</span></div>
+                        <input type="range" name="band_{{i}}_loudness" id="band_loudness_{{i}}" min="-30" max="0" step="0.1" value="-18" oninput="updateSliderValue('band_loudness_{{i}}','band_loudness_{{i}}_val', '')">
+                    </div>
+                    <div>
+                        <div class="control-head"><span class="label-pro">Mid Mean</span><span class="value-chip" id="band_mid_mean_{{i}}_val">-15</span></div>
+                        <input type="range" name="band_{{i}}_mid_mean" id="band_mid_mean_{{i}}" min="-30" max="0" step="0.1" value="-15" oninput="updateSliderValue('band_mid_mean_{{i}}','band_mid_mean_{{i}}_val', '')">
+                    </div>
+                    <div>
+                        <div class="control-head"><span class="label-pro">Side Mean</span><span class="value-chip" id="band_side_mean_{{i}}_val">-20</span></div>
+                        <input type="range" name="band_{{i}}_side_mean" id="band_side_mean_{{i}}" min="-30" max="0" step="0.1" value="-20" oninput="updateSliderValue('band_side_mean_{{i}}','band_side_mean_{{i}}_val', '')">
+                    </div>
+                </div>
+
+                <input type="hidden" name="band_{{i}}_loudness_range" id="band_loudness_range_{{i}}" value="6">
+                <input type="hidden" name="band_{{i}}_mid_to_side_loudness" id="band_mid_to_side_loudness_{{i}}" value="-10">
+                <input type="hidden" name="band_{{i}}_mid_to_side_loudness_range" id="band_mid_to_side_loudness_range_{{i}}" value="10">
+            </div>
+            {% endfor %}
+        </div>
+
+        <button type="submit" class="submit-btn-pro">
+            <i class="fas fa-microchip" style="margin-right: 12px;"></i> Inyectar Algoritmo de Masterización
+        </button>
+    </form>
+
+    <!-- Loading Overlay PRO MAX -->
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="loading-orb"></div>
+        <h2 class="loading-title">Compilando Audio</h2>
+        <p style="color: var(--text-muted); margin-bottom: 2rem; font-weight: 600;">Aplicando Red Neuronal de Audio v4.0</p>
+        <div class="progress-bar-pro">
+            <div class="progress-fill-pro" id="progressBar"></div>
+        </div>
+        <div style="margin-top: 1rem; color: var(--brand-primary); font-family: monospace; font-weight: 800; font-size: 1.2rem;" id="progressText">0%</div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    // Form Submit Handler
+    document.querySelector('form').addEventListener('submit', function (e) {
+        const overlay = document.getElementById('loadingOverlay');
+        const progressBar = document.getElementById('progressBar');
+        const progressText = document.getElementById('progressText');
+
+        overlay.style.display = 'flex';
+        // Force reflow
+        overlay.offsetHeight;
+        overlay.classList.add('active');
+
+        let progress = 0;
+        const interval = setInterval(() => {
+            if (progress < 90) {
+                // Slower progress logic: Target ~30-40s to reach 90%
+                const increment = Math.max(0.05, (90 - progress) / 150);
+                progress += increment;
+                progressBar.style.width = progress + '%';
+                progressText.textContent = Math.round(progress) + '%';
+            } else {
+                progressText.textContent = "90% - Finalizando detalles...";
+            }
+        }, 100);
+    });
+
+    function toggleInfo(infoId) {
+        // Cerrar otros abiertos? Opcional. Por ahora solo toggle simple.
+        const el = document.getElementById(infoId);
+        if (el.classList.contains('active')) {
+            el.classList.remove('active');
+        } else {
+            // Cerrar todos antes para que no se amontonen
+            document.querySelectorAll('.parameter-info').forEach(info => info.classList.remove('active'));
+            el.classList.add('active');
+        }
+    }
+
+    function updateSliderValue(sliderId, valueId, suffix) {
+        document.getElementById(valueId).textContent = document.getElementById(sliderId).value + (suffix || '');
+    }
+
+    function updateFileName(input) {
+        const display = document.getElementById('file-name-display');
+        if (input.files && input.files[0]) {
+            display.textContent = 'Archivo seleccionado: ' + input.files[0].name;
+            analyzeOriginalAudio(input.files[0]);
+        } else {
+            display.textContent = '';
+            document.getElementById('original-stats-container').style.display = 'none';
+        }
+    }
+
+    async function analyzeOriginalAudio(file) {
+        const container = document.getElementById('original-stats-container');
+        const lufsEl = document.getElementById('original_lufs');
+        const peakEl = document.getElementById('original_peak');
+        const rmsEl = document.getElementById('original_rms');
+        const progressContainer = document.getElementById('analysis-progress-container');
+        const progressBar = document.getElementById('analysis-progress-bar');
+        const statusText = document.getElementById('analysis-status-text');
+
+        container.style.display = 'block';
+        lufsEl.textContent = '...';
+        peakEl.textContent = '...';
+        rmsEl.textContent = '...';
+
+        progressContainer.style.display = 'block';
+        statusText.style.display = 'block';
+        progressBar.style.width = '0%';
+
+        // Simulación de progreso suave para el análisis
+        let progress = 0;
+        const progressInterval = setInterval(() => {
+            if (progress < 90) {
+                progress += (90 - progress) / 30;
+                progressBar.style.width = progress + '%';
+            }
+        }, 300);
+
+        const formData = new FormData();
+        formData.append('audio', file);
+
+        try {
+            const response = await fetch('{% url "mastering:analyze_pre_master" %}', {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value
+                }
+            });
+
+            clearInterval(progressInterval);
+            progressBar.style.width = '100%';
+
+            if (response.ok) {
+                const data = await response.json();
+                lufsEl.textContent = data.lufs.toFixed(1) + ' LUFS';
+                peakEl.textContent = data.peak.toFixed(2) + ' dB';
+                rmsEl.textContent = data.rms.toFixed(1) + ' dB';
+
+                setTimeout(() => {
+                    progressContainer.style.display = 'none';
+                    statusText.style.display = 'none';
+                }, 500);
+
+                showToast('Análisis original completado');
+            } else {
+                const data = await response.json();
+                showToast('Error: ' + (data.error || 'No se pudo analizar el audio'));
+                container.style.display = 'none';
+            }
+        } catch (error) {
+            clearInterval(progressInterval);
+            console.error('Error:', error);
+            showToast('Error de conexión');
+            container.style.display = 'none';
+        }
+    }
+
+    const PRESETS = {
+        normal: {
+            global: { loudness: -12.0, loudness_range: 8.0, peak: 0.98, rms: -14.0, dynamics: 2.5, sharpness: 2.5, space: -2, drr: 10, sample_rate: 44100, channels: 2 },
+            bands: [
+                { low_freq: 20, high_freq: 200, loudness: -12, mid_mean: -10, side_mean: -16 },
+                { low_freq: 200, high_freq: 1000, loudness: -11, mid_mean: -9, side_mean: -14 },
+                { low_freq: 1000, high_freq: 5000, loudness: -12, mid_mean: -10, side_mean: -14 },
+                { low_freq: 5000, high_freq: 20000, loudness: -14, mid_mean: -12, side_mean: -13 },
+            ]
+        },
+        rock: {
+            global: { loudness: -12.0, loudness_range: 6, peak: 0.98, rms: -13, dynamics: 3.5, sharpness: 3.0, space: -1.0, drr: 12, sample_rate: 44100, channels: 2 },
+            bands: [
+                { low_freq: 20, high_freq: 180, loudness: -12, mid_mean: -10, side_mean: -15 },
+                { low_freq: 180, high_freq: 800, loudness: -11, mid_mean: -9, side_mean: -14 },
+                { low_freq: 800, high_freq: 4000, loudness: -12, mid_mean: -10, side_mean: -13 },
+                { low_freq: 4000, high_freq: 20000, loudness: -14, mid_mean: -11, side_mean: -14 },
+            ]
+        },
+        trap: {
+            global: { loudness: -12.0, loudness_range: 5, peak: 0.99, rms: -12.5, dynamics: 1.8, sharpness: 4.5, space: -0.5, drr: 10, sample_rate: 44100, channels: 2 },
+            bands: [
+                { low_freq: 20, high_freq: 120, loudness: -11, mid_mean: -9, side_mean: -14 },
+                { low_freq: 120, high_freq: 300, loudness: -10, mid_mean: -8, side_mean: -12 },
+                { low_freq: 300, high_freq: 800, loudness: -12, mid_mean: -10, side_mean: -11 },
+                { low_freq: 800, high_freq: 20000, loudness: -13, mid_mean: -11, side_mean: -11 },
+            ]
+        },
+        drill: {
+            global: { loudness: -12.0, loudness_range: 4, peak: 0.99, rms: -12.0, dynamics: 1.5, sharpness: 5, space: -0.5, drr: 9, sample_rate: 44100, channels: 2 },
+            bands: [
+                { low_freq: 20, high_freq: 100, loudness: -11, mid_mean: -9, side_mean: -14 },
+                { low_freq: 100, high_freq: 400, loudness: -10, mid_mean: -8, side_mean: -12 },
+                { low_freq: 400, high_freq: 2000, loudness: -12, mid_mean: -10, side_mean: -10 },
+                { low_freq: 2000, high_freq: 20000, loudness: -13, mid_mean: -11, side_mean: -12 },
+            ]
+        },
+        reggaeton: {
+            global: { loudness: -12.0, loudness_range: 6, peak: 0.98, rms: -13.0, dynamics: 2.2, sharpness: 3.5, space: -1.0, drr: 11, sample_rate: 44100, channels: 2 },
+            bands: [
+                { low_freq: 20, high_freq: 150, loudness: -12, mid_mean: -10, side_mean: -15 },
+                { low_freq: 150, high_freq: 600, loudness: -11, mid_mean: -9, side_mean: -13 },
+                { low_freq: 600, high_freq: 3000, loudness: -12, mid_mean: -10, side_mean: -12 },
+                { low_freq: 3000, high_freq: 20000, loudness: -14, mid_mean: -11, side_mean: -14 },
+            ]
+        },
+        rap: {
+            global: { loudness: -12.0, loudness_range: 7, peak: 0.98, rms: -13.5, dynamics: 2.5, sharpness: 2.8, space: -1.5, drr: 10, sample_rate: 44100, channels: 2 },
+            bands: [
+                { low_freq: 20, high_freq: 180, loudness: -16, mid_mean: -14, side_mean: -19 },
+                { low_freq: 180, high_freq: 800, loudness: -14, mid_mean: -12, side_mean: -17 },
+                { low_freq: 800, high_freq: 4000, loudness: -15, mid_mean: -13, side_mean: -16 },
+                { low_freq: 4000, high_freq: 20000, loudness: -18, mid_mean: -15, side_mean: -18 },
+            ]
+        },
+        pop: {
+            global: { loudness: -12, loudness_range: 6, peak: 0.98, rms: -14, dynamics: 3, sharpness: 3.2, space: -1, drr: 12, sample_rate: 44100, channels: 2 },
+            bands: [
+                { low_freq: 20, high_freq: 150, loudness: -18, mid_mean: -15, side_mean: -25 },
+                { low_freq: 150, high_freq: 400, loudness: -16, mid_mean: -13, side_mean: -20 },
+                { low_freq: 400, high_freq: 800, loudness: -17, mid_mean: -14, side_mean: -18 },
+                { low_freq: 800, high_freq: 20000, loudness: -18, mid_mean: -15, side_mean: -17 },
+            ]
+        },
+        hyperpop: {
+            global: { loudness: -8, loudness_range: 3, peak: 1.0, rms: -9, dynamics: 1.2, sharpness: 6.5, space: 0, drr: 8, sample_rate: 44100, channels: 2 },
+            bands: [
+                { low_freq: 20, high_freq: 200, loudness: -12, mid_mean: -10, side_mean: -14 },
+                { low_freq: 200, high_freq: 1000, loudness: -10, mid_mean: -8, side_mean: -12 },
+                { low_freq: 1000, high_freq: 5000, loudness: -11, mid_mean: -9, side_mean: -11 },
+                { low_freq: 5000, high_freq: 20000, loudness: -13, mid_mean: -11, side_mean: -13 },
+            ]
+        },
+    };
+
+    function showToast(message) {
+        const toast = document.createElement('div');
+        toast.style.cssText = `
+            position: fixed; bottom: 30px; right: 30px;
+            background: linear-gradient(135deg, #8b5cf6 0%, #6366f1 100%);
+            color: white; padding: 12px 24px; border-radius: 12px;
+            z-index: 10001; box-shadow: 0 10px 25px rgba(0,0,0,0.4);
+            font-weight: 600; font-size: 0.9rem; pointer-events: none;
+            border: 1px solid rgba(255,255,255,0.1);
+        `;
+        toast.textContent = message;
+        document.body.appendChild(toast);
+
+        // Simple fade in/out
+        toast.animate([
+            { opacity: 0, transform: 'translateY(20px)' },
+            { opacity: 1, transform: 'translateY(0)' }
+        ], { duration: 300, easing: 'ease-out' });
+
+        setTimeout(() => {
+            toast.animate([
+                { opacity: 1, transform: 'translateY(0)' },
+                { opacity: 0, transform: 'translateY(-20px)' }
+            ], { duration: 300, easing: 'ease-in' }).onfinish = () => toast.remove();
+        }, 3000);
+    }
+
+    function setPreset(preset) {
+        if (!PRESETS[preset]) return;
+        const g = PRESETS[preset].global;
+
+        // Update global sliders
+        const globalParams = ['loudness', 'loudness_range', 'peak', 'rms', 'dynamics', 'sharpness', 'space', 'drr', 'sample_rate', 'channels'];
+        const suffixes = { 'loudness': ' LUFS', 'loudness_range': ' LU', 'rms': ' dB', 'sample_rate': ' Hz' };
+
+        globalParams.forEach(param => {
+            const el = document.getElementById(param);
+            if (el) {
+                el.value = g[param];
+                updateSliderValue(param, param + '_val', suffixes[param] || '');
+            }
+        });
+
+        // Update bands
+        const bands = PRESETS[preset].bands;
+        for (let i = 0; i < 4; i++) {
+            const b = bands[i];
+            if (document.getElementById(`low_freq_${i}`)) document.getElementById(`low_freq_${i}`).value = b.low_freq;
+            if (document.getElementById(`high_freq_${i}`)) document.getElementById(`high_freq_${i}`).value = b.high_freq;
+
+            if (document.getElementById(`band_loudness_${i}`)) {
+                document.getElementById(`band_loudness_${i}`).value = b.loudness;
+                updateSliderValue(`band_loudness_${i}`, `band_loudness_${i}_val`, '');
+            }
+            if (document.getElementById(`band_mid_mean_${i}`)) {
+                document.getElementById(`band_mid_mean_${i}`).value = b.mid_mean;
+                updateSliderValue(`band_mid_mean_${i}`, `band_mid_mean_${i}_val`, '');
+            }
+            if (document.getElementById(`band_side_mean_${i}`)) {
+                document.getElementById(`band_side_mean_${i}`).value = b.side_mean;
+                updateSliderValue(`band_side_mean_${i}`, `band_side_mean_${i}_val`, '');
+            }
+        }
+    }
+
+    document.getElementById('preset').addEventListener('change', function () {
+        setPreset(this.value);
+        showToast(`Estilo "${this.options[this.selectedIndex].text}" aplicado`);
+    });
+
+    // Initialize
+    window.onload = function () {
+        setPreset(document.getElementById('preset').value);
+    };
+</script>
+{% endblock %}

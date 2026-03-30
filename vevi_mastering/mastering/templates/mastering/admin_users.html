@@ -1,0 +1,236 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block extra_css %}
+<style>
+    body {
+        background: #0a0e27 !important;
+    }
+
+    .main-content {
+        display: block !important;
+        padding: 0 !important;
+        margin: 0 !important;
+    }
+
+    .admin-section {
+        padding: 8rem 2rem 6rem;
+        position: relative;
+        min-height: 100vh;
+    }
+
+    .admin-container {
+        max-width: 1200px;
+        margin: 0 auto;
+        position: relative;
+        z-index: 2;
+    }
+
+    .section-title {
+        text-align: center;
+        font-size: 3.5rem;
+        font-weight: 800;
+        margin-bottom: 1rem;
+        background: linear-gradient(135deg, #fff 0%, #a5b4fc 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+
+    .section-subtitle {
+        text-align: center;
+        color: #94a3b8;
+        font-size: 1.25rem;
+        margin-bottom: 4rem;
+    }
+
+    /* Glass Cards */
+    .stats-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 2rem;
+        margin-bottom: 4rem;
+    }
+
+    .stat-card {
+        background: rgba(255, 255, 255, 0.03);
+        border: 1px solid rgba(255, 255, 255, 0.05);
+        border-radius: 24px;
+        padding: 2rem;
+        text-align: center;
+        backdrop-filter: blur(10px);
+        transition: transform 0.3s ease;
+    }
+
+    .stat-card:hover {
+        transform: translateY(-5px);
+        background: rgba(255, 255, 255, 0.05);
+        border-color: rgba(99, 102, 241, 0.3);
+    }
+
+    .stat-value {
+        font-size: 3rem;
+        font-weight: 800;
+        display: block;
+        margin-bottom: 0.5rem;
+    }
+
+    .stat-label {
+        color: #94a3b8;
+        font-size: 0.85rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+    }
+
+    /* Table Design */
+    .table-container {
+        background: rgba(255, 255, 255, 0.02);
+        border: 1px solid rgba(255, 255, 255, 0.05);
+        border-radius: 24px;
+        overflow: hidden;
+        backdrop-filter: blur(10px);
+    }
+
+    .admin-table {
+        width: 100%;
+        border-collapse: collapse;
+        text-align: left;
+    }
+
+    .admin-table th {
+        padding: 1.5rem 2rem;
+        background: rgba(255, 255, 255, 0.03);
+        color: #94a3b8;
+        font-weight: 700;
+        font-size: 0.8rem;
+        text-transform: uppercase;
+    }
+
+    .admin-table td {
+        padding: 1.5rem 2rem;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        color: white;
+    }
+
+    .status-badge {
+        padding: 0.4rem 1rem;
+        border-radius: 50px;
+        font-size: 0.75rem;
+        font-weight: 700;
+    }
+
+    .status-pro {
+        background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+        color: white;
+        box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+    }
+
+    .status-basic {
+        background: rgba(255, 255, 255, 0.05);
+        color: #94a3b8;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .btn-action {
+        padding: 0.6rem 1.2rem;
+        border-radius: 12px;
+        font-weight: 700;
+        font-size: 0.85rem;
+        text-decoration: none;
+        transition: all 0.3s;
+        display: inline-block;
+    }
+
+    .btn-make-pro {
+        background: white;
+        color: black;
+    }
+
+    .btn-remove-pro {
+        background: transparent;
+        border: 1px solid #ef4444;
+        color: #ef4444;
+    }
+
+    .btn-action:hover {
+        transform: scale(1.05);
+    }
+
+    @keyframes fadeInUp {
+        from { opacity: 0; transform: translateY(20px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<section class="admin-section">
+    <!-- Gradient Orbs -->
+    <div style="width: 500px; height: 500px; top: -10%; left: -10%; background: radial-gradient(circle, rgba(99,102,241,0.1) 0%, rgba(0,0,0,0) 70%); position: absolute; border-radius: 50%; filter: blur(100px); opacity: 0.3;"></div>
+    <div style="width: 400px; height: 400px; bottom: 10%; right: -5%; background: radial-gradient(circle, rgba(139,92,246,0.1) 0%, rgba(0,0,0,0) 70%); position: absolute; border-radius: 50%; filter: blur(100px); opacity: 0.3;"></div>
+
+    <div class="admin-container">
+        <h1 class="section-title">Centro de Control</h1>
+        <p class="section-subtitle">Gestión Administrativa y Estadísticas Globales</p>
+
+        <!-- Stats -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <span class="stat-value" style="color: white;">{{ user_count }}</span>
+                <span class="stat-label">Usuarios Totales</span>
+            </div>
+            <div class="stat-card">
+                <span class="stat-value" style="color: #8b5cf6;">{{ pro_count }}</span>
+                <span class="stat-label">Membresías PRO</span>
+            </div>
+            <div class="stat-card">
+                <span class="stat-value" style="color: #4ade80;">{{ ga_visits }}</span>
+                <span class="stat-label">Visitas (30 Días)</span>
+            </div>
+            <div class="stat-card">
+                <span class="stat-value" style="color: #60a5fa;">{{ ga_avg_position }}</span>
+                <span class="stat-label">Posición SEO</span>
+            </div>
+        </div>
+
+        <!-- Users Table -->
+        <div class="table-container">
+            <table class="admin-table">
+                <thead>
+                    <tr>
+                        <th>Email / Registro</th>
+                        <th>Estado</th>
+                        <th style="text-align: center;">Tracks</th>
+                        <th style="text-align: right;">Gestión</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for settings in all_settings %}
+                    <tr>
+                        <td>
+                            <div style="font-weight: 700; color: white;">{{ settings.user.email }}</div>
+                            <div style="font-size: 0.8rem; color: #64748b;">ID: {{ settings.user.id }} • {{ settings.user.date_joined|date:"d M Y" }}</div>
+                        </td>
+                        <td>
+                            {% if settings.is_pro %}
+                            <span class="status-badge status-pro">PREMIUM</span>
+                            {% else %}
+                            <span class="status-badge status-basic">GRATIS</span>
+                            {% endif %}
+                        </td>
+                        <td style="text-align: center; font-weight: 800; color: #94a3b8;">
+                            {{ settings.mastered_tracks_total }}
+                        </td>
+                        <td style="text-align: right;">
+                            <a href="{% url 'mastering:toggle_pro_status' settings.user.id %}" class="btn-action {% if settings.is_pro %}btn-remove-pro{% else %}btn-make-pro{% endif %}">
+                                {% if settings.is_pro %}Degradar{% else %}Hacer PRO{% endif %}
+                            </a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</section>
+{% endblock %}

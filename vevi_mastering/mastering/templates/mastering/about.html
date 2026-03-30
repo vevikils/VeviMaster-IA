@@ -1,0 +1,272 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Quiénes Somos - VeviMaster IA{% endblock %}
+
+{% block extra_css %}
+<style>
+    body {
+        background: #0a0e27 !important;
+    }
+
+    .main-content {
+        display: block !important;
+        align-items: unset !important;
+        justify-content: unset !important;
+        padding: 0 !important;
+        margin: 0 !important;
+    }
+
+    .about-hero {
+        padding: 8rem 2rem 4rem;
+        text-align: center;
+        background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
+    }
+
+    .about-title {
+        font-size: 3.5rem;
+        font-weight: 800;
+        color: white;
+        margin-bottom: 1.5rem;
+        background: linear-gradient(135deg, #fff 0%, #a5b4fc 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+    }
+
+    .about-subtitle {
+        font-size: 1.3rem;
+        color: #94a3b8;
+        max-width: 700px;
+        margin: 0 auto;
+        line-height: 1.6;
+    }
+
+    .about-section {
+        padding: 4rem 2rem;
+        max-width: 1000px;
+        margin: 0 auto;
+    }
+
+    .section-title {
+        font-size: 2rem;
+        font-weight: 700;
+        color: white;
+        margin-bottom: 2rem;
+        text-align: center;
+    }
+
+    .section-text {
+        color: #94a3b8;
+        font-size: 1.1rem;
+        line-height: 1.8;
+        margin-bottom: 1.5rem;
+    }
+
+    .team-grid {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 2rem;
+        margin-top: 3rem;
+        justify-content: center;
+    }
+
+    .team-card {
+        width: 250px;
+        background: rgba(255, 255, 255, 0.03);
+        border: 1px solid rgba(255, 255, 255, 0.05);
+        border-radius: 16px;
+        padding: 2rem;
+        text-align: center;
+        transition: all 0.3s ease;
+    }
+
+    .team-card:hover {
+        transform: translateY(-5px);
+        border-color: rgba(102, 126, 234, 0.3);
+    }
+
+    .team-avatar {
+        width: 100px;
+        height: 100px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, #667eea, #764ba2);
+        display: flex;
+        align-items: center;
+        place-content: center;
+        margin: 0 auto 1.5rem;
+        font-size: 2.5rem;
+        color: white;
+        font-weight: 700;
+    }
+
+    .team-name {
+        font-size: 1.3rem;
+        font-weight: 700;
+        color: white;
+        margin-bottom: 0.5rem;
+    }
+
+    .team-role {
+        color: #818cf8;
+        font-size: 1rem;
+        margin-bottom: 1rem;
+    }
+
+    .team-bio {
+        color: #94a3b8;
+        font-size: 0.9rem;
+        line-height: 1.6;
+    }
+
+    .values-grid {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 2rem;
+        margin-top: 3rem;
+        justify-content: center;
+    }
+
+    .value-card {
+        width: 280px;
+        background: rgba(255, 255, 255, 0.03);
+        border: 1px solid rgba(255, 255, 255, 0.05);
+        border-radius: 16px;
+        padding: 2rem;
+    }
+
+    .value-icon {
+        font-size: 2.5rem;
+        color: #818cf8;
+        margin-bottom: 1rem;
+    }
+
+    .value-title {
+        font-size: 1.2rem;
+        font-weight: 700;
+        color: white;
+        margin-bottom: 1rem;
+    }
+
+    .value-desc {
+        color: #94a3b8;
+        line-height: 1.6;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="about-hero">
+    <h1 class="about-title">Quiénes Somos</h1>
+    <p class="about-subtitle">
+        Un proyecto personal nacido de la pasión por la música y la tecnología, dedicado a democratizar la masterización
+        profesional mediante inteligencia artificial.
+    </p>
+</div>
+
+<div class="about-section">
+    <h2 class="section-title">Nuestra Historia</h2>
+    <p class="section-text">
+        VeviMaster IA nació de una necesidad real: hacer que la masterización profesional sea accesible para todos los
+        creadores de música, independientemente de su presupuesto o ubicación geográfica.
+    </p>
+    <p class="section-text">
+        Fundada en 2024, nuestra plataforma combina experiencia en desarrollo web y producción musical con las últimas
+        tecnologías de inteligencia artificial. Hemos entrenado nuestros algoritmos con miles de masters profesionales
+        para ofrecer resultados que rivalizan con los estudios tradicionales.
+    </p>
+    <p class="section-text">
+        Hoy, servimos a productores, músicos y creadores de contenido en todo el mundo, ayudándoles a llevar su música
+        al siguiente nivel con solo unos clics.
+    </p>
+</div>
+
+<div class="about-section">
+    <h2 class="section-title">Nuestros Valores</h2>
+    <div class="values-grid">
+        <div class="value-card">
+            <div class="value-icon"><i class="fas fa-heart"></i></div>
+            <h3 class="value-title">Pasión por la Música</h3>
+            <p class="value-desc">Amamos la música y entendemos la importancia de un sonido perfecto. Cada decisión
+                que tomamos está guiada por nuestro compromiso con la excelencia sonora.</p>
+        </div>
+        <div class="value-card">
+            <div class="value-icon"><i class="fas fa-users"></i></div>
+            <h3 class="value-title">Accesibilidad</h3>
+            <p class="value-desc">Creemos que todos los artistas merecen acceso a herramientas profesionales, sin
+                importar su presupuesto o experiencia técnica.</p>
+        </div>
+        <div class="value-card">
+            <div class="value-icon"><i class="fas fa-lightbulb"></i></div>
+            <h3 class="value-title">Innovación</h3>
+            <p class="value-desc">Estamos constantemente mejorando nuestros algoritmos y explorando nuevas
+                tecnologías para ofrecer los mejores resultados posibles.</p>
+        </div>
+        <div class="value-card">
+            <div class="value-icon"><i class="fas fa-shield-alt"></i></div>
+            <h3 class="value-title">Transparencia</h3>
+            <p class="value-desc">Somos honestos sobre lo que nuestra tecnología puede y no puede hacer. Tu
+                confianza es nuestra prioridad.</p>
+        </div>
+    </div>
+</div>
+
+<div class="about-section">
+    <h2 class="section-title">El Equipo</h2>
+    <div class="team-grid">
+        <div class="team-card">
+            <div class="team-avatar">VV</div>
+            <h3 class="team-name">Vevi</h3>
+            <p class="team-role">CEO, Fundador y Desarrollador Full-Stack</p>
+            <p class="team-bio">Desarrollador web apasionado y productor musical con años de experiencia en la
+                industria. Creador de VeviMaster IA, fusionando su amor por la tecnología y la música para democratizar
+                la masterización profesional y hacer que herramientas de calidad estudio estén al alcance de todos.</p>
+            <div style="margin-top: 1rem; display: flex; justify-content: center; gap: 1rem;">
+                <a href="https://www.linkedin.com/in/diego-garc%C3%ADa-fern%C3%A1ndez-266900332/" target="_blank"
+                    style="color: #667eea; font-size: 1.2rem; transition: color 0.3s;"><i
+                        class="fab fa-linkedin"></i></a>
+                <a href="https://www.youtube.com/@vevi_supreme" target="_blank"
+                    style="color: #667eea; font-size: 1.2rem; transition: color 0.3s;"><i
+                        class="fab fa-youtube"></i></a>
+                <a href="https://www.instagram.com/vevi_supreme/" target="_blank"
+                    style="color: #667eea; font-size: 1.2rem; transition: color 0.3s;"><i
+                        class="fab fa-instagram"></i></a>
+                <a href="https://x.com/LilVevi" target="_blank"
+                    style="color: #667eea; font-size: 1.2rem; transition: color 0.3s;"><i
+                        class="fab fa-x-twitter"></i></a>
+                <a href="https://www.facebook.com/lilvevi" target="_blank"
+                    style="color: #667eea; font-size: 1.2rem; transition: color 0.3s;"><i
+                        class="fab fa-facebook"></i></a>
+                <a href="https://open.spotify.com/intl-es/artist/5rAfUyNXtZVQq7mR90pJoS" target="_blank"
+                    style="color: #667eea; font-size: 1.2rem; transition: color 0.3s;"><i
+                        class="fab fa-spotify"></i></a>
+            </div>
+        </div>
+        <div class="team-card">
+            <div class="team-avatar" style="background: linear-gradient(135deg, #8b5cf6, #ec4899);">IA</div>
+            <h3 class="team-name">Motor de IA</h3>
+            <p class="team-role">Tecnología de Procesamiento</p>
+            <p class="team-bio">Algoritmos avanzados de inteligencia artificial entrenados con miles de masters
+                profesionales para ofrecer resultados de calidad estudio en segundos.</p>
+        </div>
+        <div class="team-card">
+            <div class="team-avatar" style="background: linear-gradient(135deg, #ec4899, #f43f5e);">🎵</div>
+            <h3 class="team-name">Comunidad</h3>
+            <p class="team-role">Nuestros Usuarios</p>
+            <p class="team-bio">Miles de productores, músicos y creadores de contenido que confían en VeviMaster IA para
+                llevar su música al siguiente nivel.</p>
+        </div>
+    </div>
+</div>
+
+<div class="about-section" style="text-align: center; padding: 4rem 2rem;">
+    <h2 class="section-title">¿Listo para Empezar?</h2>
+    <p class="section-text" style="max-width: 600px; margin: 0 auto 2rem;">
+        Únete a miles de artistas que ya confían en VeviMaster IA para sus proyectos musicales.
+    </p>
+    <a href="{% url 'account_signup' %}"
+        style="display: inline-block; background: linear-gradient(135deg, #667eea, #764ba2); color: white; padding: 1rem 2.5rem; border-radius: 50px; text-decoration: none; font-weight: 700; font-size: 1.1rem; transition: all 0.3s ease; box-shadow: 0 10px 25px -5px rgba(102, 126, 234, 0.4);">
+        Comenzar Gratis
+    </a>
+</div>
+{% endblock %}

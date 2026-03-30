@@ -1,0 +1,52 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Django
+*.log
+local_settings.py
+db.sqlite3
+db.sqlite3-journal
+
+# Entornos virtuales
+.venv/
+.venv311/
+.venv_py311/
+venv/
+env/
+ENV/
+
+# Variables de entorno
+.env
+
+# Archivos de medios (subidos por usuarios)
+vevi_mastering/media/
+!vevi_mastering/media/.gitkeep
+
+# Archivos temporales del sistema
+.DS_Store
+Thumbs.db
+
+# IDEs
+.vscode/
+.idea/
+
+# Archivos temporales de masterización y análisis
+*_mastering_config.json
+*_vevi_master_ia.wav
+
+# Modelos y datasets pesados (NO SUBIR A GITHUB)
+vevimaster_genre_model/
+dataset_ia_procesado/
+**/vevimaster_genre_model/
+**/dataset_ia_procesado/
+
+# Archivos de claves sensibles (BLOQUEADOS POR GITHUB)
+*.json
+*.env
+*.log
+*.sqlite3
+!package.json
+!composer.json
+!vevi_mastering/analisismusica/*.json

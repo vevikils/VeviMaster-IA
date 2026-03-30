@@ -1,0 +1,757 @@
+{% extends "base.html" %}
+{% load static %}
+{% load i18n %}
+
+{% block title %}VeviMaster IA 🎵 Mastering Pro & Análisis Musical con IA{% endblock %}
+{% block meta_description %}¡Suena como un profesional! 🚀 Masterización con IA en segundos. Optimiza tu música para
+Spotify y Apple Music. Análisis de género y mood GRATIS. ¡Pruébalo ya!{% endblock %}
+
+{% block extra_head %}
+<!-- Forced Favicon for Search Engines -->
+<link rel="icon" href="{% static 'mastering/favicon.svg' %}" type="image/svg+xml">
+<link rel="shortcut icon" href="{% static 'mastering/favicon.svg' %}" type="image/svg+xml">
+<link rel="apple-touch-icon" href="{% static 'mastering/favicon.svg' %}">
+
+<!-- Meta Refresh Hint (Social) -->
+<meta property="og:image" content="{% static 'mastering/favicon.svg' %}">
+<meta property="twitter:image" content="{% static 'mastering/favicon.svg' %}">
+{% endblock %}
+
+{% block extra_css %}
+<!-- Schema.org Structured Data -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  "name": "VeviMaster IA",
+  "operatingSystem": "All",
+  "applicationCategory": "AudioApplication",
+  "description": "Herramienta de masterización de audio con inteligencia artificial de última generación.",
+  "offers": {
+    "@type": "Offer",
+    "price": "0.00",
+    "priceCurrency": "EUR"
+  },
+  "aggregateRating": {
+    "@type": "AggregateRating",
+    "ratingValue": "4.9",
+    "reviewCount": "120"
+  }
+}
+</script>
+<style>
+    /* Override base.html main-content styles for landing page */
+    body {
+        background: #0a0e27 !important;
+    }
+
+    .main-content {
+        display: block !important;
+        align-items: unset !important;
+        justify-content: unset !important;
+        padding: 0 !important;
+        margin: 0 !important;
+    }
+
+    /* Landing Page Specific Styles */
+    .hero-section {
+        position: relative;
+        padding: 8rem 2rem 6rem;
+        text-align: center;
+        overflow: hidden;
+    }
+
+    .hero-content {
+        position: relative;
+        z-index: 2;
+        max-width: 900px;
+        margin: 0 auto;
+    }
+
+    .hero-title {
+        font-size: 4rem;
+        font-weight: 800;
+        line-height: 1.1;
+        margin-bottom: 1.5rem;
+        background: linear-gradient(135deg, #fff 0%, #a5b4fc 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        animation: fadeInUp 0.8s ease-out;
+    }
+
+    .hero-subtitle {
+        font-size: 1.5rem;
+        color: #94a3b8;
+        margin-bottom: 3rem;
+        max-width: 700px;
+        margin-left: auto;
+        margin-right: auto;
+        animation: fadeInUp 0.8s ease-out 0.2s backwards;
+    }
+
+    .cta-buttons {
+        display: flex;
+        gap: 1.5rem;
+        justify-content: center;
+        animation: fadeInUp 0.8s ease-out 0.4s backwards;
+    }
+
+    .btn-primary-lg {
+        background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+        color: white;
+        padding: 1rem 2.5rem;
+        border-radius: 50px;
+        font-weight: 700;
+        font-size: 1.1rem;
+        text-decoration: none;
+        transition: all 0.3s ease;
+        box-shadow: 0 10px 25px -5px rgba(99, 102, 241, 0.4);
+    }
+
+    .btn-primary-lg:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 20px 35px -5px rgba(99, 102, 241, 0.5);
+    }
+
+    .btn-secondary-lg {
+        background: rgba(255, 255, 255, 0.05);
+        color: white;
+        padding: 1rem 2.5rem;
+        border-radius: 50px;
+        font-weight: 700;
+        font-size: 1.1rem;
+        text-decoration: none;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        transition: all 0.3s ease;
+        backdrop-filter: blur(10px);
+    }
+
+    .btn-secondary-lg:hover {
+        background: rgba(255, 255, 255, 0.1);
+        transform: translateY(-3px);
+    }
+
+    /* Features Section */
+    .features-section {
+        padding: 6rem 2rem;
+        position: relative;
+    }
+
+    .section-title {
+        text-align: center;
+        font-size: 2.5rem;
+        font-weight: 700;
+        margin-bottom: 4rem;
+        color: white;
+    }
+
+    .features-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 2rem;
+        max-width: 1200px;
+        margin: 0 auto;
+    }
+
+    .feature-card {
+        background: rgba(255, 255, 255, 0.03);
+        border: 1px solid rgba(255, 255, 255, 0.05);
+        border-radius: 24px;
+        padding: 2.5rem;
+        transition: all 0.3s ease;
+        backdrop-filter: blur(10px);
+    }
+
+    .feature-card:hover {
+        transform: translateY(-10px);
+        background: rgba(255, 255, 255, 0.05);
+        border-color: rgba(99, 102, 241, 0.3);
+    }
+
+    .feature-icon {
+        width: 60px;
+        height: 60px;
+        background: linear-gradient(135deg, rgba(99, 102, 241, 0.2) 0%, rgba(139, 92, 246, 0.2) 100%);
+        border-radius: 16px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.5rem;
+        color: #a5b4fc;
+        margin-bottom: 1.5rem;
+    }
+
+    .feature-title {
+        font-size: 1.25rem;
+        font-weight: 700;
+        color: white;
+        margin-bottom: 1rem;
+    }
+
+    .feature-desc {
+        color: #94a3b8;
+        line-height: 1.6;
+    }
+
+    /* How it works */
+    .steps-section {
+        padding: 6rem 2rem;
+        background: rgba(0, 0, 0, 0.2);
+    }
+
+    .steps-container {
+        max-width: 1000px;
+        margin: 0 auto;
+        display: flex;
+        justify-content: space-between;
+        position: relative;
+    }
+
+    .steps-container::before {
+        content: '';
+        position: absolute;
+        top: 40px;
+        left: 50px;
+        right: 50px;
+        height: 2px;
+        background: rgba(255, 255, 255, 0.1);
+        z-index: 0;
+    }
+
+    .step-item {
+        position: relative;
+        z-index: 1;
+        text-align: center;
+        flex: 1;
+    }
+
+    .step-number {
+        width: 80px;
+        height: 80px;
+        background: #0f172a;
+        border: 2px solid #6366f1;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 2rem;
+        font-weight: 800;
+        color: white;
+        margin: 0 auto 1.5rem;
+        box-shadow: 0 0 20px rgba(99, 102, 241, 0.3);
+    }
+
+    .step-title {
+        color: white;
+        font-weight: 700;
+        margin-bottom: 0.5rem;
+    }
+
+    .step-desc {
+        color: #94a3b8;
+        font-size: 0.9rem;
+        padding: 0 1rem;
+    }
+
+    /* Blog highlights CSS */
+    .blog-highlights {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 2rem;
+        max-width: 1200px;
+        margin: 0 auto;
+    }
+
+    .blog-card-mini {
+        background: rgba(255, 255, 255, 0.03);
+        border-radius: 16px;
+        overflow: hidden;
+        border: 1px solid rgba(255, 255, 255, 0.05);
+        transition: transform 0.3s;
+    }
+
+    .blog-card-mini:hover {
+        transform: translateY(-5px);
+    }
+
+    .blog-thumb {
+        height: 150px;
+        background: #1e293b;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #475569;
+        font-size: 2rem;
+    }
+
+    @media (max-width: 768px) {
+        .hero-title {
+            font-size: 2.5rem;
+        }
+
+        .steps-container {
+            flex-direction: column;
+            gap: 3rem;
+        }
+
+        .steps-container::before {
+            display: none;
+        }
+
+        .cta-buttons {
+            flex-direction: column;
+        }
+    }
+
+    @keyframes fadeInUp {
+        from {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="hero-section">
+    <!-- Background Orbs -->
+    <div class="gradient-orb"
+        style="width: 500px; height: 500px; top: -10%; left: -10%; background: radial-gradient(circle, rgba(99,102,241,0.15) 0%, rgba(0,0,0,0) 70%); position: absolute; border-radius: 50%; filter: blur(100px); opacity: 0.3;">
+    </div>
+    <div class="gradient-orb"
+        style="width: 400px; height: 400px; bottom: 10%; right: -5%; background: radial-gradient(circle, rgba(139,92,246,0.15) 0%, rgba(0,0,0,0) 70%); position: absolute; border-radius: 50%; filter: blur(100px); opacity: 0.3;">
+    </div>
+
+    <div class="hero-content">
+        <h1 class="hero-title">Masterización Online con IA<br>Profesional y Análisis Musical</h1>
+        <p class="hero-subtitle">
+            Eleva tu música al estándar de la industria en segundos. Nuestra tecnología analiza y mejora tus pistas con
+            precisión para obtener un sonido cristalino y potente.
+        </p>
+
+        <div class="cta-buttons">
+            {% if user.is_authenticated %}
+            <a href="{% url 'mastering:studio' %}" class="btn-primary-lg">Ir a mi Estudio</a>
+            <a href="{% url 'analyzer:index' %}" class="btn-secondary-lg">Analizar Música</a>
+            {% else %}
+            <a href="{% url 'account_signup' %}" class="btn-primary-lg">Comenzar Gratis</a>
+            <a href="{% url 'account_login' %}" class="btn-secondary-lg">Iniciar Sesión</a>
+            {% endif %}
+        </div>
+    </div>
+</section>
+
+<!-- Features Section -->
+<section class="features-section">
+    <h2 class="section-title">¿Por qué elegir VeviMaster IA?</h2>
+    <div class="features-grid">
+        <div class="feature-card">
+            <div class="feature-icon">
+                <i class="fas fa-wave-square"></i>
+            </div>
+            <h3 class="feature-title">Análisis Espectral Profundo</h3>
+            <p class="feature-desc">Nuestra IA analiza miles de puntos de datos en tu audio para detectar problemas de
+                frecuencia y enmascaramiento, corrigiéndolos quirúrgicamente antes de aplicar compresión.</p>
+        </div>
+        <div class="feature-card">
+            <div class="feature-icon">
+                <i class="fas fa-sliders-h"></i>
+            </div>
+            <h3 class="feature-title">Análisis de Género y Mood</h3>
+            <p class="feature-desc">¿No estás seguro del género de tu canción? Nuestra herramienta de análisis (MusicNN)
+                clasifica automáticamente el género y el estado de ánimo (mood) de tu pista con alta precisión.</p>
+        </div>
+        <div class="feature-card">
+            <div class="feature-icon">
+                <i class="fas fa-bolt"></i>
+            </div>
+            <h3 class="feature-title">Resultados Instantáneos</h3>
+            <p class="feature-desc">Olvídate de esperar días por una revisión. Obtén tu master profesional en cuestión
+                de segundos, listo para Spotify y Apple Music.</p>
+        </div>
+        <div class="feature-card">
+            <div class="feature-icon">
+                <i class="fas fa-magic"></i>
+            </div>
+            <h3 class="feature-title">Mejora de Estéreo</h3>
+            <p class="feature-desc">Amplía la imagen estéreo de tu mezcla sin perder la compatibilidad mono. Dale a tu
+                música el espacio que se merece.</p>
+        </div>
+        <div class="feature-card">
+            <div class="feature-icon">
+                <i class="fas fa-robot"></i>
+            </div>
+            <h3 class="feature-title">IA Entrenada</h3>
+            <p class="feature-desc">Nuestro modelo ha sido entrenado con miles de éxitos comerciales para entender qué
+                hace que una canción suene profesional.</p>
+        </div>
+        <div class="feature-card">
+            <div class="feature-icon">
+                <i class="fas fa-shield-alt"></i>
+            </div>
+            <h3 class="feature-title">Privacidad Total</h3>
+            <p class="feature-desc">Tus archivos son tuyos. Procesamos tu música de forma segura y no reclamamos ningún
+                derecho sobre tus obras.</p>
+        </div>
+    </div>
+</section>
+
+<!-- Blog Section (New for AdSense Value) -->
+<section class="features-section" style="background: rgba(255, 255, 255, 0.02);">
+    <h2 class="section-title">Aprende con VeviMaster</h2>
+    <p style="text-align: center; color: #94a3b8; margin-bottom: 3rem; margin-top: -3rem;">Recursos y tutoriales para
+        mejorar tus producciones</p>
+
+    <div class="blog-highlights">
+        <!-- Blog Card 1 -->
+        <a href="{% url 'mastering:blog_post_ai' %}" class="blog-card-mini"
+            style="text-decoration: none; color: inherit;">
+            <div class="blog-thumb" style="background: linear-gradient(135deg, #4f46e5, #818cf8);">
+                <i class="fas fa-brain" style="color: white; font-size: 3rem;"></i>
+            </div>
+            <div style="padding: 1.5rem;">
+                <h4 style="color: white; font-size: 1.1rem; margin-bottom: 0.5rem;">¿Qué es la Masterización con IA?
+                </h4>
+                <p style="color: #94a3b8; font-size: 0.9rem;">Descubre cómo la IA está revolucionando la industria y
+                    democratizando el sonido profesional.</p>
+            </div>
+        </a>
+
+        <!-- Blog Card 2 -->
+        <a href="{% url 'mastering:blog_post_prepare' %}" class="blog-card-mini"
+            style="text-decoration: none; color: inherit;">
+            <div class="blog-thumb" style="background: linear-gradient(135deg, #059669, #34d399);">
+                <i class="fas fa-sliders-h" style="color: white; font-size: 3rem;"></i>
+            </div>
+            <div style="padding: 1.5rem;">
+                <h4 style="color: white; font-size: 1.1rem; margin-bottom: 0.5rem;">Guía: Preparar tu Mezcla</h4>
+                <p style="color: #94a3b8; font-size: 0.9rem;">5 pasos esenciales antes de subir tu canción: Headroom,
+                    limpieza y formatos.</p>
+            </div>
+        </a>
+
+        <!-- Blog Card 3 -->
+        <a href="{% url 'mastering:blog_post_diff' %}" class="blog-card-mini"
+            style="text-decoration: none; color: inherit;">
+            <div class="blog-thumb" style="background: linear-gradient(135deg, #d97706, #fbbf24);">
+                <i class="fas fa-balance-scale" style="color: white; font-size: 3rem;"></i>
+            </div>
+            <div style="padding: 1.5rem;">
+                <h4 style="color: white; font-size: 1.1rem; margin-bottom: 0.5rem;">Mezcla vs Mastering</h4>
+                <p style="color: #94a3b8; font-size: 0.9rem;">Entiende las diferencias clave y por qué ambos procesos
+                    son cruciales para el éxito.</p>
+            </div>
+        </a>
+    </div>
+    <div style="text-align: center; margin-top: 3rem;">
+        <a href="{% url 'mastering:blog_index' %}" class="btn-secondary-lg" style="font-size: 0.9rem;">Ver Todo el
+            Blog</a>
+    </div>
+</section>
+
+<!-- How it Works -->
+<section class="steps-section">
+    <h2 class="section-title">Cómo Funciona</h2>
+    <div class="steps-container">
+        <div class="step-item">
+            <div class="step-number">1</div>
+            <h3 class="step-title">Sube tu Pista</h3>
+            <p class="step-desc">Arrastra tu archivo WAV o MP3 a nuestra plataforma segura. Aceptamos archivos de hasta
+                100MB.</p>
+        </div>
+        <div class="step-item">
+            <div class="step-number">2</div>
+            <h3 class="step-title">Análisis Inteligente</h3>
+            <p class="step-desc">La IA detecta automáticamente el género, el mood y los problemas de balance espectral.
+            </p>
+        </div>
+        <div class="step-item">
+            <div class="step-number">3</div>
+            <h3 class="step-title">Descarga el Master</h3>
+            <p class="step-desc">Obtén un archivo .WAV de alta fidelidad, con volumen competitivo y listo para
+                distribución.</p>
+        </div>
+    </div>
+</section>
+
+<!-- Pricing Section -->
+<section class="features-section" style="background: rgba(0, 0, 0, 0.2);">
+    <h2 class="section-title">Planes y Precios</h2>
+    <div class="features-grid"
+        style="max-width: 1100px; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); justify-content: center; margin: 0 auto;">
+        
+        <!-- FREE PLAN -->
+        <div class="feature-card" style="text-align: center;">
+            <h3 class="feature-title" style="font-size: 1.5rem; margin-bottom: 1rem;">Gratis</h3>
+            <div style="font-size: 3rem; font-weight: 800; color: #6366f1; margin-bottom: 1.5rem;">€0</div>
+            <ul style="list-style: none; padding: 0; color: #94a3b8; margin-bottom: 2rem; text-align: left;">
+                <li style="padding: 0.5rem 0; border-bottom: 1px solid rgba(255,255,255,0.05);">
+                    <i class="fas fa-check" style="color: #6366f1; margin-right: 8px;"></i> 1 masterización al mes
+                </li>
+                <li style="padding: 0.5rem 0; border-bottom: 1px solid rgba(255,255,255,0.05);">
+                    <i class="fas fa-check" style="color: #6366f1; margin-right: 8px;"></i> Calidad estándar (16-bit)
+                </li>
+                <li style="padding: 0.5rem 0; border-bottom: 1px solid rgba(255,255,255,0.05);">
+                    <i class="fas fa-check" style="color: #6366f1; margin-right: 8px;"></i> Uso completo del Analizador
+                </li>
+                <li style="padding: 0.5rem 0; color: #4ade80; font-weight: bold;">
+                    <i class="fas fa-gift" style="margin-right: 8px;"></i> ¡Gana +3 créditos al seguirnos!
+                </li>
+            </ul>
+            <a href="{% url 'mastering:plans' %}" class="btn-secondary-lg"
+                style="display: inline-block; padding: 0.8rem 2rem; font-size: 1rem;">Ver Detalles</a>
+        </div>
+
+        <!-- PRO MONTHLY PLAN -->
+        <div class="feature-card"
+            style="text-align: center; border: 2px solid #6366f1; transform: scale(1.05); position: relative; z-index: 2;">
+            <div
+                style="background: linear-gradient(135deg, #6366f1, #8b5cf6); color: white; padding: 0.5rem; border-radius: 8px; margin-bottom: 1rem; font-weight: 700;">
+                MÁS POPULAR</div>
+            <h3 class="feature-title" style="font-size: 1.5rem; margin-bottom: 1rem;">Pro Mensual</h3>
+            <div style="font-size: 3rem; font-weight: 800; color: #6366f1; margin-bottom: 0.5rem;">€9</div>
+            <div style="color: #94a3b8; margin-bottom: 1.5rem;">/mes</div>
+            <ul style="list-style: none; padding: 0; color: #94a3b8; margin-bottom: 2rem; text-align: left;">
+                <li style="padding: 0.5rem 0; border-bottom: 1px solid rgba(255,255,255,0.05);">
+                    <i class="fas fa-check" style="color: #6366f1; margin-right: 8px;"></i> Masterizaciones
+                    <strong>ILIMITADAS</strong>
+                </li>
+                <li style="padding: 0.5rem 0; border-bottom: 1px solid rgba(255,255,255,0.05);">
+                    <i class="fas fa-check" style="color: #6366f1; margin-right: 8px;"></i> Calidad premium
+                    (24-bit/32-float)
+                </li>
+                <li style="padding: 0.5rem 0; border-bottom: 1px solid rgba(255,255,255,0.05);">
+                    <i class="fas fa-check" style="color: #6366f1; margin-right: 8px;"></i> Análisis detallado y
+                    descarga de JSON
+                </li>
+                <li style="padding: 0.5rem 0;">
+                    <i class="fas fa-check" style="color: #6366f1; margin-right: 8px;"></i> Soporte prioritario
+                </li>
+            </ul>
+            <a href="{% url 'mastering:create_checkout_session' %}" class="btn-primary-lg"
+                style="display: inline-block; padding: 0.8rem 2rem; font-size: 1rem;">Empezar Ahora</a>
+        </div>
+
+        <!-- PRO ANNUAL PLAN -->
+        <div class="feature-card"
+            style="text-align: center; border: 2px solid #10b981; position: relative; z-index: 1;">
+            <div
+                style="background: linear-gradient(135deg, #10b981, #059669); color: white; padding: 0.5rem; border-radius: 8px; margin-bottom: 1rem; font-weight: 700;">
+                AHORRA 2 MESES</div>
+            <h3 class="feature-title" style="font-size: 1.5rem; margin-bottom: 1rem; color: #10b981;">Pro Anual</h3>
+            <div style="font-size: 3rem; font-weight: 800; color: #10b981; margin-bottom: 0.5rem;">€89,99</div>
+            <div style="color: #94a3b8; margin-bottom: 1.5rem;">/año</div>
+            <ul style="list-style: none; padding: 0; color: #94a3b8; margin-bottom: 2rem; text-align: left;">
+                <li style="padding: 0.5rem 0; border-bottom: 1px solid rgba(255,255,255,0.05);">
+                    <i class="fas fa-crown" style="color: #10b981; margin-right: 8px;"></i> Todo el poder de Pro
+                </li>
+                <li style="padding: 0.5rem 0; border-bottom: 1px solid rgba(255,255,255,0.05);">
+                    <i class="fas fa-check" style="color: #10b981; margin-right: 8px;"></i> Pago único anual
+                </li>
+                <li style="padding: 0.5rem 0; border-bottom: 1px solid rgba(255,255,255,0.05);">
+                    <i class="fas fa-check" style="color: #10b981; margin-right: 8px;"></i> Acceso ininterrumpido
+                </li>
+                <li style="padding: 0.5rem 0;">
+                    <i class="fas fa-star" style="color: #10b981; margin-right: 8px;"></i> La mejor oferta
+                </li>
+            </ul>
+            <a href="{% url 'mastering:create_checkout_session_annual' %}" class="btn-primary-lg"
+                style="display: inline-block; padding: 0.8rem 2rem; font-size: 1rem; background: linear-gradient(135deg, #10b981, #059669); border-color: #059669;">Obtener Oferta</a>
+        </div>
+    </div>
+</section>
+
+<!-- Testimonials Section -->
+<section class="features-section">
+    <h2 class="section-title">Lo Que Dicen Nuestros Usuarios</h2>
+
+    <div class="features-grid" id="reviews-container" style="max-width: 1000px; margin-bottom: 4rem;">
+        {% for review in reviews %}
+        <div class="feature-card" style="animation: fadeInUp 0.5s ease-out backwards;">
+            <div style="color: #fbbf24; font-size: 1.2rem; margin-bottom: 1rem;">
+                {% for i in "12345"|make_list %}
+                <i class="{% if forloop.counter <= review.rating %}fas{% else %}far{% endif %} fa-star"></i>
+                {% endfor %}
+            </div>
+            <p class="feature-desc" style="font-style: italic; margin-bottom: 1.5rem; color: #e2e8f0;">"{{
+                review.content }}"</p>
+            <div style="display: flex; align-items: center; gap: 1rem;">
+                <div
+                    style="width: 45px; height: 45px; border-radius: 50%; background: linear-gradient(135deg, #6366f1, #a855f7); display: flex; align-items: center; justify-content: center; color: white; font-weight: 700; font-size: 0.9rem; text-transform: uppercase;">
+                    {{ review.user.username|slice:":2" }}
+                </div>
+                <div>
+                    <div style="color: white; font-weight: 700;">{{ review.user.username }}</div>
+                    <div style="color: #64748b; font-size: 0.8rem;">Usuario Verificado</div>
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <p style="text-align: center; color: #94a3b8; grid-column: 1 / -1;">Aún no hay reseñas. ¡Sé el primero en dejar
+            una!</p>
+        {% endfor %}
+    </div>
+
+    {% if user.is_authenticated %}
+    <!-- Review Form -->
+    <div
+        style="max-width: 700px; margin: 0 auto; background: rgba(30, 41, 59, 0.4); border: 1px solid rgba(139, 92, 246, 0.2); border-radius: 24px; padding: 2.5rem; backdrop-filter: blur(10px);">
+        <h3 style="color: white; font-size: 1.5rem; margin-bottom: 1.5rem; text-align: center;">Comparte tu Experiencia
+        </h3>
+        <form id="review-form">
+            {% csrf_token %}
+            <div style="margin-bottom: 1.5rem;">
+                <label style="display: block; color: #94a3b8; margin-bottom: 0.5rem;">Puntuación:</label>
+                <div style="display: flex; gap: 10px; font-size: 1.5rem; color: #fbbf24; cursor: pointer;"
+                    id="star-rating">
+                    <i class="fas fa-star" data-value="1"></i>
+                    <i class="fas fa-star" data-value="2"></i>
+                    <i class="fas fa-star" data-value="3"></i>
+                    <i class="fas fa-star" data-value="4"></i>
+                    <i class="fas fa-star" data-value="5"></i>
+                </div>
+                <input type="hidden" name="rating" id="review-rating" value="5">
+            </div>
+            <div style="margin-bottom: 1.5rem;">
+                <label style="display: block; color: #94a3b8; margin-bottom: 0.5rem;">Tu comentario:</label>
+                <textarea name="content" required
+                    style="width: 100%; background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(139, 92, 246, 0.3); border-radius: 12px; padding: 1rem; color: white; min-height: 120px; outline: none; transition: border-color 0.3s; resize: none;"></textarea>
+            </div>
+            <button type="submit" class="btn-primary-lg" style="width: 100%; border: none; cursor: pointer;">Publicar
+                Reseña</button>
+        </form>
+    </div>
+    {% endif %}
+</section>
+
+<!-- FAQ Section -->
+<section class="features-section" style="background: rgba(0, 0, 0, 0.2);">
+    <h2 class="section-title">Preguntas Frecuentes</h2>
+    <div style="max-width: 800px; margin: 0 auto;">
+        <div class="feature-card" style="margin-bottom: 1.5rem;">
+            <h3 class="feature-title" style="font-size: 1.1rem;">¿Qué es la masterización con IA y en qué se diferencia
+                de un plugin normal?</h3>
+            <p class="feature-desc">A diferencia de un plugin estático (como un ecualizador o compresor normal), nuestra
+                IA analiza primero todo tu archivo de audio. Entiende el contexto musical, el género y la estructura
+                dinámica. Luego, toma decisiones inteligentes segundo a segundo para aplicar correcciones que un simple
+                preset no podría lograr. Es como tener a un ingeniero en la caja.</p>
+        </div>
+        <div class="feature-card" style="margin-bottom: 1.5rem;">
+            <h3 class="feature-title" style="font-size: 1.1rem;">¿Qué formatos de audio acepta VeviMaster IA?</h3>
+            <p class="feature-desc">Actualmente optimizamos el proceso para archivos WAV en calidad CD (44.1kHz, 16-bit)
+                o superior para obtener los mejores resultados de masterización. También aceptamos MP3 de alta calidad
+                (320kbps) para pruebas rápidas.</p>
+        </div>
+        <div class="feature-card" style="margin-bottom: 1.5rem;">
+            <h3 class="feature-title" style="font-size: 1.1rem;">¿VeviMaster analiza el género musical?</h3>
+            <p class="feature-desc">Sí. Contamos con una herramienta dedicada al análisis musical basada en el modelo
+                MusicNN. Esta herramienta puede predecir el género y el "mood" de tu canción con gran precisión, lo que
+                ayuda a la IA de masterización a tomar decisiones estilísticas correctas.</p>
+        </div>
+        <div class="feature-card" style="margin-bottom: 1.5rem;">
+            <h3 class="feature-title" style="font-size: 1.1rem;">¿Cuánto tiempo tarda el proceso de masterización?</h3>
+            <p class="feature-desc">El proceso suele tardar entre 30 segundos y 2 minutos, dependiendo de la duración de
+                tu pista y la carga del servidor. La mayoría de las canciones se procesan en menos de un minuto.</p>
+        </div>
+        <div class="feature-card" style="margin-bottom: 1.5rem;">
+            <h3 class="feature-title" style="font-size: 1.1rem;">¿Puedo usar VeviMaster IA para música comercial?</h3>
+            <p class="feature-desc">¡Por supuesto! Tú mantienes todos los derechos sobre tu música. VeviMaster IA es
+                solo una herramienta de procesamiento. Puedes usar los resultados para distribución comercial,
+                streaming, o cualquier otro propósito sin pagar regalías adicionales.</p>
+        </div>
+        <div class="feature-card" style="margin-bottom: 1.5rem;">
+            <h3 class="feature-title" style="font-size: 1.1rem;">¿Está segura mi música en VeviMaster IA?</h3>
+            <p class="feature-desc">Tomamos la seguridad muy en serio. Todos los archivos se transmiten mediante
+                conexiones HTTPS encriptadas. Los archivos procesados se eliminan automáticamente de nuestros servidores
+                después de 24 horas. Nunca compartimos ni vendemos tu música.</p>
+        </div>
+        <div class="feature-card" style="margin-bottom: 1.5rem;">
+            <h3 class="feature-title" style="font-size: 1.1rem;">¿Puedo ajustar los parámetros de masterización?</h3>
+            <p class="feature-desc">Sí, en el plan Pro puedes ajustar parámetros como el nivel de loudness objetivo
+                (LUFS), el rango dinámico, la ecualización por bandas, y más. El plan gratuito usa configuraciones
+                optimizadas automáticamente para el género detectado.</p>
+        </div>
+        <div class="feature-card">
+            <h3 class="feature-title" style="font-size: 1.1rem;">¿Ofrecen reembolsos?</h3>
+            <p class="feature-desc">Sí, ofrecemos una garantía de satisfacción de 30 días. Si no estás satisfecho con el
+                servicio, te devolvemos el 100% de tu dinero, sin preguntas.</p>
+        </div>
+    </div>
+</section>
+
+<!-- SEO Content Detail -->
+<section style="padding: 4rem 2rem; max-width: 900px; margin: 0 auto; color: #64748b;">
+    <h3 style="color: #94a3b8; margin-bottom: 1.5rem; font-size: 1.5rem;">La Ciencia Detrás de VeviMaster IA</h3>
+    <p style="margin-bottom: 1.5rem; line-height: 1.8;">La masterización de audio ha sido históricamente un "arte
+        oscuro" reservado para ingenieros con décadas de experiencia y estudios profundos de acústica. VeviMaster IA
+        rompe esta barrera utilizando Deep Learning.</p>
+
+    <p style="margin-bottom: 1.5rem; line-height: 1.8;">Nuestro núcleo de procesamiento utiliza redes neuronales
+        convolucionales (CNN) entrenadas con un vasto conjunto de datos de canciones de éxito en géneros como Pop, Rock,
+        Hip-Hop y EDM. La IA no solo "escucha" el volumen, sino que entiende la relación entre el bombo y el bajo, la
+        presencia de la voz en los medios y el brillo de los platillos.</p>
+
+    <h4 style="color: #94a3b8; margin-bottom: 1rem; font-size: 1.2rem;">¿Por qué es superior a los presets?</h4>
+    <p style="margin-bottom: 1.5rem; line-height: 1.8;">Un preset de "Mastering Pop" aplica la misma curva de
+        ecualización a todas las canciones. Pero si tu mezcla ya es brillante, un preset la hará sonar estridente.
+        VeviMaster IA detecta que tu mezcla ya es brillante y, en lugar de añadir más agudos, podría centrarse en
+        controlar la dinámica de los graves para darle más cuerpo. Es masterización adaptativa real.</p>
+</section>
+
+{% if user.is_authenticated %}
+<script>
+    // Star Rating Logic
+    const stars = document.querySelectorAll('#star-rating i');
+    const ratingInput = document.getElementById('review-rating');
+
+    stars.forEach(star => {
+        star.addEventListener('click', () => {
+            const val = parseInt(star.getAttribute('data-value'));
+            ratingInput.value = val;
+            stars.forEach((s, index) => {
+                if (index < val) {
+                    s.classList.remove('far');
+                    s.classList.add('fas');
+                } else {
+                    s.classList.remove('fas');
+                    s.classList.add('far');
+                }
+            });
+        });
+    });
+
+    // Form Submission
+    document.getElementById('review-form').onsubmit = async (e) => {
+        e.preventDefault();
+        const formData = new FormData(e.target);
+
+        try {
+            const response = await fetch('{% url "mastering:post_review" %}', {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value
+                }
+            });
+
+            const data = await response.json();
+            if (data.success) {
+                alert(data.success);
+                location.reload();
+            } else {
+                alert(data.error);
+            }
+        } catch (err) {
+            alert('Error al enviar la reseña');
+        }
+    };
+</script>
+{% endif %}
+{% endblock %}

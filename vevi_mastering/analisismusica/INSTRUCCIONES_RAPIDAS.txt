@@ -1,0 +1,49 @@
+═══════════════════════════════════════════════════════════════
+  INSTRUCCIONES RÁPIDAS - Instalación con Python 3.11
+═══════════════════════════════════════════════════════════════
+
+PASO 1: INSTALAR PYTHON 3.11
+───────────────────────────────────────────────────────────────
+1. Descarga Python 3.11 desde:
+   https://www.python.org/downloads/release/python-31111/
+
+2. Ejecuta el instalador
+
+3. ⚠️ IMPORTANTE: Marca la casilla "Add Python 3.11 to PATH"
+
+4. Haz clic en "Install Now"
+
+
+PASO 2: CONFIGURAR EL PROYECTO
+───────────────────────────────────────────────────────────────
+Abre PowerShell en la carpeta del proyecto y ejecuta:
+
+   .\setup_python311.ps1
+
+Este script:
+- Verifica que Python 3.11 esté instalado
+- Crea un entorno virtual
+- Instala todas las dependencias necesarias
+
+
+PASO 3: USAR EL PROGRAMA
+───────────────────────────────────────────────────────────────
+1. Activa el entorno virtual:
+   .\.venv\Scripts\Activate.ps1
+
+2. Analiza un archivo de audio:
+   python analyze.py --audio "ruta/al/archivo.mp3"
+
+3. Para salida JSON:
+   python analyze.py --audio "ruta/al/archivo.mp3" --json
+
+
+NOTAS IMPORTANTES
+───────────────────────────────────────────────────────────────
+- Python 3.13 NO es compatible (usa Python 3.11)
+- Necesitas FFmpeg para archivos MP3/MP4
+- El entorno virtual debe estar activado cada vez que uses el programa
+
+═══════════════════════════════════════════════════════════════
+
+
