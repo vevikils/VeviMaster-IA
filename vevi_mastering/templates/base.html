@@ -292,11 +292,12 @@
 
 <body>
     <nav class="navbar">
-        <div class="navbar-container">
-            <div style="display: flex; align-items: center; gap: 15px;">
+        <div class="navbar-container flex items-center justify-between w-full">
+            <!-- Izquierda: Traductor + Logo -->
+            <div class="flex items-center gap-6">
                 <!-- Traductor -->
                 <div class="translator-box">
-                    <select id="langTranslate" class="notranslate" onchange="changeLanguage(this.value)" style="background: rgba(255,255,255,0.05); color: #fff; border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; padding: 6px; font-family: 'Montserrat', sans-serif; font-weight: 600; cursor: pointer; outline: none;">
+                    <select id="langTranslate" class="notranslate" onchange="changeLanguage(this.value)" style="background: rgba(255,255,255,0.05); color: #fff; border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; padding: 6px; font-family: 'Outfit', sans-serif; font-weight: 600; cursor: pointer; outline: none;">
                         <option value="es" style="background:#0f172a">Español</option>
                         <option value="en" style="background:#0f172a">English</option>
                         <option value="fr" style="background:#0f172a">Français</option>
@@ -306,17 +307,14 @@
                     </select>
                 </div>
 
-                <a href="/" class="navbar-brand" style="padding-left: 0;">
+                <a href="/" class="navbar-brand">
                     <i class="fas fa-wave-square"></i>
                     <span>VeviMaster-IA</span>
                 </a>
             </div>
 
-            <button class="menu-toggle" onclick="toggleMenu()">
-                <i class="fas fa-bars"></i>
-            </button>
-
-            <ul class="navbar-menu" id="navbarMenu">
+            <!-- Derecha: Menú de Navegación -->
+            <ul class="navbar-menu ml-auto" id="navbarMenu">
                 <li>
                     <a href="{% url 'mastering:upload' %}"
                         class="{% if request.resolver_match.url_name == 'upload' %}active{% endif %}">
@@ -359,26 +357,21 @@
                         <span>Contacto</span>
                     </a>
                 </li>
-                {% if user.is_superuser %}
-                <li>
-                    <a href="/admin/" target="_blank">
-                        <i class="fas fa-cog"></i>
-                        <span>Admin</span>
-                    </a>
-                </li>
-                {% endif %}
                 {% if user.is_authenticated %}
                 <li>
-                    <a href="{% url 'account_logout' %}">
-                        <i class="fas fa-sign-out-alt"></i>
-                        <span>Salir ({{ user.username|default:user.email }})</span>
+                    <a href="{% url 'account_logout' %}" class="btn-neon" style="padding: 0.5rem 1.2rem; margin-left: 10px;">
+                        <span>Salir</span>
                     </a>
                 </li>
                 {% else %}
                 <li>
-                    <a href="{% url 'account_login' %}">
-                        <i class="fas fa-sign-in-alt"></i>
+                    <a href="{% url 'account_login' %}" style="margin-right: 10px;">
                         <span>Entrar</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="{% url 'account_signup' %}" class="btn-neon" style="padding: 0.5rem 1.2rem;">
+                        <span>Comenzar</span>
                     </a>
                 </li>
                 {% endif %}
