@@ -102,6 +102,21 @@
             align-items: center;
             justify-content: space-between;
             padding: 0 2rem;
+            gap: 2rem;
+        }
+
+        /* Zona izquierda: solo idioma */
+        .navbar-lang {
+            display: flex;
+            align-items: center;
+            flex-shrink: 0;
+        }
+
+        /* Zona central: logo */
+        .navbar-logo-zone {
+            display: flex;
+            align-items: center;
+            flex-shrink: 0;
         }
 
         .navbar-brand {
@@ -296,85 +311,80 @@
 
 <body>
     <nav class="navbar">
-        <div class="navbar-container flex items-center justify-between w-full">
-            <!-- Izquierda: Traductor + Logo -->
-            <div class="flex items-center gap-6">
-                <!-- Traductor -->
-                <div class="translator-box">
-                    <select id="langTranslate" class="notranslate" onchange="changeLanguage(this.value)" style="background: rgba(255,255,255,0.05); color: #fff; border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; padding: 6px; font-family: 'Outfit', sans-serif; font-weight: 600; cursor: pointer; outline: none;">
-                        <option value="es" style="background:#0f172a">Español</option>
-                        <option value="en" style="background:#0f172a">English</option>
-                        <option value="fr" style="background:#0f172a">Français</option>
-                        <option value="de" style="background:#0f172a">Deutsch</option>
-                        <option value="pt" style="background:#0f172a">Português</option>
-                        <option value="it" style="background:#0f172a">Italiano</option>
-                    </select>
-                </div>
+        <div class="navbar-container">
+            <!-- IZQUIERDA: Selector de idioma -->
+            <div class="navbar-lang">
+                <select id="langTranslate" class="notranslate" onchange="changeLanguage(this.value)" style="background: rgba(255,255,255,0.05); color: #94a3b8; border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; padding: 6px 10px; font-family: 'Outfit', sans-serif; font-weight: 600; cursor: pointer; outline: none; font-size: 0.85rem;">
+                    <option value="es" style="background:#0f172a">Español</option>
+                    <option value="en" style="background:#0f172a">English</option>
+                    <option value="fr" style="background:#0f172a">Français</option>
+                    <option value="de" style="background:#0f172a">Deutsch</option>
+                    <option value="pt" style="background:#0f172a">Português</option>
+                    <option value="it" style="background:#0f172a">Italiano</option>
+                </select>
+            </div>
 
+            <!-- CENTRO: Logo -->
+            <div class="navbar-logo-zone">
                 <a href="/" class="navbar-brand">
                     <i class="fas fa-wave-square"></i>
                     <span>VeviMaster-IA</span>
                 </a>
             </div>
 
-            <!-- Derecha: Menú de Navegación -->
-            <ul class="navbar-menu ml-auto" id="navbarMenu">
+            <!-- DERECHA: Menú de navegación -->
+            <ul class="navbar-menu" id="navbarMenu">
                 <li>
-                    <a href="{% url 'mastering:upload' %}"
-                        class="{% if request.resolver_match.url_name == 'upload' %}active{% endif %}">
-                        <i class="fas fa-sliders-h"></i>
-                        <span>Mastering</span>
+                    <a href="{% url 'mastering:upload' %}" class="{% if request.resolver_match.url_name == 'upload' %}active{% endif %}">
+                        <i class="fas fa-sliders-h"></i><span>Mastering</span>
                     </a>
                 </li>
                 <li>
-                    <a href="{% url 'mastering:converter' %}"
-                        class="{% if request.resolver_match.url_name == 'converter' %}active{% endif %}">
-                        <i class="fas fa-sync-alt"></i>
-                        <span>Conversor</span>
+                    <a href="{% url 'mastering:converter' %}" class="{% if request.resolver_match.url_name == 'converter' %}active{% endif %}">
+                        <i class="fas fa-sync-alt"></i><span>Conversor</span>
                     </a>
                 </li>
                 <li>
-                    <a href="{% url 'analyzer:index' %}"
-                        class="{% if 'analyzer' in request.resolver_match.namespace %}active{% endif %}">
-                        <i class="fas fa-music"></i>
-                        <span>Análisis Musical</span>
+                    <a href="{% url 'analyzer:index' %}" class="{% if 'analyzer' in request.resolver_match.namespace %}active{% endif %}">
+                        <i class="fas fa-music"></i><span>Análisis Musical</span>
                     </a>
                 </li>
                 <li>
-                    <a href="{% url 'mastering:blog_index' %}"
-                        class="{% if 'blog' in request.resolver_match.url_name %}active{% endif %}">
-                        <i class="fas fa-book"></i>
-                        <span>Blog</span>
+                    <a href="{% url 'mastering:blog_index' %}" class="{% if 'blog' in request.resolver_match.url_name %}active{% endif %}">
+                        <i class="fas fa-book"></i><span>Blog</span>
                     </a>
                 </li>
                 <li>
-                    <a href="{% url 'mastering:about' %}"
-                        class="{% if request.resolver_match.url_name == 'about' %}active{% endif %}">
-                        <i class="fas fa-info-circle"></i>
-                        <span>Quiénes Somos</span>
+                    <a href="{% url 'mastering:about' %}" class="{% if request.resolver_match.url_name == 'about' %}active{% endif %}">
+                        <i class="fas fa-info-circle"></i><span>Quiénes Somos</span>
                     </a>
                 </li>
                 <li>
-                    <a href="{% url 'mastering:contact' %}"
-                        class="{% if request.resolver_match.url_name == 'contact' %}active{% endif %}">
-                        <i class="fas fa-envelope"></i>
-                        <span>Contacto</span>
+                    <a href="{% url 'mastering:contact' %}" class="{% if request.resolver_match.url_name == 'contact' %}active{% endif %}">
+                        <i class="fas fa-envelope"></i><span>Contacto</span>
                     </a>
                 </li>
+                {% if user.is_superuser %}
+                <li>
+                    <a href="/admin/" target="_blank">
+                        <i class="fas fa-cog"></i><span>Admin</span>
+                    </a>
+                </li>
+                {% endif %}
                 {% if user.is_authenticated %}
                 <li>
-                    <a href="{% url 'account_logout' %}" class="btn-neon" style="padding: 0.5rem 1.2rem; margin-left: 10px;">
-                        <span>Salir</span>
+                    <a href="{% url 'account_logout' %}" class="btn-neon" style="padding: 0.4rem 1rem; margin-left: 8px;">
+                        <i class="fas fa-sign-out-alt"></i><span>Salir</span>
                     </a>
                 </li>
                 {% else %}
                 <li>
-                    <a href="{% url 'account_login' %}" style="margin-right: 10px;">
-                        <span>Entrar</span>
+                    <a href="{% url 'account_login' %}">
+                        <i class="fas fa-sign-in-alt"></i><span>Entrar</span>
                     </a>
                 </li>
                 <li>
-                    <a href="{% url 'account_signup' %}" class="btn-neon" style="padding: 0.5rem 1.2rem;">
+                    <a href="{% url 'account_signup' %}" class="btn-neon" style="padding: 0.4rem 1rem; margin-left: 8px;">
                         <span>Comenzar</span>
                     </a>
                 </li>
