@@ -99,6 +99,8 @@
         cursor: pointer;
         transition: all 0.3s;
         box-shadow: 0 10px 30px -10px rgba(139, 92, 246, 0.5);
+        position: relative; /* CRÍTICO para z-index */
+        z-index: 100;       /* Por encima de todo */
     }
 
     .btn-analyze-pro:hover {
