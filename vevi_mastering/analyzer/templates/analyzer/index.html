@@ -151,6 +151,15 @@ técnicos de tu canción con nuestra IA de reconocimiento musical avanzada.{% en
         box-shadow: 0 0 15px rgba(139, 92, 246, 0.3);
     }
 
+    .progress-status {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 0.8rem;
+        font-size: 0.85rem;
+        color: var(--text-muted);
+        font-weight: 600;
+    }
+
     /* Recent Section */
     .recent-section-header {
         display: flex;
@@ -213,7 +222,6 @@ técnicos de tu canción con nuestra IA de reconocimiento musical avanzada.{% en
 </style>
 {% endblock %}
 
-
 {% block content %}
 <div class="analyzer-container">
     <!-- Upload Bento Card -->
@@ -253,7 +261,9 @@ técnicos de tu canción con nuestra IA de reconocimiento musical avanzada.{% en
                     </div>
                 </div>
 
-                <button type="submit" class="btn-analyze-pro" id="submit-btn">
+                <div id="inline-error"></div>
+
+                <button type="submit" class="btn-analyze-pro" id="submit-btn" style="z-index: 10;">
                     <i class="fas fa-atom"></i> Iniciar Análisis
                 </button>
             </form>
@@ -302,15 +312,19 @@ técnicos de tu canción con nuestra IA de reconocimiento musical avanzada.{% en
     const progressContainer = document.getElementById('progress-container');
     const progressBar = document.getElementById('progress-bar');
     const progressPercent = document.getElementById('progress-percent');
+    const errDiv = document.getElementById('inline-error');
 
     // File Selection
-    uploadArea.addEventListener('click', () => fileInput.click());
+    uploadArea.addEventListener('click', (e) => {
+        e.stopPropagation();
+        fileInput.click();
+    });
 
     fileInput.addEventListener('change', (e) => {
         if (e.target.files.length > 0) {
             fileNameDisplay.innerHTML = `<div class="file-chip"><i class="fas fa-check-circle"></i> ${e.target.files[0].name}</div>`;
-        } else {
-            fileNameDisplay.innerHTML = '';
+            errDiv.textContent = '';
+            errDiv.style.display = 'none';
         }
     });
 
@@ -330,50 +344,38 @@ técnicos de tu canción con nuestra IA de reconocimiento musical avanzada.{% en
         if (e.dataTransfer.files.length > 0) {
             fileInput.files = e.dataTransfer.files;
             fileNameDisplay.innerHTML = `<div class="file-chip"><i class="fas fa-check-circle"></i> ${e.dataTransfer.files[0].name}</div>`;
+            errDiv.textContent = '';
+            errDiv.style.display = 'none';
         }
     });
 
-    // Submit Handling
-    uploadForm.addEventListener('submit', (e) => {
+    // Submit Handling REFORZADO
+    uploadForm.addEventListener('submit', function(e) {
         if (!fileInput.files.length) {
             e.preventDefault();
-            // Mostrar error inline en vez de alert() (bloqueado en HTTPS)
-            let errDiv = document.getElementById('inline-error');
-            if (!errDiv) {
-                errDiv = document.createElement('div');
-                errDiv.id = 'inline-error';
-                errDiv.style.cssText = 'color:#f87171;background:rgba(239,68,68,0.1);border:1px solid rgba(239,68,68,0.3);border-radius:12px;padding:1rem;text-align:center;font-weight:600;margin-top:1rem;';
-                submitBtn.insertAdjacentElement('beforebegin', errDiv);
-            }
+            errDiv.style.cssText = 'color:#f87171;background:rgba(239,68,68,0.1);border:1px solid rgba(239,68,68,0.3);border-radius:12px;padding:1rem;text-align:center;font-weight:600;margin-top:1rem;display:block;';
             errDiv.textContent = '⚠️ Por favor selecciona un archivo de audio primero';
-            return;
+            return false;
         }
 
-        // Limpiar error si existe
-        const errDiv = document.getElementById('inline-error');
-        if (errDiv) errDiv.remove();
-
-        submitBtn.disabled = true;
+        // NO deshabilitamos el botón inmediatamente porque bloquea el submit en algunos navegadores
         submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Procesando...';
         progressContainer.style.display = 'block';
 
-        // IMPORTANTE: Forzar el envío del formulario tras deshabilitar el botón
-        setTimeout(() => {
-            uploadForm.submit();
-        }, 100);
-
-        // Fake progress
+        // Iniciamos el progreso falso
         let width = 0;
         const interval = setInterval(() => {
-            if (width >= 90) {
+            if (width >= 95) {
                 clearInterval(interval);
             } else {
-                width += Math.random() * 5;
-                if (width > 90) width = 90;
+                width += Math.random() * 2;
+                if (width > 95) width = 95;
                 progressBar.style.width = width + '%';
                 progressPercent.textContent = Math.round(width) + '%';
             }
-        }, 300);
+        }, 500);
+        
+        return true; // Permitir el envío natural del formulario
     });
 </script>
 {% endblock %}
