@@ -1,18 +1,11 @@
 {% extends 'base.html' %}
 
 {% block title %}Analizador de Música IA - Género, Mood y BPM Gratis - VeviMaster IA{% endblock %}
-{% block meta_description %}Analiza tu música gratis. Descubre el género, el estado de ánimo (mood) y los detalles
-técnicos de tu canción con nuestra IA de reconocimiento musical avanzada.{% endblock %}
+{% block meta_description %}Analiza tu música gratis. Descubre el género, el estado de ánimo (mood) y los detalles técnicos de tu canción.{% endblock %}
 
 {% block extra_css %}
 <style>
-    .analyzer-container {
-        max-width: 800px;
-        margin: 0 auto;
-        padding: 4rem 1.5rem;
-    }
-
-    /* Bento Card Base */
+    .analyzer-container { max-width: 800px; margin: 0 auto; padding: 4rem 1.5rem; }
     .bento-card {
         background: var(--glass-bg);
         backdrop-filter: blur(25px);
@@ -23,78 +16,33 @@ técnicos de tu canción con nuestra IA de reconocimiento musical avanzada.{% en
         overflow: hidden;
         margin-bottom: 2rem;
     }
-
     .analyzer-hero {
         padding: 3.5rem 2rem;
         text-align: center;
         border-bottom: 1px solid var(--glass-border);
         background: linear-gradient(180deg, rgba(139, 92, 246, 0.05) 0%, transparent 100%);
     }
-
-    .analyzer-title {
-        font-size: 2.5rem;
-        font-weight: 800;
-        letter-spacing: -1.5px;
-        margin-bottom: 0.8rem;
-        color: #fff;
-    }
-
-    .analyzer-subtitle {
-        color: var(--text-muted);
-        font-size: 1rem;
-        max-width: 500px;
-        margin: 0 auto;
-    }
-
-    .analyzer-body {
-        padding: 3rem 2rem;
-    }
-
-    /* Portal Upload Area */
+    .analyzer-title { font-size: 2.5rem; font-weight: 800; letter-spacing: -1.5px; margin-bottom: 0.8rem; color: #fff; }
+    .analyzer-subtitle { color: var(--text-muted); font-size: 1rem; max-width: 500px; margin: 0 auto; }
+    .analyzer-body { padding: 3rem 2rem; }
     .upload-portal {
         border: 2px dashed rgba(139, 92, 246, 0.2);
         border-radius: 24px;
         padding: 4rem 2rem;
         text-align: center;
         background: rgba(255, 255, 255, 0.02);
-        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        transition: all 0.4s ease;
         cursor: pointer;
-        position: relative;
-        overflow: hidden;
     }
-
-    .upload-portal:hover {
-        border-color: var(--brand-primary);
-        background: rgba(139, 92, 246, 0.05);
-        transform: scale(1.01);
-    }
-
-    .upload-portal.dragover {
-        border-color: var(--brand-secondary);
-        background: rgba(6, 182, 212, 0.05);
-        box-shadow: 0 0 30px rgba(6, 182, 212, 0.1);
-    }
-
+    .upload-portal:hover { border-color: var(--brand-primary); background: rgba(139, 92, 246, 0.05); }
+    .upload-portal.dragover { border-color: var(--brand-secondary); background: rgba(6, 182, 212, 0.05); }
     .portal-icon {
         font-size: 3.5rem;
         background: linear-gradient(135deg, var(--brand-primary), var(--brand-secondary));
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
         margin-bottom: 1.5rem;
-        filter: drop-shadow(0 0 15px rgba(139, 92, 246, 0.3));
     }
-
-    .upload-info h4 {
-        font-size: 1.25rem;
-        font-weight: 700;
-        margin-bottom: 0.5rem;
-    }
-
-    .upload-hint {
-        color: var(--text-muted);
-        font-size: 0.85rem;
-    }
-
     .file-chip {
         display: inline-flex;
         align-items: center;
@@ -107,8 +55,6 @@ técnicos de tu canción con nuestra IA de reconocimiento musical avanzada.{% en
         font-weight: 600;
         border: 1px solid rgba(16, 185, 129, 0.2);
     }
-
-    /* Button Analyze Pro */
     .btn-analyze-pro {
         background: var(--brand-primary);
         color: white;
@@ -120,20 +66,13 @@ técnicos de tu canción con nuestra IA de reconocimiento musical avanzada.{% en
         width: 100%;
         margin-top: 2rem;
         cursor: pointer;
-        transition: all 0.4s;
+        transition: all 0.3s;
         display: flex;
         align-items: center;
         justify-content: center;
         gap: 12px;
         box-shadow: 0 10px 25px -5px rgba(139, 92, 246, 0.4);
     }
-
-    .btn-analyze-pro:hover {
-        transform: translateY(-2px) scale(1.01);
-        box-shadow: 0 15px 30px -5px rgba(139, 92, 246, 0.5);
-    }
-
-    /* Progress Styling */
     .progress-track {
         background: rgba(255, 255, 255, 0.05);
         height: 12px;
@@ -142,89 +81,29 @@ técnicos de tu canción con nuestra IA de reconocimiento musical avanzada.{% en
         margin-top: 2rem;
         border: 1px solid var(--glass-border);
     }
-
     .progress-fill {
         height: 100%;
         background: linear-gradient(90deg, var(--brand-primary), var(--brand-secondary));
         width: 0%;
         transition: width 0.3s ease;
-        box-shadow: 0 0 15px rgba(139, 92, 246, 0.3);
     }
-
-    .progress-status {
-        display: flex;
-        justify-content: space-between;
-        margin-top: 0.8rem;
-        font-size: 0.85rem;
-        color: var(--text-muted);
+    .progress-status { display: flex; justify-content: space-between; margin-top: 0.8rem; font-size: 0.85rem; color: var(--text-muted); }
+    #inline-error {
+        color: #f87171;
+        background: rgba(239, 68, 68, 0.1);
+        border: 1px solid rgba(239, 68, 68, 0.3);
+        border-radius: 12px;
+        padding: 1rem;
+        text-align: center;
         font-weight: 600;
-    }
-
-    /* Recent Section */
-    .recent-section-header {
-        display: flex;
-        align-items: center;
-        gap: 12px;
-        margin-bottom: 1.5rem;
-        padding-left: 0.5rem;
-    }
-
-    .recent-dot {
-        width: 8px;
-        height: 8px;
-        background: var(--brand-secondary);
-        border-radius: 50%;
-        box-shadow: 0 0 10px var(--brand-secondary);
-    }
-
-    .recent-bento-item {
-        background: rgba(255, 255, 255, 0.02);
-        border: 1px solid var(--glass-border);
-        border-radius: 20px;
-        padding: 1.2rem;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        text-decoration: none;
-        transition: all 0.3s;
-        margin-bottom: 0.8rem;
-    }
-
-    .recent-bento-item:hover {
-        background: rgba(255, 255, 255, 0.05);
-        transform: translateX(8px);
-        border-color: var(--brand-primary);
-    }
-
-    .recent-name {
-        color: #fff;
-        font-weight: 700;
-        margin-bottom: 0.2rem;
-        font-size: 1rem;
-    }
-
-    .recent-sub {
-        color: var(--text-muted);
-        font-size: 0.8rem;
-        display: flex;
-        gap: 10px;
-    }
-
-    .mood-pill {
-        background: rgba(139, 92, 246, 0.1);
-        color: var(--brand-primary);
-        padding: 2px 10px;
-        border-radius: 100px;
-        font-weight: 600;
-        font-size: 0.75rem;
-        text-transform: uppercase;
+        margin: 1rem 0;
+        display: none;
     }
 </style>
 {% endblock %}
 
 {% block content %}
 <div class="analyzer-container">
-    <!-- Upload Bento Card -->
     <div class="bento-card">
         <div class="analyzer-hero">
             <h2 class="analyzer-title">Análisis Musical</h2>
@@ -234,7 +113,6 @@ técnicos de tu canción con nuestra IA de reconocimiento musical avanzada.{% en
         <div class="analyzer-body">
             <form method="post" enctype="multipart/form-data" id="upload-form">
                 {% csrf_token %}
-
                 <div class="upload-portal" id="upload-area">
                     <i class="fas fa-fingerprint portal-icon"></i>
                     <div class="upload-info">
@@ -245,137 +123,85 @@ técnicos de tu canción con nuestra IA de reconocimiento musical avanzada.{% en
                     <div id="file-name-display"></div>
                 </div>
 
-                {% if form.audio_file.errors %}
-                <div style="color: #ef4444; margin-top: 1rem; text-align: center; font-weight: 600;">
-                    {{ form.audio_file.errors }}
-                </div>
-                {% endif %}
+                <div id="inline-error"></div>
 
                 <div class="progress-container" id="progress-container" style="display: none;">
-                    <div class="progress-track">
-                        <div class="progress-fill" id="progress-bar"></div>
-                    </div>
+                    <div class="progress-track"><div class="progress-fill" id="progress-bar"></div></div>
                     <div class="progress-status">
                         <span id="progress-message">Analizando frecuencias...</span>
                         <span id="progress-percent">0%</span>
                     </div>
                 </div>
 
-                <div id="inline-error"></div>
-
-                <button type="submit" class="btn-analyze-pro" id="submit-btn" style="z-index: 10;">
-                    <i class="fas fa-atom"></i> Iniciar Análisis
+                <button type="submit" class="btn-analyze-pro" id="submit-btn" style="position: relative; z-index: 10;">
+                    <i class="fas fa-atom"></i> <span id="btn-text">Iniciar Análisis</span>
                 </button>
             </form>
         </div>
     </div>
-
-    <!-- Recent Analyses Section -->
-    {% if recent_analyses %}
-    <div class="recent-section">
-        <div class="recent-section-header">
-            <div class="recent-dot"></div>
-            <h3 style="font-weight: 700; color: #fff;">Historial Inteligente</h3>
-        </div>
-        
-        <div class="recent-list">
-            {% for analysis in recent_analyses %}
-            <a href="{% url 'analyzer:results' analysis.id %}" class="recent-bento-item">
-                <div style="display: flex; align-items: center; gap: 15px;">
-                    <div style="background: rgba(139, 92, 246, 0.1); width: 45px; height: 45px; border-radius: 12px; display: flex; align-items: center; justify-content: center; color: var(--brand-primary);">
-                        <i class="fas fa-wave-square"></i>
-                    </div>
-                    <div>
-                        <div class="recent-name">{{ analysis.audio_file.name|truncatechars:35 }}</div>
-                        <div class="recent-sub">
-                            <span class="mood-pill">{{ analysis.mood|title }}</span>
-                            <span>{{ analysis.uploaded_at|timesince }} atrás</span>
-                        </div>
-                    </div>
-                </div>
-                <i class="fas fa-arrow-right" style="color: var(--text-muted); opacity: 0.5;"></i>
-            </a>
-            {% endfor %}
-        </div>
-    </div>
-    {% endif %}
 </div>
 {% endblock %}
 
 {% block extra_js %}
 <script>
+document.addEventListener('DOMContentLoaded', function() {
     const uploadArea = document.getElementById('upload-area');
     const fileInput = document.getElementById('audio-file-input');
     const fileNameDisplay = document.getElementById('file-name-display');
     const uploadForm = document.getElementById('upload-form');
     const submitBtn = document.getElementById('submit-btn');
+    const btnText = document.getElementById('btn-text');
     const progressContainer = document.getElementById('progress-container');
     const progressBar = document.getElementById('progress-bar');
     const progressPercent = document.getElementById('progress-percent');
     const errDiv = document.getElementById('inline-error');
 
-    // File Selection
-    uploadArea.addEventListener('click', (e) => {
-        e.stopPropagation();
-        fileInput.click();
-    });
+    uploadArea.onclick = () => fileInput.click();
 
-    fileInput.addEventListener('change', (e) => {
+    fileInput.onchange = (e) => {
         if (e.target.files.length > 0) {
             fileNameDisplay.innerHTML = `<div class="file-chip"><i class="fas fa-check-circle"></i> ${e.target.files[0].name}</div>`;
-            errDiv.textContent = '';
             errDiv.style.display = 'none';
         }
-    });
+    };
 
-    // Drag & Drop
-    uploadArea.addEventListener('dragover', (e) => {
-        e.preventDefault();
-        uploadArea.classList.add('dragover');
-    });
-
-    uploadArea.addEventListener('dragleave', () => {
-        uploadArea.classList.remove('dragover');
-    });
-
-    uploadArea.addEventListener('drop', (e) => {
+    uploadArea.ondragover = (e) => { e.preventDefault(); uploadArea.classList.add('dragover'); };
+    uploadArea.ondragleave = () => uploadArea.classList.remove('dragover');
+    uploadArea.ondrop = (e) => {
         e.preventDefault();
         uploadArea.classList.remove('dragover');
         if (e.dataTransfer.files.length > 0) {
             fileInput.files = e.dataTransfer.files;
             fileNameDisplay.innerHTML = `<div class="file-chip"><i class="fas fa-check-circle"></i> ${e.dataTransfer.files[0].name}</div>`;
-            errDiv.textContent = '';
             errDiv.style.display = 'none';
         }
-    });
+    };
 
-    // Submit Handling REFORZADO
-    uploadForm.addEventListener('submit', function(e) {
-        if (!fileInput.files.length) {
+    uploadForm.onsubmit = function(e) {
+        if (!fileInput.files || fileInput.files.length === 0) {
             e.preventDefault();
-            errDiv.style.cssText = 'color:#f87171;background:rgba(239,68,68,0.1);border:1px solid rgba(239,68,68,0.3);border-radius:12px;padding:1rem;text-align:center;font-weight:600;margin-top:1rem;display:block;';
             errDiv.textContent = '⚠️ Por favor selecciona un archivo de audio primero';
+            errDiv.style.display = 'block';
             return false;
         }
 
-        // NO deshabilitamos el botón inmediatamente porque bloquea el submit en algunos navegadores
-        submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Procesando...';
+        // Animación de carga
+        btnText.innerHTML = 'Procesando...';
+        submitBtn.querySelector('i').className = 'fas fa-spinner fa-spin';
         progressContainer.style.display = 'block';
 
-        // Iniciamos el progreso falso
         let width = 0;
         const interval = setInterval(() => {
-            if (width >= 95) {
-                clearInterval(interval);
-            } else {
-                width += Math.random() * 2;
-                if (width > 95) width = 95;
+            if (width >= 90) clearInterval(interval);
+            else {
+                width += 2;
                 progressBar.style.width = width + '%';
-                progressPercent.textContent = Math.round(width) + '%';
+                progressPercent.textContent = width + '%';
             }
-        }, 500);
+        }, 600);
         
-        return true; // Permitir el envío natural del formulario
-    });
+        return true; 
+    };
+});
 </script>
 {% endblock %}
