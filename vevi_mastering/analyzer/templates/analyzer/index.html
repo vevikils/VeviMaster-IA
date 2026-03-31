@@ -14,6 +14,7 @@
         box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
         overflow: hidden;
         margin-bottom: 2rem;
+        position: relative;
     }
     .analyzer-hero {
         padding: 3.5rem 2rem;
@@ -25,60 +26,92 @@
     .analyzer-subtitle { color: var(--text-muted); font-size: 1rem; max-width: 500px; margin: 0 auto; }
     .analyzer-body { padding: 3rem 2rem; }
     
-    /* ZONA DE SUBIDA NATIVA */
+    /* ZONA DE SUBIDA MEJORADA */
     .upload-portal {
-        display: block;
-        border: 2px dashed rgba(139, 92, 246, 0.2);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        border: 2px dashed rgba(139, 92, 246, 0.3);
         border-radius: 24px;
-        padding: 4rem 2rem;
+        padding: 3rem 2rem;
         text-align: center;
         background: rgba(255, 255, 255, 0.02);
-        transition: all 0.4s ease;
+        transition: all 0.3s ease;
+        position: relative;
         cursor: pointer;
     }
-    .upload-portal:hover { border-color: var(--brand-primary); background: rgba(139, 92, 246, 0.05); }
-    .upload-portal.dragover { border-color: var(--brand-secondary); background: rgba(6, 182, 212, 0.05); }
+    .upload-portal:hover { 
+        border-color: var(--brand-primary); 
+        background: rgba(139, 92, 246, 0.05); 
+        transform: translateY(-2px);
+    }
     
     .portal-icon {
-        font-size: 3.5rem;
+        font-size: 3rem;
         background: linear-gradient(135deg, var(--brand-primary), var(--brand-secondary));
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
         margin-bottom: 1.5rem;
-        display: block;
     }
+
+    .btn-select-file {
+        background: rgba(255, 255, 255, 0.1);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        color: white;
+        padding: 0.6rem 1.2rem;
+        border-radius: 12px;
+        font-weight: 600;
+        font-size: 0.9rem;
+        margin-top: 1rem;
+        pointer-events: none; /* El clic lo captura el label/portal */
+    }
+
     .file-chip {
         display: inline-flex;
         align-items: center;
         gap: 8px;
         background: rgba(16, 185, 129, 0.1);
         color: #34d399;
-        padding: 0.5rem 1rem;
-        border-radius: 12px;
+        padding: 0.6rem 1.2rem;
+        border-radius: 14px;
         margin-top: 1.5rem;
-        font-weight: 600;
+        font-weight: 700;
         border: 1px solid rgba(16, 185, 129, 0.2);
+        animation: slideUp 0.3s ease;
     }
+
+    @keyframes slideUp {
+        from { opacity: 0; transform: translateY(10px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
     .btn-analyze-pro {
-        background: var(--brand-primary);
+        background: linear-gradient(135deg, var(--brand-primary), var(--brand-secondary));
         color: white;
         border: none;
         padding: 1.2rem 2.5rem;
-        border-radius: 18px;
+        border-radius: 20px;
         font-weight: 800;
         font-size: 1.1rem;
         width: 100%;
         margin-top: 2rem;
         cursor: pointer;
         transition: all 0.3s;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        gap: 12px;
+        box-shadow: 0 10px 30px -10px rgba(139, 92, 246, 0.5);
     }
-    .progress-track { height: 12px; background: rgba(255,255,255,0.05); border-radius: 10px; overflow: hidden; margin-top: 2rem; }
-    .progress-fill { height: 100%; background: var(--brand-primary); width: 0%; transition: width 0.4s; }
-    #inline-error { color: #f87171; text-align: center; margin: 1rem 0; font-weight: 600; display: none; }
+
+    .btn-analyze-pro:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 15px 40px -10px rgba(139, 92, 246, 0.7);
+    }
+
+    /* Progress UI */
+    .progress-container { margin-top: 2rem; }
+    .progress-track { height: 10px; background: rgba(255,255,255,0.05); border-radius: 20px; overflow: hidden; margin-bottom: 0.5rem; }
+    .progress-fill { height: 100%; background: var(--brand-primary); width: 0%; transition: width 0.3s; }
+    
+    #inline-error { color: #f87171; text-align: center; margin-top: 1.5rem; font-weight: 600; display: none; }
 </style>
 {% endblock %}
 
@@ -94,30 +127,31 @@
             <form method="post" enctype="multipart/form-data" id="upload-form">
                 {% csrf_token %}
                 
-                <!-- LABEL VINCULADO AL INPUT (NATAL) -->
+                <!-- LABEL COMO CONTENEDOR PRINCIPAL -->
                 <label for="audio-file-input" class="upload-portal" id="upload-area">
-                    <i class="fas fa-fingerprint portal-icon"></i>
+                    <i class="fas fa-music portal-icon"></i>
                     <div class="upload-info">
-                        <h4>Subir Archivo</h4>
-                        <p class="upload-hint">Arrastra tu audio aquí o pulsa para explorar</p>
+                        <h4 style="font-weight: 700; margin-bottom: 0.4rem;">Subir Archivo de Audio</h4>
+                        <p class="upload-hint" style="color: var(--text-muted); font-size: 0.9rem;">Arrastra o haz clic aquí</p>
                     </div>
+                    <div class="btn-select-file">Seleccionar Archivo</div>
                     <div id="file-name-display"></div>
                 </label>
 
-                <!-- INPUT OCULTO PERO VINCULADO -->
-                <input type="file" id="audio-file-input" name="audio_file" accept="audio/*" style="display: none;" required>
+                <!-- El input con visibilidad reducida pero FUNCIONAL -->
+                <input type="file" id="audio-file-input" name="audio_file" accept="audio/*" style="opacity: 0; position: absolute; z-index: -1;" required>
 
                 <div id="inline-error"></div>
 
                 <div class="progress-container" id="progress-container" style="display: none;">
                     <div class="progress-track"><div class="progress-fill" id="progress-bar"></div></div>
-                    <div style="display: flex; justify-content: space-between; margin-top: 0.5rem; color: var(--text-muted);">
-                        <span>Procesando...</span>
+                    <div style="display: flex; justify-content: space-between; font-size: 0.8rem; color: var(--text-muted); font-weight: 600;">
+                        <span>Procesando Frecuencias...</span>
                         <span id="progress-percent">0%</span>
                     </div>
                 </div>
 
-                <button type="submit" class="btn-analyze-pro" id="submit-btn">
+                <button type="submit" class="btn-analyze-pro" id="submit-btn" style="z-index: 20;">
                     <i class="fas fa-atom"></i> Iniciar Análisis
                 </button>
             </form>
@@ -128,54 +162,63 @@
 
 {% block extra_js %}
 <script>
-    const fileInput = document.getElementById('audio-file-input');
-    const fileNameDisplay = document.getElementById('file-name-display');
-    const uploadArea = document.getElementById('upload-area');
-    const uploadForm = document.getElementById('upload-form');
-    const submitBtn = document.getElementById('submit-btn');
-    const errDiv = document.getElementById('inline-error');
-    const progressBar = document.getElementById('progress-bar');
-    const progressPercent = document.getElementById('progress-percent');
+    document.addEventListener('DOMContentLoaded', function() {
+        const fileInput = document.getElementById('audio-file-input');
+        const fileNameDisplay = document.getElementById('file-name-display');
+        const uploadArea = document.getElementById('upload-area');
+        const uploadForm = document.getElementById('upload-form');
+        const submitBtn = document.getElementById('submit-btn');
+        const progressBar = document.getElementById('progress-bar');
+        const progressPercent = document.getElementById('progress-percent');
+        const errDiv = document.getElementById('inline-error');
 
-    // Selección de archivo
-    fileInput.addEventListener('change', () => {
-        if (fileInput.files.length > 0) {
-            fileNameDisplay.innerHTML = `<div class="file-chip"><i class="fas fa-check-circle"></i> ${fileInput.files[0].name}</div>`;
-            errDiv.style.display = 'none';
-        }
-    });
+        // Sincronizar nombre de archivo
+        fileInput.addEventListener('change', function() {
+            if (this.files && this.files.length > 0) {
+                fileNameDisplay.innerHTML = `<div class="file-chip"><i class="fas fa-check-circle"></i> ${this.files[0].name}</div>`;
+                errDiv.style.display = 'none';
+            }
+        });
 
-    // Drag and Drop
-    uploadArea.addEventListener('dragover', (e) => { e.preventDefault(); uploadArea.classList.add('dragover'); });
-    uploadArea.addEventListener('dragleave', () => uploadArea.classList.remove('dragover'));
-    uploadArea.addEventListener('drop', (e) => {
-        e.preventDefault();
-        uploadArea.classList.remove('dragover');
-        if (e.dataTransfer.files.length > 0) {
-            fileInput.files = e.dataTransfer.files;
-            fileNameDisplay.innerHTML = `<div class="file-chip"><i class="fas fa-check-circle"></i> ${e.dataTransfer.files[0].name}</div>`;
-        }
-    });
-
-    // Envío del formulario
-    uploadForm.addEventListener('submit', (e) => {
-        if (!fileInput.files.length) {
+        // Drag and Drop
+        uploadArea.addEventListener('dragover', (e) => { e.preventDefault(); uploadArea.style.borderColor = 'var(--brand-primary)'; });
+        uploadArea.addEventListener('dragleave', () => { uploadArea.style.borderColor = ''; });
+        uploadArea.addEventListener('drop', (e) => {
             e.preventDefault();
-            errDiv.textContent = 'Selecciona un archivo primero';
-            errDiv.style.display = 'block';
-            return;
-        }
+            uploadArea.style.borderColor = '';
+            if (e.dataTransfer.files.length > 0) {
+                fileInput.files = e.dataTransfer.files;
+                // Disparar evento change manualmente para actualizar el nombre
+                const event = new Event('change');
+                fileInput.dispatchEvent(event);
+            }
+        });
 
-        submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Subiendo...';
-        document.getElementById('progress-container').style.display = 'block';
+        // Enviar formulario
+        uploadForm.addEventListener('submit', function(e) {
+            if (!fileInput.files || fileInput.files.length === 0) {
+                e.preventDefault();
+                errDiv.textContent = '⚠️ Selecciona un archivo de audio para comenzar';
+                errDiv.style.display = 'block';
+                return false;
+            }
 
-        let w = 0;
-        const interval = setInterval(() => {
-            if (w >= 90) clearInterval(interval);
-            w += 5;
-            progressBar.style.width = w + '%';
-            progressPercent.textContent = w + '%';
-        }, 500);
+            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Analizando...';
+            submitBtn.style.opacity = '0.7';
+            document.getElementById('progress-container').style.display = 'block';
+
+            let w = 0;
+            const interval = setInterval(() => {
+                if (w >= 95) clearInterval(interval);
+                else {
+                    w += 2;
+                    progressBar.style.width = w + '%';
+                    progressPercent.textContent = w + '%';
+                }
+            }, 600);
+            
+            return true;
+        });
     });
 </script>
 {% endblock %}
