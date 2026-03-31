@@ -337,9 +337,21 @@ técnicos de tu canción con nuestra IA de reconocimiento musical avanzada.{% en
     uploadForm.addEventListener('submit', (e) => {
         if (!fileInput.files.length) {
             e.preventDefault();
-            alert('Por favor selecciona un archivo');
+            // Mostrar error inline en vez de alert() (bloqueado en HTTPS)
+            let errDiv = document.getElementById('inline-error');
+            if (!errDiv) {
+                errDiv = document.createElement('div');
+                errDiv.id = 'inline-error';
+                errDiv.style.cssText = 'color:#f87171;background:rgba(239,68,68,0.1);border:1px solid rgba(239,68,68,0.3);border-radius:12px;padding:1rem;text-align:center;font-weight:600;margin-top:1rem;';
+                submitBtn.insertAdjacentElement('beforebegin', errDiv);
+            }
+            errDiv.textContent = '⚠️ Por favor selecciona un archivo de audio primero';
             return;
         }
+
+        // Limpiar error si existe
+        const errDiv = document.getElementById('inline-error');
+        if (errDiv) errDiv.remove();
 
         submitBtn.disabled = true;
         submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Procesando...';
