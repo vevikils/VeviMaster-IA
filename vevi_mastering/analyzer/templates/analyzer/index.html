@@ -357,6 +357,11 @@ técnicos de tu canción con nuestra IA de reconocimiento musical avanzada.{% en
         submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Procesando...';
         progressContainer.style.display = 'block';
 
+        // IMPORTANTE: Forzar el envío del formulario tras deshabilitar el botón
+        setTimeout(() => {
+            uploadForm.submit();
+        }, 100);
+
         // Fake progress
         let width = 0;
         const interval = setInterval(() => {
