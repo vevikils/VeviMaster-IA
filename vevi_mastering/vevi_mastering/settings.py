@@ -33,7 +33,7 @@ DEBUG = os.environ.get('DEBUG', 'True') == 'True'
 
 ALLOWED_HOSTS = [host.strip() for host in os.environ.get('ALLOWED_HOSTS', '').split(',') if host.strip()]
 if not ALLOWED_HOSTS:
-    ALLOWED_HOSTS = ['localhost', '127.0.0.1', '0.0.0.0']
+    ALLOWED_HOSTS = ['localhost', '127.0.0.1', '0.0.0.0', 'vevimaster.com', 'www.vevimaster.com']
 
 # Add Render domains (they use pattern like vevimaster-ia-1.onrender.com)
 ALLOWED_HOSTS.extend([
